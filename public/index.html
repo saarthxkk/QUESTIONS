@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CodeArena — DSA Question Bank</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="nav-left">
+      <a href="/" class="logo">⚡ CodeArena</a>
+    </div>
+    <div class="nav-right">
+      <span class="score-badge" id="totalScore">Score: 0</span>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <h1>Master DSA, One Problem at a Time</h1>
+    <p>Practice data structures & algorithms with instant C++ compilation and automated test cases.</p>
+  </section>
+
+  <!-- Filters -->
+  <div class="container">
+    <div class="filters">
+      <div class="filter-group">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="Easy">Easy</button>
+        <button class="filter-btn" data-filter="Medium">Medium</button>
+        <button class="filter-btn" data-filter="Hard">Hard</button>
+      </div>
+      <div class="filter-group">
+        <select id="categoryFilter" class="filter-select">
+          <option value="all">All Categories</option>
+        </select>
+      </div>
+      <div class="stats-bar">
+        <div class="stat"><span class="stat-count" id="totalQ">0</span> Problems</div>
+        <div class="stat easy-stat"><span class="stat-count" id="easyQ">0</span> Easy</div>
+        <div class="stat medium-stat"><span class="stat-count" id="medQ">0</span> Medium</div>
+        <div class="stat hard-stat"><span class="stat-count" id="hardQ">0</span> Hard</div>
+      </div>
+    </div>
+
+    <!-- Question Table -->
+    <div class="question-table">
+      <div class="table-header">
+        <span class="col-status">#</span>
+        <span class="col-title">Title</span>
+        <span class="col-category">Category</span>
+        <span class="col-difficulty">Difficulty</span>
+        <span class="col-points">Points</span>
+      </div>
+      <div id="questionList" class="table-body">
+        <!-- Questions will be rendered here -->
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p>CodeArena — Built for DSA Practice 🔥</p>
+  </footer>
+
+  <script src="/js/main.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CodeArena — Problem</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <!-- Marked.js for Markdown rendering -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body class="problem-page">
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="nav-left">
+      <a href="/" class="logo">⚡ CodeArena</a>
+      <span class="nav-divider">|</span>
+      <span class="problem-nav-title" id="navTitle">Loading...</span>
+    </div>
+    <div class="nav-right">
+      <div class="difficulty-badge" id="navDifficulty">—</div>
+      <span class="points-badge" id="navPoints">0 pts</span>
+    </div>
+  </nav>
+
+  <!-- Main Layout: Split Pane -->
+  <div class="split-layout">
+    <!-- Left Panel: Problem Description -->
+    <div class="panel left-panel" id="leftPanel">
+      <div class="panel-tabs">
+        <button class="panel-tab active" data-tab="description">Description</button>
+        <button class="panel-tab" data-tab="submissions">Results</button>
+      </div>
+
+      <!-- Description Tab -->
+      <div class="tab-content active" id="descriptionTab">
+        <div class="problem-header">
+          <h1 id="problemTitle">Loading...</h1>
+          <div class="problem-meta">
+            <span class="difficulty-pill" id="problemDifficulty">—</span>
+            <span class="category-pill" id="problemCategory">—</span>
+            <div class="tags" id="problemTags"></div>
+          </div>
+        </div>
+        <div class="problem-description" id="problemDescription">
+          <!-- Rendered markdown -->
+        </div>
+        <div class="sample-section">
+          <h3>Sample Input</h3>
+          <pre class="sample-box" id="sampleInput"></pre>
+          <h3>Sample Output</h3>
+          <pre class="sample-box" id="sampleOutput"></pre>
+        </div>
+      </div>
+
+      <!-- Results Tab -->
+      <div class="tab-content" id="submissionsTab">
+        <div id="resultsContainer" class="results-container">
+          <div class="empty-state">
+            <p>🚀 Submit your code to see results</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Resizer -->
+    <div class="resizer" id="resizer"></div>
+
+    <!-- Right Panel: Code Editor -->
+    <div class="panel right-panel" id="rightPanel">
+      <div class="editor-header">
+        <span class="lang-badge">C++17</span>
+        <button class="btn-reset" id="resetBtn" title="Reset to boilerplate">↺ Reset</button>
+      </div>
+
+      <div class="editor-wrapper">
+        <div class="line-numbers" id="lineNumbers"></div>
+        <textarea id="codeEditor" class="code-editor" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off"></textarea>
+      </div>
+
+      <!-- Custom Input -->
+      <div class="custom-input-section">
+        <div class="input-header" id="toggleCustomInput">
+          <span>▶ Custom Input</span>
+        </div>
+        <textarea id="customInput" class="custom-input" placeholder="Enter your custom test input here..."></textarea>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="editor-actions">
+        <button class="btn btn-run" id="runBtn">▶ Run</button>
+        <button class="btn btn-submit" id="submitBtn">Submit</button>
+      </div>
+
+      <!-- Console Output -->
+      <div class="console-section" id="consoleSection">
+        <div class="console-header">
+          <span>Console</span>
+          <button class="btn-clear" id="clearConsole">Clear</button>
+        </div>
+        <pre class="console-output" id="consoleOutput"></pre>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/autocomplete.js"></script>
+  <script src="/js/problem.js"></script>
+</body>
+</html>
+
