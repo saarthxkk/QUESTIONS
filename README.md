@@ -52,3 +52,4 @@ python3 server.py
 ```
 Or double-click `CodeArena.command` on your Desktop.
 Open: [http://localhost:8080](http://localhost:8080)
+
