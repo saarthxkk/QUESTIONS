@@ -1475,33 +1475,25 @@
   },
   {
     "id": 14,
-    "title": "Employee Eligibility and Recruitment Search System",
+    "title": "Employee Eligibility and Recruitment Search Engine",
     "difficulty": "Medium",
     "points": 50,
-    "category": "SQL",
     "track": "SQL",
-    "subtopic": "Employee Recruitment Search (JOIN)",
+    "category": "SQL",
+    "subtopic": "Filtering & INNER JOIN",
+    "description": "A large organization is upgrading its internal employee search platform to help the Human Resources (HR) team identify employees who may be eligible for special assignments, promotions and internal career opportunities.\n\nThe organization wants to create an eligibility search system that retrieves employee details along with their respective department information. However, employees must satisfy several conditions related to their salary, age, city, date of joining, name patterns and performance scores.\n\nYou are provided with two relational database tables:\n- `employee`: Contains employee identification, personal details, salary, performance and joining date.\n- `department`: Contains department names, department IDs and official office locations.\n\nBoth tables are connected through the `dept_id` column.\n\nWrite a single SQL query to retrieve employees who satisfy all the eligibility requirements listed below.\n\n### Requirements\n1. Retrieve `emp_id`, `employee_name` (`e.emp_name`), `department` (`d.dept_name`), `age`, `gender`, `city`, `salary`, `performance`, and `joining_date`.\n2. Employee salary must be between \u20b960,000 and \u20b980,000, including both boundaries.\n3. Employee age must be between 25 and 32, including both boundaries.\n4. Employees must belong to Delhi, Noida or Gurgaon.\n5. Joining date must fall between January 1, 2020 and December 31, 2023, including both dates.\n6. Employee names must satisfy at least one of the following conditions:\n   - Start with the letter 'A'\n   - End with the letter 'a'\n   - Contain the substring 'it'\n7. Employees whose performance score is between 70 and 85, including both boundaries, must be excluded (`performance NOT BETWEEN 70 AND 85`).\n8. Exclude employees belonging to the HR or Sales departments.\n9. Sort the final results by salary in descending order. If salaries are equal, sort employee names alphabetically.\n10. Use meaningful column aliases, such as `employee_name` and `department`.\n\n### Acceptance Criteria (10 Checks)\n- Employees from Panipat or outside Delhi/Noida/Gurgaon must never appear.\n- Female employees from HR or Sales must never appear.\n- Performance scores between 70 and 85 must be excluded.\n- Age between 25 and 32 inclusive.\n- Joining date from 2020 to 2023 inclusive.\n- Exact column names: `emp_id`, `employee_name`, `department`, `age`, `gender`, `city`, `salary`, `performance`, `joining_date`.",
     "type": "sql",
-    "tags": [
-      "SQL",
-      "INNER JOIN",
-      "WHERE",
-      "BETWEEN",
-      "LIKE",
-      "Filtering"
-    ],
-    "description": "## Employee Eligibility and Recruitment Search System\n\nA large organization is developing an internal employee search and recruitment management system. The HR department wants to identify employees who satisfy a specific combination of salary, age, location, performance, and recruitment-related requirements.\n\nWrite a single SQL query that retrieves all eligible employees.\n\n### Requirements:\n1. Retrieve `emp_id`, `employee_name` (`emp_name AS employee_name`), `department` (`dept_name AS department`), `age`, `gender`, `city`, `salary`, `performance`, and `joining_date`.\n2. Salary must be **between \u20b960,000 and \u20b980,000** (inclusive).\n3. Age must be **between 25 and 32 years old** (inclusive).\n4. Employee must belong to either **Delhi** or **Noida**.\n5. Must have joined on or after **January 1, 2020** (`joining_date >= '2020-01-01'`).\n6. Employee name must satisfy at least one of:\n   - Starts with 'A'\n   - Ends with 'a'\n   - Contains substring 'it'\n7. **Exclude** employees whose performance scores are **between 70 and 85** (inclusive).\n8. **Exclude** employees belonging to **HR** or **Sales** departments.\n9. **Exclude female employees whose performance is below 90**.\n10. Sort by **`salary` in descending order**, then alphabetically by name.\n\n### Output Columns:\n`emp_id`, `employee_name`, `department`, `age`, `gender`, `city`, `salary`, `performance`, `joining_date`",
-    "sampleInput": "-- department Table:\n+---------+-----------+----------+\n| dept_id | dept_name | location |\n+---------+-----------+----------+\n| 1       | IT        | Delhi    |\n| 2       | HR        | Noida    |\n| 3       | Finance   | Gurgaon  |\n| 4       | Marketing | Delhi    |\n| 5       | Sales     | Gurgaon  |\n+---------+-----------+----------+\n\n-- employee Table (15 records):\n+--------+----------+-----+--------+---------+---------+--------+-------------+--------------+\n| emp_id | emp_name | age | gender | dept_id | city    | salary | performance | joining_date |\n+--------+----------+-----+--------+---------+---------+--------+-------------+--------------+\n| 101    | Aman     | 28  | M      | 1       | Delhi   | 65000  | 85          | 2021-06-15   |\n| 102    | Priya    | 26  | F      | 1       | Noida   | 72000  | 92          | 2020-03-10   |\n| 103    | Rohit    | 31  | M      | 2       | Delhi   | 58000  | 74          | 2019-08-21   |\n| 104    | Neha     | 29  | F      | 2       | Noida   | 62000  | 88          | 2022-01-12   |\n| 105    | Karan    | 35  | M      | 3       | Gurgaon | 85000  | 91          | 2018-05-17   |\n| 106    | Riya     | 27  | F      | 3       | Delhi   | 78000  | 79          | 2021-11-03   |\n| 107    | Vikas    | 30  | M      | 4       | Noida   | 68000  | 83          | 2020-07-19   |\n| 108    | Anjali   | 25  | F      | 4       | Delhi   | 71000  | 95          | 2023-02-14   |\n| 109    | Mohit    | 33  | M      | 5       | Gurgaon | 55000  | 68          | 2019-12-01   |\n| 110    | Simran   | 28  | F      | 5       | Delhi   | 60000  | 82          | 2022-09-25   |\n| 111    | Arjun    | 24  | M      | 1       | Gurgaon | 59000  | 76          | 2023-06-11   |\n| 112    | Pooja    | 32  | F      | 3       | Noida   | 88000  | 94          | 2017-04-20   |\n| 113    | Nitin    | 29  | M      | 4       | Delhi   | 64000  | 72          | 2021-01-05   |\n| 114    | Kavita   | 27  | F      | 5       | Gurgaon | 63000  | 89          | 2020-10-16   |\n| 115    | Deepak   | 36  | M      | 2       | Noida   | 57000  | 65          | 2018-03-28   |\n+--------+----------+-----+--------+---------+---------+--------+-------------+--------------+",
-    "sampleOutput": "emp_id | employee_name | department | age | gender | city  | salary | performance | joining_date\n-------+---------------+------------+-----+--------+-------+--------+-------------+-------------\n102    | Priya         | IT         | 26  | F      | Noida | 72000  | 92          | 2020-03-10  \n108    | Anjali        | Marketing  | 25  | F      | Delhi | 71000  | 95          | 2023-02-14  \n\n(2 rows)",
     "tableSchema": "CREATE TABLE department (\n    dept_id INT PRIMARY KEY,\n    dept_name VARCHAR(50) NOT NULL,\n    location VARCHAR(50)\n);\n\nCREATE TABLE employee (\n    emp_id INT PRIMARY KEY,\n    emp_name VARCHAR(50) NOT NULL,\n    age INT,\n    gender CHAR(1),\n    dept_id INT,\n    city VARCHAR(50),\n    salary INT,\n    performance INT,\n    joining_date DATE,\n    FOREIGN KEY (dept_id) REFERENCES department(dept_id)\n);",
-    "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(101, 'Aman', 28, 'M', 1, 'Delhi', 65000, 85, '2021-06-15'),\n(102, 'Priya', 26, 'F', 1, 'Noida', 72000, 92, '2020-03-10'),\n(103, 'Rohit', 31, 'M', 2, 'Delhi', 58000, 74, '2019-08-21'),\n(104, 'Neha', 29, 'F', 2, 'Noida', 62000, 88, '2022-01-12'),\n(105, 'Karan', 35, 'M', 3, 'Gurgaon', 85000, 91, '2018-05-17'),\n(106, 'Riya', 27, 'F', 3, 'Delhi', 78000, 79, '2021-11-03'),\n(107, 'Vikas', 30, 'M', 4, 'Noida', 68000, 83, '2020-07-19'),\n(108, 'Anjali', 25, 'F', 4, 'Delhi', 71000, 95, '2023-02-14'),\n(109, 'Mohit', 33, 'M', 5, 'Gurgaon', 55000, 68, '2019-12-01'),\n(110, 'Simran', 28, 'F', 5, 'Delhi', 60000, 82, '2022-09-25'),\n(111, 'Arjun', 24, 'M', 1, 'Gurgaon', 59000, 76, '2023-06-11'),\n(112, 'Pooja', 32, 'F', 3, 'Noida', 88000, 94, '2017-04-20'),\n(113, 'Nitin', 29, 'M', 4, 'Delhi', 64000, 72, '2021-01-05'),\n(114, 'Kavita', 27, 'F', 5, 'Gurgaon', 63000, 89, '2020-10-16'),\n(115, 'Deepak', 36, 'M', 2, 'Noida', 57000, 65, '2018-03-28');",
-    "boilerplate": "-- Write your SQL query below\nSELECT e.emp_id, e.emp_name AS employee_name, d.dept_name AS department,\n       e.age, e.gender, e.city, e.salary, e.performance, e.joining_date\nFROM employee e\nJOIN department d ON e.dept_id = d.dept_id\nWHERE \nORDER BY ;",
+    "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon'),\n(6, 'Research', 'Mumbai');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(101, 'Aman', 28, 'M', 1, 'Delhi', 65000, 85, '2021-06-15'),\n(102, 'Priya', 26, 'F', 1, 'Noida', 72000, 92, '2020-03-10'),\n(103, 'Rohit', 31, 'M', 2, 'Delhi', 58000, 74, '2019-08-21'),\n(104, 'Neha', 29, 'F', 2, 'Noida', 62000, 88, '2022-01-12'),\n(105, 'Karan', 35, 'M', 3, 'Gurgaon', 85000, 91, '2018-05-17'),\n(106, 'Riya', 27, 'F', 3, 'Delhi', 78000, 79, '2021-11-03'),\n(107, 'Vikas', 30, 'M', 4, 'Noida', 68000, 83, '2020-07-19'),\n(108, 'Anjali', 25, 'F', 4, 'Delhi', 71000, 95, '2023-02-14'),\n(109, 'Mohit', 33, 'M', 5, 'Gurgaon', 55000, 68, '2019-12-01'),\n(110, 'Simran', 28, 'F', 5, 'Delhi', 60000, 82, '2022-09-25'),\n(111, 'Arjun', 24, 'M', 1, 'Gurgaon', 59000, 76, '2023-06-11'),\n(112, 'Pooja', 32, 'F', 3, 'Noida', 88000, 94, '2017-04-20'),\n(113, 'Nitin', 29, 'M', 4, 'Delhi', 64000, 72, '2021-01-05'),\n(114, 'Kavita', 27, 'F', 5, 'Gurgaon', 63000, 89, '2020-10-16'),\n(115, 'Deepak', 36, 'M', 2, 'Noida', 57000, 65, '2018-03-28');",
+    "sampleInput": "SELECT * FROM department;\nSELECT * FROM employee;",
+    "sampleOutput": "+--------+---------------+------------+-----+--------+-------+--------+-------------+--------------+\n| emp_id | employee_name | department | age | gender | city  | salary | performance | joining_date |\n+--------+---------------+------------+-----+--------+-------+--------+-------------+--------------+\n| 102    | Priya         | IT         | 26  | F      | Noida | 72000  | 92          | 2020-03-10   |\n| 108    | Anjali        | Marketing  | 25  | F      | Delhi | 71000  | 95          | 2023-02-14   |\n+--------+---------------+------------+-----+--------+-------+--------+-------------+--------------+",
+    "boilerplate": "-- Write your MySQL query below\n-- Schema: department (dept_id, dept_name, location)\n--         employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date)\n\n",
     "testCases": [
       {
         "id": 1,
-        "description": "Standard corporate dataset (15 employees, 5 departments)",
+        "description": "Standard Company Dataset (15 Employees, 6 Departments)",
         "isSample": true,
-        "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(101, 'Aman', 28, 'M', 1, 'Delhi', 65000, 85, '2021-06-15'),\n(102, 'Priya', 26, 'F', 1, 'Noida', 72000, 92, '2020-03-10'),\n(103, 'Rohit', 31, 'M', 2, 'Delhi', 58000, 74, '2019-08-21'),\n(104, 'Neha', 29, 'F', 2, 'Noida', 62000, 88, '2022-01-12'),\n(105, 'Karan', 35, 'M', 3, 'Gurgaon', 85000, 91, '2018-05-17'),\n(106, 'Riya', 27, 'F', 3, 'Delhi', 78000, 79, '2021-11-03'),\n(107, 'Vikas', 30, 'M', 4, 'Noida', 68000, 83, '2020-07-19'),\n(108, 'Anjali', 25, 'F', 4, 'Delhi', 71000, 95, '2023-02-14'),\n(109, 'Mohit', 33, 'M', 5, 'Gurgaon', 55000, 68, '2019-12-01'),\n(110, 'Simran', 28, 'F', 5, 'Delhi', 60000, 82, '2022-09-25'),\n(111, 'Arjun', 24, 'M', 1, 'Gurgaon', 59000, 76, '2023-06-11'),\n(112, 'Pooja', 32, 'F', 3, 'Noida', 88000, 94, '2017-04-20'),\n(113, 'Nitin', 29, 'M', 4, 'Delhi', 64000, 72, '2021-01-05'),\n(114, 'Kavita', 27, 'F', 5, 'Gurgaon', 63000, 89, '2020-10-16'),\n(115, 'Deepak', 36, 'M', 2, 'Noida', 57000, 65, '2018-03-28');",
+        "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon'),\n(6, 'Research', 'Mumbai');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(101, 'Aman', 28, 'M', 1, 'Delhi', 65000, 85, '2021-06-15'),\n(102, 'Priya', 26, 'F', 1, 'Noida', 72000, 92, '2020-03-10'),\n(103, 'Rohit', 31, 'M', 2, 'Delhi', 58000, 74, '2019-08-21'),\n(104, 'Neha', 29, 'F', 2, 'Noida', 62000, 88, '2022-01-12'),\n(105, 'Karan', 35, 'M', 3, 'Gurgaon', 85000, 91, '2018-05-17'),\n(106, 'Riya', 27, 'F', 3, 'Delhi', 78000, 79, '2021-11-03'),\n(107, 'Vikas', 30, 'M', 4, 'Noida', 68000, 83, '2020-07-19'),\n(108, 'Anjali', 25, 'F', 4, 'Delhi', 71000, 95, '2023-02-14'),\n(109, 'Mohit', 33, 'M', 5, 'Gurgaon', 55000, 68, '2019-12-01'),\n(110, 'Simran', 28, 'F', 5, 'Delhi', 60000, 82, '2022-09-25'),\n(111, 'Arjun', 24, 'M', 1, 'Gurgaon', 59000, 76, '2023-06-11'),\n(112, 'Pooja', 32, 'F', 3, 'Noida', 88000, 94, '2017-04-20'),\n(113, 'Nitin', 29, 'M', 4, 'Delhi', 64000, 72, '2021-01-05'),\n(114, 'Kavita', 27, 'F', 5, 'Gurgaon', 63000, 89, '2020-10-16'),\n(115, 'Deepak', 36, 'M', 2, 'Noida', 57000, 65, '2018-03-28');",
         "expectedColumns": [
           "emp_id",
           "employee_name",
@@ -1541,9 +1533,9 @@
       },
       {
         "id": 2,
-        "description": "Diverse salary and demographic distribution test",
+        "description": "Dataset 2: Edge Boundaries & Alternative Cohorts",
         "isSample": false,
-        "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(201, 'Aakash', 29, 'M', 1, 'Delhi', 75000, 88, '2021-08-10'),\n(202, 'Anita', 27, 'F', 4, 'Noida', 74000, 93, '2022-04-18'),\n(203, 'Rohan', 26, 'M', 1, 'Delhi', 68000, 89, '2020-11-20'),\n(204, 'Sunita', 30, 'F', 3, 'Gurgaon', 82000, 92, '2019-02-14'),\n(205, 'Manish', 34, 'M', 2, 'Noida', 61000, 77, '2020-05-22'),\n(206, 'Divya', 28, 'F', 5, 'Delhi', 66000, 84, '2021-09-01'),\n(207, 'Amit', 25, 'M', 4, 'Delhi', 62000, 87, '2023-01-15'),\n(208, 'Reena', 31, 'F', 3, 'Noida', 89000, 96, '2018-07-19'),\n(209, 'Varun', 32, 'M', 5, 'Gurgaon', 58000, 73, '2020-03-11'),\n(210, 'Geeta', 29, 'F', 1, 'Noida', 70000, 91, '2022-10-05');",
+        "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon'),\n(6, 'Research', 'Mumbai');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(201, 'Aditya', 27, 'M', 1, 'Delhi', 74000, 89, '2021-04-12'),\n(202, 'Alka', 25, 'F', 4, 'Noida', 69000, 93, '2022-03-15'),\n(203, 'Amitabh', 30, 'M', 1, 'Gurgaon', 78000, 91, '2020-11-20'),\n(204, 'Sonia', 29, 'F', 3, 'Delhi', 84000, 92, '2019-02-14'),\n(205, 'Manish', 34, 'M', 2, 'Noida', 61000, 77, '2020-05-22'),\n(206, 'Divya', 28, 'F', 5, 'Delhi', 66000, 84, '2021-09-01'),\n(207, 'Anita', 26, 'F', 4, 'Delhi', 73000, 96, '2023-01-15'),\n(208, 'Reena', 31, 'F', 3, 'Noida', 89000, 94, '2018-07-19'),\n(209, 'Varun', 32, 'M', 5, 'Gurgaon', 58000, 73, '2020-03-11'),\n(210, 'Geeta', 29, 'F', 1, 'Noida', 70000, 89, '2022-10-05');",
         "expectedColumns": [
           "emp_id",
           "employee_name",
@@ -1557,26 +1549,37 @@
         ],
         "expectedRows": [
           [
-            201,
-            "Aakash",
+            203,
+            "Amitabh",
             "IT",
-            29,
+            30,
             "M",
-            "Delhi",
-            75000,
-            88,
-            "2021-08-10"
+            "Gurgaon",
+            78000,
+            91,
+            "2020-11-20"
           ],
           [
-            202,
+            201,
+            "Aditya",
+            "IT",
+            27,
+            "M",
+            "Delhi",
+            74000,
+            89,
+            "2021-04-12"
+          ],
+          [
+            207,
             "Anita",
             "Marketing",
-            27,
+            26,
             "F",
-            "Noida",
-            74000,
-            93,
-            "2022-04-18"
+            "Delhi",
+            73000,
+            96,
+            "2023-01-15"
           ],
           [
             210,
@@ -1586,28 +1589,28 @@
             "F",
             "Noida",
             70000,
-            91,
+            89,
             "2022-10-05"
           ],
           [
-            207,
-            "Amit",
+            202,
+            "Alka",
             "Marketing",
             25,
-            "M",
-            "Delhi",
-            62000,
-            87,
-            "2023-01-15"
+            "F",
+            "Noida",
+            69000,
+            93,
+            "2022-03-15"
           ]
         ],
         "orderSensitive": true
       },
       {
         "id": 3,
-        "description": "Boundary conditions and date range validation test",
+        "description": "Dataset 3: Boundary Salaries & Distinct Department Sizes",
         "isSample": false,
-        "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(301, 'Aditi', 25, 'F', 1, 'Delhi', 60000, 90, '2020-01-01'),\n(302, 'Alok', 32, 'M', 4, 'Noida', 80000, 89, '2021-03-15'),\n(303, 'Savitri', 28, 'F', 3, 'Gurgaon', 85000, 95, '2019-06-20'),\n(304, 'Rohit', 27, 'M', 2, 'Delhi', 59000, 78, '2022-08-10'),\n(305, 'Kavita', 31, 'F', 5, 'Delhi', 62000, 83, '2020-12-25'),\n(306, 'Naveen', 35, 'M', 3, 'Noida', 90000, 92, '2017-09-14'),\n(307, 'Ankit', 26, 'M', 1, 'Noida', 67000, 86, '2023-04-05');",
+        "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon'),\n(6, 'Research', 'Mumbai');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(301, 'Ananya', 25, 'F', 1, 'Delhi', 60000, 90, '2020-01-01'),\n(302, 'Ashish', 32, 'M', 4, 'Noida', 80000, 88, '2021-03-15'),\n(303, 'Savitri', 28, 'F', 3, 'Gurgaon', 85000, 95, '2019-06-20'),\n(304, 'Rohit', 27, 'M', 2, 'Delhi', 59000, 78, '2022-08-10'),\n(305, 'Kavita', 31, 'F', 5, 'Delhi', 62000, 83, '2020-12-25'),\n(306, 'Priya', 26, 'F', 3, 'Delhi', 79000, 91, '2021-05-18'),\n(307, 'Arun', 30, 'M', 1, 'Gurgaon', 68000, 89, '2020-09-09');",
         "expectedColumns": [
           "emp_id",
           "employee_name",
@@ -1622,29 +1625,40 @@
         "expectedRows": [
           [
             302,
-            "Alok",
+            "Ashish",
             "Marketing",
             32,
             "M",
             "Noida",
             80000,
-            89,
+            88,
             "2021-03-15"
           ],
           [
-            307,
-            "Ankit",
-            "IT",
+            306,
+            "Priya",
+            "Finance",
             26,
+            "F",
+            "Delhi",
+            79000,
+            91,
+            "2021-05-18"
+          ],
+          [
+            307,
+            "Arun",
+            "IT",
+            30,
             "M",
-            "Noida",
-            67000,
-            86,
-            "2023-04-05"
+            "Gurgaon",
+            68000,
+            89,
+            "2020-09-09"
           ],
           [
             301,
-            "Aditi",
+            "Ananya",
             "IT",
             25,
             "F",
@@ -1660,32 +1674,25 @@
   },
   {
     "id": 15,
-    "title": "Employee Performance Leaderboard and Reward Selection",
+    "title": "Employee Performance Leaderboard and Incentive Selection",
     "difficulty": "Easy",
     "points": 25,
-    "category": "SQL",
     "track": "SQL",
-    "subtopic": "Employee Performance Leaderboard",
+    "category": "SQL",
+    "subtopic": "ORDER BY & LIMIT",
+    "description": "A multinational organization conducts an annual employee performance evaluation to identify individuals who deserve special recognition, salary incentives and career advancement opportunities.\n\nThe HR department wants to build an employee leaderboard that displays the highest-performing employees across the organization.\n\nHowever, the company has decided that only employees satisfying certain minimum performance and salary requirements should be eligible for the leaderboard.\n\nAn employee's performance score will be considered the primary ranking factor. In case multiple employees receive the same performance score, the employee earning a higher salary must be placed ahead. If both performance and salary are equal, names must be arranged alphabetically.\n\nYou are provided with an `employee` table containing employee information, including salary, performance, gender and department ID.\n\nWrite a single SQL query that generates the top five eligible employees.\n\n### Requirements\n1. Consider only employees whose performance score is greater than or equal to 75 (`performance >= 75`).\n2. Consider only employees whose salary is between \u20b960,000 and \u20b990,000 inclusive (`salary BETWEEN 60000 AND 90000`).\n3. Retrieve:\n   - `emp_id`\n   - `employee_name` (alias for `emp_name`)\n   - `dept_id`\n   - `employee_salary` (alias for `salary`)\n   - `performance_score` (alias for `performance`)\n   - `gender`\n4. Arrange employees according to:\n   - `performance_score` in descending order\n   - `employee_salary` in descending order\n   - `employee_name` in ascending alphabetical order\n5. Return only the first five employees after applying the sorting conditions (`LIMIT 5`).\n6. Use meaningful aliases such as `employee_name`, `employee_salary` and `performance_score`.\n\n### Acceptance Criteria (10 Checks)\n- Exactly 5 rows returned.\n- Primary sort on performance DESC.\n- Secondary sort on salary DESC.\n- Tertiary sort on employee_name ASC.\n- Performance strictly >= 75 and salary between 60,000 and 90,000.",
     "type": "sql",
-    "tags": [
-      "SQL",
-      "ORDER BY",
-      "LIMIT",
-      "Aliases",
-      "Filtering"
-    ],
-    "description": "## Employee Performance Leaderboard and Reward Selection\n\nA multinational organization conducts an annual performance evaluation. The HR department wants to generate an employee leaderboard prioritizing top performers who meet compensation and performance thresholds.\n\n### Requirements:\n1. Consider employees whose performance score is **at least 75**.\n2. Consider employees whose salaries are **between \u20b960,000 and \u20b990,000** (inclusive).\n3. Retrieve: `emp_id`, `employee_name` (`emp_name AS employee_name`), `dept_id`, `employee_salary` (`salary AS employee_salary`), `performance_score` (`performance AS performance_score`), and `gender`.\n4. Sort using the following priority:\n   - `performance_score` in descending order\n   - `employee_salary` in descending order\n   - `employee_name` in ascending alphabetical order\n5. Display **only the top 5 employees** (`LIMIT 5`).\n\n### Output Columns:\n`emp_id`, `employee_name`, `dept_id`, `employee_salary`, `performance_score`, `gender`",
-    "sampleInput": "-- department Table:\n+---------+-----------+----------+\n| dept_id | dept_name | location |\n+---------+-----------+----------+\n| 1       | IT        | Delhi    |\n| 2       | HR        | Noida    |\n| 3       | Finance   | Gurgaon  |\n| 4       | Marketing | Delhi    |\n| 5       | Sales     | Gurgaon  |\n+---------+-----------+----------+\n\n-- employee Table (15 records):\n+--------+----------+-----+--------+---------+---------+--------+-------------+--------------+\n| emp_id | emp_name | age | gender | dept_id | city    | salary | performance | joining_date |\n+--------+----------+-----+--------+---------+---------+--------+-------------+--------------+\n| 101    | Aman     | 28  | M      | 1       | Delhi   | 65000  | 85          | 2021-06-15   |\n| 102    | Priya    | 26  | F      | 1       | Noida   | 72000  | 92          | 2020-03-10   |\n| 103    | Rohit    | 31  | M      | 2       | Delhi   | 58000  | 74          | 2019-08-21   |\n| 104    | Neha     | 29  | F      | 2       | Noida   | 62000  | 88          | 2022-01-12   |\n| 105    | Karan    | 35  | M      | 3       | Gurgaon | 85000  | 91          | 2018-05-17   |\n| 106    | Riya     | 27  | F      | 3       | Delhi   | 78000  | 79          | 2021-11-03   |\n| 107    | Vikas    | 30  | M      | 4       | Noida   | 68000  | 83          | 2020-07-19   |\n| 108    | Anjali   | 25  | F      | 4       | Delhi   | 71000  | 95          | 2023-02-14   |\n| 109    | Mohit    | 33  | M      | 5       | Gurgaon | 55000  | 68          | 2019-12-01   |\n| 110    | Simran   | 28  | F      | 5       | Delhi   | 60000  | 82          | 2022-09-25   |\n| 111    | Arjun    | 24  | M      | 1       | Gurgaon | 59000  | 76          | 2023-06-11   |\n| 112    | Pooja    | 32  | F      | 3       | Noida   | 88000  | 94          | 2017-04-20   |\n| 113    | Nitin    | 29  | M      | 4       | Delhi   | 64000  | 72          | 2021-01-05   |\n| 114    | Kavita   | 27  | F      | 5       | Gurgaon | 63000  | 89          | 2020-10-16   |\n| 115    | Deepak   | 36  | M      | 2       | Noida   | 57000  | 65          | 2018-03-28   |\n+--------+----------+-----+--------+---------+---------+--------+-------------+--------------+",
-    "sampleOutput": "emp_id | employee_name | dept_id | employee_salary | performance_score | gender\n-------+---------------+---------+-----------------+-------------------+-------\n108    | Anjali        | 4       | 71000           | 95                | F     \n112    | Pooja         | 3       | 88000           | 94                | F     \n102    | Priya         | 1       | 72000           | 92                | F     \n105    | Karan         | 3       | 85000           | 91                | M     \n114    | Kavita        | 5       | 63000           | 89                | F     \n\n(5 rows)",
     "tableSchema": "CREATE TABLE department (\n    dept_id INT PRIMARY KEY,\n    dept_name VARCHAR(50) NOT NULL,\n    location VARCHAR(50)\n);\n\nCREATE TABLE employee (\n    emp_id INT PRIMARY KEY,\n    emp_name VARCHAR(50) NOT NULL,\n    age INT,\n    gender CHAR(1),\n    dept_id INT,\n    city VARCHAR(50),\n    salary INT,\n    performance INT,\n    joining_date DATE,\n    FOREIGN KEY (dept_id) REFERENCES department(dept_id)\n);",
-    "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(101, 'Aman', 28, 'M', 1, 'Delhi', 65000, 85, '2021-06-15'),\n(102, 'Priya', 26, 'F', 1, 'Noida', 72000, 92, '2020-03-10'),\n(103, 'Rohit', 31, 'M', 2, 'Delhi', 58000, 74, '2019-08-21'),\n(104, 'Neha', 29, 'F', 2, 'Noida', 62000, 88, '2022-01-12'),\n(105, 'Karan', 35, 'M', 3, 'Gurgaon', 85000, 91, '2018-05-17'),\n(106, 'Riya', 27, 'F', 3, 'Delhi', 78000, 79, '2021-11-03'),\n(107, 'Vikas', 30, 'M', 4, 'Noida', 68000, 83, '2020-07-19'),\n(108, 'Anjali', 25, 'F', 4, 'Delhi', 71000, 95, '2023-02-14'),\n(109, 'Mohit', 33, 'M', 5, 'Gurgaon', 55000, 68, '2019-12-01'),\n(110, 'Simran', 28, 'F', 5, 'Delhi', 60000, 82, '2022-09-25'),\n(111, 'Arjun', 24, 'M', 1, 'Gurgaon', 59000, 76, '2023-06-11'),\n(112, 'Pooja', 32, 'F', 3, 'Noida', 88000, 94, '2017-04-20'),\n(113, 'Nitin', 29, 'M', 4, 'Delhi', 64000, 72, '2021-01-05'),\n(114, 'Kavita', 27, 'F', 5, 'Gurgaon', 63000, 89, '2020-10-16'),\n(115, 'Deepak', 36, 'M', 2, 'Noida', 57000, 65, '2018-03-28');",
-    "boilerplate": "-- Write your SQL query below\nSELECT emp_id, emp_name AS employee_name, dept_id, salary AS employee_salary, performance AS performance_score, gender\nFROM employee\nWHERE \nORDER BY \nLIMIT 5;",
+    "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon'),\n(6, 'Research', 'Mumbai');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(101, 'Aman', 28, 'M', 1, 'Delhi', 65000, 85, '2021-06-15'),\n(102, 'Priya', 26, 'F', 1, 'Noida', 72000, 92, '2020-03-10'),\n(103, 'Rohit', 31, 'M', 2, 'Delhi', 58000, 74, '2019-08-21'),\n(104, 'Neha', 29, 'F', 2, 'Noida', 62000, 88, '2022-01-12'),\n(105, 'Karan', 35, 'M', 3, 'Gurgaon', 85000, 91, '2018-05-17'),\n(106, 'Riya', 27, 'F', 3, 'Delhi', 78000, 79, '2021-11-03'),\n(107, 'Vikas', 30, 'M', 4, 'Noida', 68000, 83, '2020-07-19'),\n(108, 'Anjali', 25, 'F', 4, 'Delhi', 71000, 95, '2023-02-14'),\n(109, 'Mohit', 33, 'M', 5, 'Gurgaon', 55000, 68, '2019-12-01'),\n(110, 'Simran', 28, 'F', 5, 'Delhi', 60000, 82, '2022-09-25'),\n(111, 'Arjun', 24, 'M', 1, 'Gurgaon', 59000, 76, '2023-06-11'),\n(112, 'Pooja', 32, 'F', 3, 'Noida', 88000, 94, '2017-04-20'),\n(113, 'Nitin', 29, 'M', 4, 'Delhi', 64000, 72, '2021-01-05'),\n(114, 'Kavita', 27, 'F', 5, 'Gurgaon', 63000, 89, '2020-10-16'),\n(115, 'Deepak', 36, 'M', 2, 'Noida', 57000, 65, '2018-03-28');",
+    "sampleInput": "SELECT * FROM department;\nSELECT * FROM employee;",
+    "sampleOutput": "+--------+---------------+---------+-----------------+-------------------+--------+\n| emp_id | employee_name | dept_id | employee_salary | performance_score | gender |\n+--------+---------------+---------+-----------------+-------------------+--------+\n| 108    | Anjali        | 4       | 71000           | 95                | F      |\n| 112    | Pooja         | 3       | 88000           | 94                | F      |\n| 102    | Priya         | 1       | 72000           | 92                | F      |\n| 105    | Karan         | 3       | 85000           | 91                | M      |\n| 114    | Kavita        | 5       | 63000           | 89                | F      |\n+--------+---------------+---------+-----------------+-------------------+--------+",
+    "boilerplate": "-- Write your MySQL query below\n-- Schema: department (dept_id, dept_name, location)\n--         employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date)\n\n",
     "testCases": [
       {
         "id": 1,
-        "description": "Standard corporate dataset (15 employees, 5 departments)",
+        "description": "Standard Company Dataset (15 Employees, 6 Departments)",
         "isSample": true,
-        "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(101, 'Aman', 28, 'M', 1, 'Delhi', 65000, 85, '2021-06-15'),\n(102, 'Priya', 26, 'F', 1, 'Noida', 72000, 92, '2020-03-10'),\n(103, 'Rohit', 31, 'M', 2, 'Delhi', 58000, 74, '2019-08-21'),\n(104, 'Neha', 29, 'F', 2, 'Noida', 62000, 88, '2022-01-12'),\n(105, 'Karan', 35, 'M', 3, 'Gurgaon', 85000, 91, '2018-05-17'),\n(106, 'Riya', 27, 'F', 3, 'Delhi', 78000, 79, '2021-11-03'),\n(107, 'Vikas', 30, 'M', 4, 'Noida', 68000, 83, '2020-07-19'),\n(108, 'Anjali', 25, 'F', 4, 'Delhi', 71000, 95, '2023-02-14'),\n(109, 'Mohit', 33, 'M', 5, 'Gurgaon', 55000, 68, '2019-12-01'),\n(110, 'Simran', 28, 'F', 5, 'Delhi', 60000, 82, '2022-09-25'),\n(111, 'Arjun', 24, 'M', 1, 'Gurgaon', 59000, 76, '2023-06-11'),\n(112, 'Pooja', 32, 'F', 3, 'Noida', 88000, 94, '2017-04-20'),\n(113, 'Nitin', 29, 'M', 4, 'Delhi', 64000, 72, '2021-01-05'),\n(114, 'Kavita', 27, 'F', 5, 'Gurgaon', 63000, 89, '2020-10-16'),\n(115, 'Deepak', 36, 'M', 2, 'Noida', 57000, 65, '2018-03-28');",
+        "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon'),\n(6, 'Research', 'Mumbai');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(101, 'Aman', 28, 'M', 1, 'Delhi', 65000, 85, '2021-06-15'),\n(102, 'Priya', 26, 'F', 1, 'Noida', 72000, 92, '2020-03-10'),\n(103, 'Rohit', 31, 'M', 2, 'Delhi', 58000, 74, '2019-08-21'),\n(104, 'Neha', 29, 'F', 2, 'Noida', 62000, 88, '2022-01-12'),\n(105, 'Karan', 35, 'M', 3, 'Gurgaon', 85000, 91, '2018-05-17'),\n(106, 'Riya', 27, 'F', 3, 'Delhi', 78000, 79, '2021-11-03'),\n(107, 'Vikas', 30, 'M', 4, 'Noida', 68000, 83, '2020-07-19'),\n(108, 'Anjali', 25, 'F', 4, 'Delhi', 71000, 95, '2023-02-14'),\n(109, 'Mohit', 33, 'M', 5, 'Gurgaon', 55000, 68, '2019-12-01'),\n(110, 'Simran', 28, 'F', 5, 'Delhi', 60000, 82, '2022-09-25'),\n(111, 'Arjun', 24, 'M', 1, 'Gurgaon', 59000, 76, '2023-06-11'),\n(112, 'Pooja', 32, 'F', 3, 'Noida', 88000, 94, '2017-04-20'),\n(113, 'Nitin', 29, 'M', 4, 'Delhi', 64000, 72, '2021-01-05'),\n(114, 'Kavita', 27, 'F', 5, 'Gurgaon', 63000, 89, '2020-10-16'),\n(115, 'Deepak', 36, 'M', 2, 'Noida', 57000, 65, '2018-03-28');",
         "expectedColumns": [
           "emp_id",
           "employee_name",
@@ -1740,9 +1747,9 @@
       },
       {
         "id": 2,
-        "description": "Diverse salary and demographic distribution test",
+        "description": "Dataset 2: Edge Boundaries & Alternative Cohorts",
         "isSample": false,
-        "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(201, 'Aakash', 29, 'M', 1, 'Delhi', 75000, 88, '2021-08-10'),\n(202, 'Anita', 27, 'F', 4, 'Noida', 74000, 93, '2022-04-18'),\n(203, 'Rohan', 26, 'M', 1, 'Delhi', 68000, 89, '2020-11-20'),\n(204, 'Sunita', 30, 'F', 3, 'Gurgaon', 82000, 92, '2019-02-14'),\n(205, 'Manish', 34, 'M', 2, 'Noida', 61000, 77, '2020-05-22'),\n(206, 'Divya', 28, 'F', 5, 'Delhi', 66000, 84, '2021-09-01'),\n(207, 'Amit', 25, 'M', 4, 'Delhi', 62000, 87, '2023-01-15'),\n(208, 'Reena', 31, 'F', 3, 'Noida', 89000, 96, '2018-07-19'),\n(209, 'Varun', 32, 'M', 5, 'Gurgaon', 58000, 73, '2020-03-11'),\n(210, 'Geeta', 29, 'F', 1, 'Noida', 70000, 91, '2022-10-05');",
+        "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon'),\n(6, 'Research', 'Mumbai');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(201, 'Aditya', 27, 'M', 1, 'Delhi', 74000, 89, '2021-04-12'),\n(202, 'Alka', 25, 'F', 4, 'Noida', 69000, 93, '2022-03-15'),\n(203, 'Amitabh', 30, 'M', 1, 'Gurgaon', 78000, 91, '2020-11-20'),\n(204, 'Sonia', 29, 'F', 3, 'Delhi', 84000, 92, '2019-02-14'),\n(205, 'Manish', 34, 'M', 2, 'Noida', 61000, 77, '2020-05-22'),\n(206, 'Divya', 28, 'F', 5, 'Delhi', 66000, 84, '2021-09-01'),\n(207, 'Anita', 26, 'F', 4, 'Delhi', 73000, 96, '2023-01-15'),\n(208, 'Reena', 31, 'F', 3, 'Noida', 89000, 94, '2018-07-19'),\n(209, 'Varun', 32, 'M', 5, 'Gurgaon', 58000, 73, '2020-03-11'),\n(210, 'Geeta', 29, 'F', 1, 'Noida', 70000, 89, '2022-10-05');",
         "expectedColumns": [
           "emp_id",
           "employee_name",
@@ -1753,43 +1760,43 @@
         ],
         "expectedRows": [
           [
-            208,
-            "Reena",
-            3,
-            89000,
+            207,
+            "Anita",
+            4,
+            73000,
             96,
             "F"
           ],
           [
+            208,
+            "Reena",
+            3,
+            89000,
+            94,
+            "F"
+          ],
+          [
             202,
-            "Anita",
+            "Alka",
             4,
-            74000,
+            69000,
             93,
             "F"
           ],
           [
             204,
-            "Sunita",
+            "Sonia",
             3,
-            82000,
+            84000,
             92,
             "F"
           ],
           [
-            210,
-            "Geeta",
-            1,
-            70000,
-            91,
-            "F"
-          ],
-          [
             203,
-            "Rohan",
+            "Amitabh",
             1,
-            68000,
-            89,
+            78000,
+            91,
             "M"
           ]
         ],
@@ -1797,9 +1804,9 @@
       },
       {
         "id": 3,
-        "description": "Boundary conditions and date range validation test",
+        "description": "Dataset 3: Boundary Salaries & Distinct Department Sizes",
         "isSample": false,
-        "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(301, 'Aditi', 25, 'F', 1, 'Delhi', 60000, 90, '2020-01-01'),\n(302, 'Alok', 32, 'M', 4, 'Noida', 80000, 89, '2021-03-15'),\n(303, 'Savitri', 28, 'F', 3, 'Gurgaon', 85000, 95, '2019-06-20'),\n(304, 'Rohit', 27, 'M', 2, 'Delhi', 59000, 78, '2022-08-10'),\n(305, 'Kavita', 31, 'F', 5, 'Delhi', 62000, 83, '2020-12-25'),\n(306, 'Naveen', 35, 'M', 3, 'Noida', 90000, 92, '2017-09-14'),\n(307, 'Ankit', 26, 'M', 1, 'Noida', 67000, 86, '2023-04-05');",
+        "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon'),\n(6, 'Research', 'Mumbai');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(301, 'Ananya', 25, 'F', 1, 'Delhi', 60000, 90, '2020-01-01'),\n(302, 'Ashish', 32, 'M', 4, 'Noida', 80000, 88, '2021-03-15'),\n(303, 'Savitri', 28, 'F', 3, 'Gurgaon', 85000, 95, '2019-06-20'),\n(304, 'Rohit', 27, 'M', 2, 'Delhi', 59000, 78, '2022-08-10'),\n(305, 'Kavita', 31, 'F', 5, 'Delhi', 62000, 83, '2020-12-25'),\n(306, 'Priya', 26, 'F', 3, 'Delhi', 79000, 91, '2021-05-18'),\n(307, 'Arun', 30, 'M', 1, 'Gurgaon', 68000, 89, '2020-09-09');",
         "expectedColumns": [
           "emp_id",
           "employee_name",
@@ -1819,34 +1826,34 @@
           ],
           [
             306,
-            "Naveen",
+            "Priya",
             3,
-            90000,
-            92,
-            "M"
+            79000,
+            91,
+            "F"
           ],
           [
             301,
-            "Aditi",
+            "Ananya",
             1,
             60000,
             90,
             "F"
           ],
           [
-            302,
-            "Alok",
-            4,
-            80000,
+            307,
+            "Arun",
+            1,
+            68000,
             89,
             "M"
           ],
           [
-            307,
-            "Ankit",
-            1,
-            67000,
-            86,
+            302,
+            "Ashish",
+            4,
+            80000,
+            88,
             "M"
           ]
         ],
@@ -1856,34 +1863,25 @@
   },
   {
     "id": 16,
-    "title": "Company Payroll and Financial Statistics Analyzer",
+    "title": "Enterprise Payroll and Compensation Statistics Analyzer",
     "difficulty": "Medium",
     "points": 50,
-    "category": "SQL",
     "track": "SQL",
-    "subtopic": "Company Payroll Statistics",
+    "category": "SQL",
+    "subtopic": "Aggregate Functions & COALESCE",
+    "description": "The finance department of an organization is preparing its monthly payroll statement for senior management.\n\nThe company wants to understand its total employee strength, monthly salary expenditure, average compensation, salary distribution and the portion of its payroll allocated to female employees.\n\nAdditionally, management wants to analyze the average salary of employees who have achieved a performance score greater than 80 to understand the compensation associated with higher-performing employees.\n\nYou are provided with an `employee` table containing information about employee salaries, gender and performance scores.\n\nYour task is to write a single SQL query that generates a consolidated payroll statistics report.\n\n### Requirements\nCalculate and display the following information in a single row:\n1. `total_employees`: Total number of employees working in the organization.\n2. `total_salary`: Total salary paid to all employees (`SUM(salary)`).\n3. `average_salary`: Average salary of all employees, rounded to two decimal places (`ROUND(AVG(salary), 2)`).\n4. `highest_salary`: Highest salary paid to any employee (`MAX(salary)`).\n5. `lowest_salary`: Lowest salary paid to any employee (`MIN(salary)`).\n6. `salary_difference`: Difference between the highest and lowest salaries (`MAX(salary) - MIN(salary)`).\n7. `female_total_salary`: Total salary paid exclusively to female employees (`COALESCE(SUM(CASE WHEN gender = 'F' THEN salary ELSE 0 END), 0)`).\n8. `high_performer_avg_salary`: Average salary of employees whose performance score is strictly greater than 80 (`ROUND(AVG(CASE WHEN performance > 80 THEN salary END), 2)`).\n9. `average_performance`: Average performance score of all employees, rounded to two decimal places (`ROUND(AVG(performance), 2)`).\n10. Give every calculated column the exact specified alias.\n\n### Acceptance Criteria (10 Checks)\n- Exactly one summary row returned.\n- Female total salary sums only rows where gender = 'F'.\n- High performer average includes only performance > 80.\n- All averages rounded to 2 decimal places.",
     "type": "sql",
-    "tags": [
-      "SQL",
-      "Aggregate Functions",
-      "COUNT",
-      "SUM",
-      "AVG",
-      "CASE",
-      "ROUND"
-    ],
-    "description": "## Company Payroll and Financial Statistics Analyzer\n\nThe finance department requires a consolidated executive financial summary report regarding overall payroll expenditure, salary distributions, and female/high-performer metrics.\n\nWrite a query returning a **single-row summary**:\n1. `total_employees`: Total number of employees (`COUNT(*)`).\n2. `total_salary`: Total salary expenditure (`SUM(salary)`).\n3. `average_salary`: Average employee salary rounded to 2 decimal places (`ROUND(AVG(salary), 2)`).\n4. `highest_salary`: Maximum salary paid (`MAX(salary)`).\n5. `lowest_salary`: Minimum salary paid (`MIN(salary)`).\n6. `salary_difference`: Difference between highest and lowest salary (`MAX(salary) - MIN(salary)`).\n7. `female_total_salary`: Total salary paid to female employees (`SUM(CASE WHEN gender = 'F' THEN salary ELSE 0 END)`).\n8. `high_performer_avg_salary`: Average salary of employees whose performance score is **strictly greater than 80** rounded to 2 decimals.\n9. `average_performance`: Average performance score of the organization rounded to 2 decimal places.\n\n### Output Columns:\n`total_employees`, `total_salary`, `average_salary`, `highest_salary`, `lowest_salary`, `salary_difference`, `female_total_salary`, `high_performer_avg_salary`, `average_performance`",
-    "sampleInput": "-- department Table:\n+---------+-----------+----------+\n| dept_id | dept_name | location |\n+---------+-----------+----------+\n| 1       | IT        | Delhi    |\n| 2       | HR        | Noida    |\n| 3       | Finance   | Gurgaon  |\n| 4       | Marketing | Delhi    |\n| 5       | Sales     | Gurgaon  |\n+---------+-----------+----------+\n\n-- employee Table (15 records):\n+--------+----------+-----+--------+---------+---------+--------+-------------+--------------+\n| emp_id | emp_name | age | gender | dept_id | city    | salary | performance | joining_date |\n+--------+----------+-----+--------+---------+---------+--------+-------------+--------------+\n| 101    | Aman     | 28  | M      | 1       | Delhi   | 65000  | 85          | 2021-06-15   |\n| 102    | Priya    | 26  | F      | 1       | Noida   | 72000  | 92          | 2020-03-10   |\n| 103    | Rohit    | 31  | M      | 2       | Delhi   | 58000  | 74          | 2019-08-21   |\n| 104    | Neha     | 29  | F      | 2       | Noida   | 62000  | 88          | 2022-01-12   |\n| 105    | Karan    | 35  | M      | 3       | Gurgaon | 85000  | 91          | 2018-05-17   |\n| 106    | Riya     | 27  | F      | 3       | Delhi   | 78000  | 79          | 2021-11-03   |\n| 107    | Vikas    | 30  | M      | 4       | Noida   | 68000  | 83          | 2020-07-19   |\n| 108    | Anjali   | 25  | F      | 4       | Delhi   | 71000  | 95          | 2023-02-14   |\n| 109    | Mohit    | 33  | M      | 5       | Gurgaon | 55000  | 68          | 2019-12-01   |\n| 110    | Simran   | 28  | F      | 5       | Delhi   | 60000  | 82          | 2022-09-25   |\n| 111    | Arjun    | 24  | M      | 1       | Gurgaon | 59000  | 76          | 2023-06-11   |\n| 112    | Pooja    | 32  | F      | 3       | Noida   | 88000  | 94          | 2017-04-20   |\n| 113    | Nitin    | 29  | M      | 4       | Delhi   | 64000  | 72          | 2021-01-05   |\n| 114    | Kavita   | 27  | F      | 5       | Gurgaon | 63000  | 89          | 2020-10-16   |\n| 115    | Deepak   | 36  | M      | 2       | Noida   | 57000  | 65          | 2018-03-28   |\n+--------+----------+-----+--------+---------+---------+--------+-------------+--------------+",
-    "sampleOutput": "total_employees | total_salary | average_salary | highest_salary | lowest_salary | salary_difference | female_total_salary | high_performer_avg_salary | average_performance\n----------------+--------------+----------------+----------------+---------------+-------------------+---------------------+---------------------------+--------------------\n15              | 1005000      | 67000.0        | 88000          | 55000         | 33000             | 494000              | 70444.44                  | 82.2               \n\n(1 row)",
     "tableSchema": "CREATE TABLE department (\n    dept_id INT PRIMARY KEY,\n    dept_name VARCHAR(50) NOT NULL,\n    location VARCHAR(50)\n);\n\nCREATE TABLE employee (\n    emp_id INT PRIMARY KEY,\n    emp_name VARCHAR(50) NOT NULL,\n    age INT,\n    gender CHAR(1),\n    dept_id INT,\n    city VARCHAR(50),\n    salary INT,\n    performance INT,\n    joining_date DATE,\n    FOREIGN KEY (dept_id) REFERENCES department(dept_id)\n);",
-    "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(101, 'Aman', 28, 'M', 1, 'Delhi', 65000, 85, '2021-06-15'),\n(102, 'Priya', 26, 'F', 1, 'Noida', 72000, 92, '2020-03-10'),\n(103, 'Rohit', 31, 'M', 2, 'Delhi', 58000, 74, '2019-08-21'),\n(104, 'Neha', 29, 'F', 2, 'Noida', 62000, 88, '2022-01-12'),\n(105, 'Karan', 35, 'M', 3, 'Gurgaon', 85000, 91, '2018-05-17'),\n(106, 'Riya', 27, 'F', 3, 'Delhi', 78000, 79, '2021-11-03'),\n(107, 'Vikas', 30, 'M', 4, 'Noida', 68000, 83, '2020-07-19'),\n(108, 'Anjali', 25, 'F', 4, 'Delhi', 71000, 95, '2023-02-14'),\n(109, 'Mohit', 33, 'M', 5, 'Gurgaon', 55000, 68, '2019-12-01'),\n(110, 'Simran', 28, 'F', 5, 'Delhi', 60000, 82, '2022-09-25'),\n(111, 'Arjun', 24, 'M', 1, 'Gurgaon', 59000, 76, '2023-06-11'),\n(112, 'Pooja', 32, 'F', 3, 'Noida', 88000, 94, '2017-04-20'),\n(113, 'Nitin', 29, 'M', 4, 'Delhi', 64000, 72, '2021-01-05'),\n(114, 'Kavita', 27, 'F', 5, 'Gurgaon', 63000, 89, '2020-10-16'),\n(115, 'Deepak', 36, 'M', 2, 'Noida', 57000, 65, '2018-03-28');",
-    "boilerplate": "-- Write your SQL query below\nSELECT COUNT(*) AS total_employees,\n       SUM(salary) AS total_salary,\n       ROUND(AVG(salary), 2) AS average_salary,\n       MAX(salary) AS highest_salary,\n       MIN(salary) AS lowest_salary,\n       (MAX(salary) - MIN(salary)) AS salary_difference,\n       SUM(CASE WHEN gender = 'F' THEN salary ELSE 0 END) AS female_total_salary,\n       ROUND(AVG(CASE WHEN performance > 80 THEN salary ELSE NULL END), 2) AS high_performer_avg_salary,\n       ROUND(AVG(performance), 2) AS average_performance\nFROM employee;",
+    "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon'),\n(6, 'Research', 'Mumbai');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(101, 'Aman', 28, 'M', 1, 'Delhi', 65000, 85, '2021-06-15'),\n(102, 'Priya', 26, 'F', 1, 'Noida', 72000, 92, '2020-03-10'),\n(103, 'Rohit', 31, 'M', 2, 'Delhi', 58000, 74, '2019-08-21'),\n(104, 'Neha', 29, 'F', 2, 'Noida', 62000, 88, '2022-01-12'),\n(105, 'Karan', 35, 'M', 3, 'Gurgaon', 85000, 91, '2018-05-17'),\n(106, 'Riya', 27, 'F', 3, 'Delhi', 78000, 79, '2021-11-03'),\n(107, 'Vikas', 30, 'M', 4, 'Noida', 68000, 83, '2020-07-19'),\n(108, 'Anjali', 25, 'F', 4, 'Delhi', 71000, 95, '2023-02-14'),\n(109, 'Mohit', 33, 'M', 5, 'Gurgaon', 55000, 68, '2019-12-01'),\n(110, 'Simran', 28, 'F', 5, 'Delhi', 60000, 82, '2022-09-25'),\n(111, 'Arjun', 24, 'M', 1, 'Gurgaon', 59000, 76, '2023-06-11'),\n(112, 'Pooja', 32, 'F', 3, 'Noida', 88000, 94, '2017-04-20'),\n(113, 'Nitin', 29, 'M', 4, 'Delhi', 64000, 72, '2021-01-05'),\n(114, 'Kavita', 27, 'F', 5, 'Gurgaon', 63000, 89, '2020-10-16'),\n(115, 'Deepak', 36, 'M', 2, 'Noida', 57000, 65, '2018-03-28');",
+    "sampleInput": "SELECT * FROM department;\nSELECT * FROM employee;",
+    "sampleOutput": "+-----------------+--------------+----------------+----------------+---------------+-------------------+---------------------+---------------------------+---------------------+\n| total_employees | total_salary | average_salary | highest_salary | lowest_salary | salary_difference | female_total_salary | high_performer_avg_salary | average_performance |\n+-----------------+--------------+----------------+----------------+---------------+-------------------+---------------------+---------------------------+---------------------+\n| 15              | 1005000      | 67000.0        | 88000          | 55000         | 33000             | 494000              | 70444.44                  | 82.2                |\n+-----------------+--------------+----------------+----------------+---------------+-------------------+---------------------+---------------------------+---------------------+",
+    "boilerplate": "-- Write your MySQL query below\n-- Schema: department (dept_id, dept_name, location)\n--         employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date)\n\n",
     "testCases": [
       {
         "id": 1,
-        "description": "Standard corporate dataset (15 employees, 5 departments)",
+        "description": "Standard Company Dataset (15 Employees, 6 Departments)",
         "isSample": true,
-        "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(101, 'Aman', 28, 'M', 1, 'Delhi', 65000, 85, '2021-06-15'),\n(102, 'Priya', 26, 'F', 1, 'Noida', 72000, 92, '2020-03-10'),\n(103, 'Rohit', 31, 'M', 2, 'Delhi', 58000, 74, '2019-08-21'),\n(104, 'Neha', 29, 'F', 2, 'Noida', 62000, 88, '2022-01-12'),\n(105, 'Karan', 35, 'M', 3, 'Gurgaon', 85000, 91, '2018-05-17'),\n(106, 'Riya', 27, 'F', 3, 'Delhi', 78000, 79, '2021-11-03'),\n(107, 'Vikas', 30, 'M', 4, 'Noida', 68000, 83, '2020-07-19'),\n(108, 'Anjali', 25, 'F', 4, 'Delhi', 71000, 95, '2023-02-14'),\n(109, 'Mohit', 33, 'M', 5, 'Gurgaon', 55000, 68, '2019-12-01'),\n(110, 'Simran', 28, 'F', 5, 'Delhi', 60000, 82, '2022-09-25'),\n(111, 'Arjun', 24, 'M', 1, 'Gurgaon', 59000, 76, '2023-06-11'),\n(112, 'Pooja', 32, 'F', 3, 'Noida', 88000, 94, '2017-04-20'),\n(113, 'Nitin', 29, 'M', 4, 'Delhi', 64000, 72, '2021-01-05'),\n(114, 'Kavita', 27, 'F', 5, 'Gurgaon', 63000, 89, '2020-10-16'),\n(115, 'Deepak', 36, 'M', 2, 'Noida', 57000, 65, '2018-03-28');",
+        "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon'),\n(6, 'Research', 'Mumbai');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(101, 'Aman', 28, 'M', 1, 'Delhi', 65000, 85, '2021-06-15'),\n(102, 'Priya', 26, 'F', 1, 'Noida', 72000, 92, '2020-03-10'),\n(103, 'Rohit', 31, 'M', 2, 'Delhi', 58000, 74, '2019-08-21'),\n(104, 'Neha', 29, 'F', 2, 'Noida', 62000, 88, '2022-01-12'),\n(105, 'Karan', 35, 'M', 3, 'Gurgaon', 85000, 91, '2018-05-17'),\n(106, 'Riya', 27, 'F', 3, 'Delhi', 78000, 79, '2021-11-03'),\n(107, 'Vikas', 30, 'M', 4, 'Noida', 68000, 83, '2020-07-19'),\n(108, 'Anjali', 25, 'F', 4, 'Delhi', 71000, 95, '2023-02-14'),\n(109, 'Mohit', 33, 'M', 5, 'Gurgaon', 55000, 68, '2019-12-01'),\n(110, 'Simran', 28, 'F', 5, 'Delhi', 60000, 82, '2022-09-25'),\n(111, 'Arjun', 24, 'M', 1, 'Gurgaon', 59000, 76, '2023-06-11'),\n(112, 'Pooja', 32, 'F', 3, 'Noida', 88000, 94, '2017-04-20'),\n(113, 'Nitin', 29, 'M', 4, 'Delhi', 64000, 72, '2021-01-05'),\n(114, 'Kavita', 27, 'F', 5, 'Gurgaon', 63000, 89, '2020-10-16'),\n(115, 'Deepak', 36, 'M', 2, 'Noida', 57000, 65, '2018-03-28');",
         "expectedColumns": [
           "total_employees",
           "total_salary",
@@ -1912,9 +1910,9 @@
       },
       {
         "id": 2,
-        "description": "Diverse salary and demographic distribution test",
+        "description": "Dataset 2: Edge Boundaries & Alternative Cohorts",
         "isSample": false,
-        "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(201, 'Aakash', 29, 'M', 1, 'Delhi', 75000, 88, '2021-08-10'),\n(202, 'Anita', 27, 'F', 4, 'Noida', 74000, 93, '2022-04-18'),\n(203, 'Rohan', 26, 'M', 1, 'Delhi', 68000, 89, '2020-11-20'),\n(204, 'Sunita', 30, 'F', 3, 'Gurgaon', 82000, 92, '2019-02-14'),\n(205, 'Manish', 34, 'M', 2, 'Noida', 61000, 77, '2020-05-22'),\n(206, 'Divya', 28, 'F', 5, 'Delhi', 66000, 84, '2021-09-01'),\n(207, 'Amit', 25, 'M', 4, 'Delhi', 62000, 87, '2023-01-15'),\n(208, 'Reena', 31, 'F', 3, 'Noida', 89000, 96, '2018-07-19'),\n(209, 'Varun', 32, 'M', 5, 'Gurgaon', 58000, 73, '2020-03-11'),\n(210, 'Geeta', 29, 'F', 1, 'Noida', 70000, 91, '2022-10-05');",
+        "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon'),\n(6, 'Research', 'Mumbai');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(201, 'Aditya', 27, 'M', 1, 'Delhi', 74000, 89, '2021-04-12'),\n(202, 'Alka', 25, 'F', 4, 'Noida', 69000, 93, '2022-03-15'),\n(203, 'Amitabh', 30, 'M', 1, 'Gurgaon', 78000, 91, '2020-11-20'),\n(204, 'Sonia', 29, 'F', 3, 'Delhi', 84000, 92, '2019-02-14'),\n(205, 'Manish', 34, 'M', 2, 'Noida', 61000, 77, '2020-05-22'),\n(206, 'Divya', 28, 'F', 5, 'Delhi', 66000, 84, '2021-09-01'),\n(207, 'Anita', 26, 'F', 4, 'Delhi', 73000, 96, '2023-01-15'),\n(208, 'Reena', 31, 'F', 3, 'Noida', 89000, 94, '2018-07-19'),\n(209, 'Varun', 32, 'M', 5, 'Gurgaon', 58000, 73, '2020-03-11'),\n(210, 'Geeta', 29, 'F', 1, 'Noida', 70000, 89, '2022-10-05');",
         "expectedColumns": [
           "total_employees",
           "total_salary",
@@ -1929,23 +1927,23 @@
         "expectedRows": [
           [
             10,
-            705000,
-            70500.0,
+            722000,
+            72200.0,
             89000,
             58000,
             31000,
-            381000,
-            73250.0,
-            87.0
+            451000,
+            75375.0,
+            87.8
           ]
         ],
         "orderSensitive": true
       },
       {
         "id": 3,
-        "description": "Boundary conditions and date range validation test",
+        "description": "Dataset 3: Boundary Salaries & Distinct Department Sizes",
         "isSample": false,
-        "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(301, 'Aditi', 25, 'F', 1, 'Delhi', 60000, 90, '2020-01-01'),\n(302, 'Alok', 32, 'M', 4, 'Noida', 80000, 89, '2021-03-15'),\n(303, 'Savitri', 28, 'F', 3, 'Gurgaon', 85000, 95, '2019-06-20'),\n(304, 'Rohit', 27, 'M', 2, 'Delhi', 59000, 78, '2022-08-10'),\n(305, 'Kavita', 31, 'F', 5, 'Delhi', 62000, 83, '2020-12-25'),\n(306, 'Naveen', 35, 'M', 3, 'Noida', 90000, 92, '2017-09-14'),\n(307, 'Ankit', 26, 'M', 1, 'Noida', 67000, 86, '2023-04-05');",
+        "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon'),\n(6, 'Research', 'Mumbai');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(301, 'Ananya', 25, 'F', 1, 'Delhi', 60000, 90, '2020-01-01'),\n(302, 'Ashish', 32, 'M', 4, 'Noida', 80000, 88, '2021-03-15'),\n(303, 'Savitri', 28, 'F', 3, 'Gurgaon', 85000, 95, '2019-06-20'),\n(304, 'Rohit', 27, 'M', 2, 'Delhi', 59000, 78, '2022-08-10'),\n(305, 'Kavita', 31, 'F', 5, 'Delhi', 62000, 83, '2020-12-25'),\n(306, 'Priya', 26, 'F', 3, 'Delhi', 79000, 91, '2021-05-18'),\n(307, 'Arun', 30, 'M', 1, 'Gurgaon', 68000, 89, '2020-09-09');",
         "expectedColumns": [
           "total_employees",
           "total_salary",
@@ -1960,14 +1958,14 @@
         "expectedRows": [
           [
             7,
-            503000,
-            71857.14,
-            90000,
+            493000,
+            70428.57,
+            85000,
             59000,
-            31000,
-            207000,
-            74000.0,
-            87.57
+            26000,
+            286000,
+            72333.33,
+            87.71
           ]
         ],
         "orderSensitive": true
@@ -1976,934 +1974,25 @@
   },
   {
     "id": 17,
-    "title": "Department Location and Workforce Distribution Analysis",
-    "difficulty": "Medium",
-    "points": 50,
-    "category": "SQL",
-    "track": "SQL",
-    "subtopic": "Department Location & Workforce",
-    "type": "sql",
-    "tags": [
-      "SQL",
-      "INNER JOIN",
-      "GROUP BY",
-      "HAVING",
-      "COUNT",
-      "AVG",
-      "DISTINCT"
-    ],
-    "description": "## Department Location and Workforce Distribution Analysis\n\nManagement wants to evaluate workforce and payroll distribution across the **department's official office locations** (`department.location`), not the employee's personal city.\n\n### Requirements:\n1. Join `employee` and `department` on `dept_id`.\n2. Group by `d.location`.\n3. Calculate:\n   - `total_employees`: Total employees working in departments at that location.\n   - `total_salary`: Combined salary expenditure for that location.\n   - `average_salary`: Average employee salary rounded to 2 decimal places.\n   - `highest_performance`: Highest individual performance score at that location.\n   - `total_departments`: Number of distinct departments operating at that location (`COUNT(DISTINCT d.dept_id)`).\n4. Include only locations having **at least 3 employees** (`COUNT >= 3`).\n5. Include only locations where `average_salary` is **strictly greater than \u20b965,000**.\n6. Sort by `average_salary` in descending order, then alphabetically by location.\n\n### Output Columns:\n`location`, `total_employees`, `total_salary`, `average_salary`, `highest_performance`, `total_departments`",
-    "sampleInput": "-- department Table:\n+---------+-----------+----------+\n| dept_id | dept_name | location |\n+---------+-----------+----------+\n| 1       | IT        | Delhi    |\n| 2       | HR        | Noida    |\n| 3       | Finance   | Gurgaon  |\n| 4       | Marketing | Delhi    |\n| 5       | Sales     | Gurgaon  |\n+---------+-----------+----------+\n\n-- employee Table (15 records):\n+--------+----------+-----+--------+---------+---------+--------+-------------+--------------+\n| emp_id | emp_name | age | gender | dept_id | city    | salary | performance | joining_date |\n+--------+----------+-----+--------+---------+---------+--------+-------------+--------------+\n| 101    | Aman     | 28  | M      | 1       | Delhi   | 65000  | 85          | 2021-06-15   |\n| 102    | Priya    | 26  | F      | 1       | Noida   | 72000  | 92          | 2020-03-10   |\n| 103    | Rohit    | 31  | M      | 2       | Delhi   | 58000  | 74          | 2019-08-21   |\n| 104    | Neha     | 29  | F      | 2       | Noida   | 62000  | 88          | 2022-01-12   |\n| 105    | Karan    | 35  | M      | 3       | Gurgaon | 85000  | 91          | 2018-05-17   |\n| 106    | Riya     | 27  | F      | 3       | Delhi   | 78000  | 79          | 2021-11-03   |\n| 107    | Vikas    | 30  | M      | 4       | Noida   | 68000  | 83          | 2020-07-19   |\n| 108    | Anjali   | 25  | F      | 4       | Delhi   | 71000  | 95          | 2023-02-14   |\n| 109    | Mohit    | 33  | M      | 5       | Gurgaon | 55000  | 68          | 2019-12-01   |\n| 110    | Simran   | 28  | F      | 5       | Delhi   | 60000  | 82          | 2022-09-25   |\n| 111    | Arjun    | 24  | M      | 1       | Gurgaon | 59000  | 76          | 2023-06-11   |\n| 112    | Pooja    | 32  | F      | 3       | Noida   | 88000  | 94          | 2017-04-20   |\n| 113    | Nitin    | 29  | M      | 4       | Delhi   | 64000  | 72          | 2021-01-05   |\n| 114    | Kavita   | 27  | F      | 5       | Gurgaon | 63000  | 89          | 2020-10-16   |\n| 115    | Deepak   | 36  | M      | 2       | Noida   | 57000  | 65          | 2018-03-28   |\n+--------+----------+-----+--------+---------+---------+--------+-------------+--------------+",
-    "sampleOutput": "location | total_employees | total_salary | average_salary | highest_performance | total_departments\n---------+-----------------+--------------+----------------+---------------------+------------------\nGurgaon  | 6               | 429000       | 71500.0        | 94                  | 2                \nDelhi    | 6               | 399000       | 66500.0        | 95                  | 2                \n\n(2 rows)",
-    "tableSchema": "CREATE TABLE department (\n    dept_id INT PRIMARY KEY,\n    dept_name VARCHAR(50) NOT NULL,\n    location VARCHAR(50)\n);\n\nCREATE TABLE employee (\n    emp_id INT PRIMARY KEY,\n    emp_name VARCHAR(50) NOT NULL,\n    age INT,\n    gender CHAR(1),\n    dept_id INT,\n    city VARCHAR(50),\n    salary INT,\n    performance INT,\n    joining_date DATE,\n    FOREIGN KEY (dept_id) REFERENCES department(dept_id)\n);",
-    "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(101, 'Aman', 28, 'M', 1, 'Delhi', 65000, 85, '2021-06-15'),\n(102, 'Priya', 26, 'F', 1, 'Noida', 72000, 92, '2020-03-10'),\n(103, 'Rohit', 31, 'M', 2, 'Delhi', 58000, 74, '2019-08-21'),\n(104, 'Neha', 29, 'F', 2, 'Noida', 62000, 88, '2022-01-12'),\n(105, 'Karan', 35, 'M', 3, 'Gurgaon', 85000, 91, '2018-05-17'),\n(106, 'Riya', 27, 'F', 3, 'Delhi', 78000, 79, '2021-11-03'),\n(107, 'Vikas', 30, 'M', 4, 'Noida', 68000, 83, '2020-07-19'),\n(108, 'Anjali', 25, 'F', 4, 'Delhi', 71000, 95, '2023-02-14'),\n(109, 'Mohit', 33, 'M', 5, 'Gurgaon', 55000, 68, '2019-12-01'),\n(110, 'Simran', 28, 'F', 5, 'Delhi', 60000, 82, '2022-09-25'),\n(111, 'Arjun', 24, 'M', 1, 'Gurgaon', 59000, 76, '2023-06-11'),\n(112, 'Pooja', 32, 'F', 3, 'Noida', 88000, 94, '2017-04-20'),\n(113, 'Nitin', 29, 'M', 4, 'Delhi', 64000, 72, '2021-01-05'),\n(114, 'Kavita', 27, 'F', 5, 'Gurgaon', 63000, 89, '2020-10-16'),\n(115, 'Deepak', 36, 'M', 2, 'Noida', 57000, 65, '2018-03-28');",
-    "boilerplate": "-- Write your SQL query below\nSELECT d.location,\n       COUNT(e.emp_id) AS total_employees,\n       SUM(e.salary) AS total_salary,\n       ROUND(AVG(e.salary), 2) AS average_salary,\n       MAX(e.performance) AS highest_performance,\n       COUNT(DISTINCT d.dept_id) AS total_departments\nFROM employee e\nJOIN department d ON e.dept_id = d.dept_id\nGROUP BY d.location\nHAVING \nORDER BY ;",
-    "testCases": [
-      {
-        "id": 1,
-        "description": "Standard corporate dataset (15 employees, 5 departments)",
-        "isSample": true,
-        "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(101, 'Aman', 28, 'M', 1, 'Delhi', 65000, 85, '2021-06-15'),\n(102, 'Priya', 26, 'F', 1, 'Noida', 72000, 92, '2020-03-10'),\n(103, 'Rohit', 31, 'M', 2, 'Delhi', 58000, 74, '2019-08-21'),\n(104, 'Neha', 29, 'F', 2, 'Noida', 62000, 88, '2022-01-12'),\n(105, 'Karan', 35, 'M', 3, 'Gurgaon', 85000, 91, '2018-05-17'),\n(106, 'Riya', 27, 'F', 3, 'Delhi', 78000, 79, '2021-11-03'),\n(107, 'Vikas', 30, 'M', 4, 'Noida', 68000, 83, '2020-07-19'),\n(108, 'Anjali', 25, 'F', 4, 'Delhi', 71000, 95, '2023-02-14'),\n(109, 'Mohit', 33, 'M', 5, 'Gurgaon', 55000, 68, '2019-12-01'),\n(110, 'Simran', 28, 'F', 5, 'Delhi', 60000, 82, '2022-09-25'),\n(111, 'Arjun', 24, 'M', 1, 'Gurgaon', 59000, 76, '2023-06-11'),\n(112, 'Pooja', 32, 'F', 3, 'Noida', 88000, 94, '2017-04-20'),\n(113, 'Nitin', 29, 'M', 4, 'Delhi', 64000, 72, '2021-01-05'),\n(114, 'Kavita', 27, 'F', 5, 'Gurgaon', 63000, 89, '2020-10-16'),\n(115, 'Deepak', 36, 'M', 2, 'Noida', 57000, 65, '2018-03-28');",
-        "expectedColumns": [
-          "location",
-          "total_employees",
-          "total_salary",
-          "average_salary",
-          "highest_performance",
-          "total_departments"
-        ],
-        "expectedRows": [
-          [
-            "Gurgaon",
-            6,
-            429000,
-            71500.0,
-            94,
-            2
-          ],
-          [
-            "Delhi",
-            6,
-            399000,
-            66500.0,
-            95,
-            2
-          ]
-        ],
-        "orderSensitive": true
-      },
-      {
-        "id": 2,
-        "description": "Diverse salary and demographic distribution test",
-        "isSample": false,
-        "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(201, 'Aakash', 29, 'M', 1, 'Delhi', 75000, 88, '2021-08-10'),\n(202, 'Anita', 27, 'F', 4, 'Noida', 74000, 93, '2022-04-18'),\n(203, 'Rohan', 26, 'M', 1, 'Delhi', 68000, 89, '2020-11-20'),\n(204, 'Sunita', 30, 'F', 3, 'Gurgaon', 82000, 92, '2019-02-14'),\n(205, 'Manish', 34, 'M', 2, 'Noida', 61000, 77, '2020-05-22'),\n(206, 'Divya', 28, 'F', 5, 'Delhi', 66000, 84, '2021-09-01'),\n(207, 'Amit', 25, 'M', 4, 'Delhi', 62000, 87, '2023-01-15'),\n(208, 'Reena', 31, 'F', 3, 'Noida', 89000, 96, '2018-07-19'),\n(209, 'Varun', 32, 'M', 5, 'Gurgaon', 58000, 73, '2020-03-11'),\n(210, 'Geeta', 29, 'F', 1, 'Noida', 70000, 91, '2022-10-05');",
-        "expectedColumns": [
-          "location",
-          "total_employees",
-          "total_salary",
-          "average_salary",
-          "highest_performance",
-          "total_departments"
-        ],
-        "expectedRows": [
-          [
-            "Gurgaon",
-            4,
-            295000,
-            73750.0,
-            96,
-            2
-          ],
-          [
-            "Delhi",
-            5,
-            349000,
-            69800.0,
-            93,
-            2
-          ]
-        ],
-        "orderSensitive": true
-      },
-      {
-        "id": 3,
-        "description": "Boundary conditions and date range validation test",
-        "isSample": false,
-        "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(301, 'Aditi', 25, 'F', 1, 'Delhi', 60000, 90, '2020-01-01'),\n(302, 'Alok', 32, 'M', 4, 'Noida', 80000, 89, '2021-03-15'),\n(303, 'Savitri', 28, 'F', 3, 'Gurgaon', 85000, 95, '2019-06-20'),\n(304, 'Rohit', 27, 'M', 2, 'Delhi', 59000, 78, '2022-08-10'),\n(305, 'Kavita', 31, 'F', 5, 'Delhi', 62000, 83, '2020-12-25'),\n(306, 'Naveen', 35, 'M', 3, 'Noida', 90000, 92, '2017-09-14'),\n(307, 'Ankit', 26, 'M', 1, 'Noida', 67000, 86, '2023-04-05');",
-        "expectedColumns": [
-          "location",
-          "total_employees",
-          "total_salary",
-          "average_salary",
-          "highest_performance",
-          "total_departments"
-        ],
-        "expectedRows": [
-          [
-            "Gurgaon",
-            3,
-            237000,
-            79000.0,
-            95,
-            2
-          ],
-          [
-            "Delhi",
-            3,
-            207000,
-            69000.0,
-            90,
-            2
-          ]
-        ],
-        "orderSensitive": true
-      }
-    ]
-  },
-  {
-    "id": 18,
-    "title": "Employee Classification and HR Information Directory",
-    "difficulty": "Medium",
-    "points": 50,
-    "category": "SQL",
-    "track": "SQL",
-    "subtopic": "Employee HR Classification (CASE)",
-    "type": "sql",
-    "tags": [
-      "SQL",
-      "CASE Statements",
-      "Date Functions",
-      "YEAR",
-      "MONTHNAME",
-      "INNER JOIN"
-    ],
-    "description": "## Employee Classification and HR Information Directory\n\nThe HR department requires a dynamic employee directory classifying employees according to salary, age, and performance using CASE statements.\n\n### Retrieve for every employee:\n`emp_id`, `employee_name` (`e.emp_name`), `department` (`d.dept_name`), `age`, `salary`, `performance`.\n\n### Create Three Classification Columns:\n1. **`performance_category`**:\n   - `Performance >= 90` -> `'Excellent'`\n   - `Performance >= 80` -> `'Good'`\n   - `Performance >= 70` -> `'Average'`\n   - `Performance < 70` -> `'Poor'`\n2. **`salary_category`**:\n   - `Salary >= 80000` -> `'High'`\n   - `Salary >= 60000` -> `'Medium'`\n   - `Salary < 60000` -> `'Low'`\n3. **`age_category`**:\n   - `Age < 28` -> `'Young'`\n   - `Age BETWEEN 28 AND 32` -> `'Middle'`\n   - `Age > 32` -> `'Senior'`\n4. **`joining_year`**: `YEAR(joining_date)`.\n5. **`joining_month`**: `MONTHNAME(joining_date)`.\n\n### Sorting:\nSort by `performance` in descending order, then by `emp_id` in ascending order.\n\n### Output Columns:\n`emp_id`, `employee_name`, `department`, `age`, `salary`, `performance`, `performance_category`, `salary_category`, `age_category`, `joining_year`, `joining_month`",
-    "sampleInput": "-- department Table:\n+---------+-----------+----------+\n| dept_id | dept_name | location |\n+---------+-----------+----------+\n| 1       | IT        | Delhi    |\n| 2       | HR        | Noida    |\n| 3       | Finance   | Gurgaon  |\n| 4       | Marketing | Delhi    |\n| 5       | Sales     | Gurgaon  |\n+---------+-----------+----------+\n\n-- employee Table (15 records):\n+--------+----------+-----+--------+---------+---------+--------+-------------+--------------+\n| emp_id | emp_name | age | gender | dept_id | city    | salary | performance | joining_date |\n+--------+----------+-----+--------+---------+---------+--------+-------------+--------------+\n| 101    | Aman     | 28  | M      | 1       | Delhi   | 65000  | 85          | 2021-06-15   |\n| 102    | Priya    | 26  | F      | 1       | Noida   | 72000  | 92          | 2020-03-10   |\n| 103    | Rohit    | 31  | M      | 2       | Delhi   | 58000  | 74          | 2019-08-21   |\n| 104    | Neha     | 29  | F      | 2       | Noida   | 62000  | 88          | 2022-01-12   |\n| 105    | Karan    | 35  | M      | 3       | Gurgaon | 85000  | 91          | 2018-05-17   |\n| 106    | Riya     | 27  | F      | 3       | Delhi   | 78000  | 79          | 2021-11-03   |\n| 107    | Vikas    | 30  | M      | 4       | Noida   | 68000  | 83          | 2020-07-19   |\n| 108    | Anjali   | 25  | F      | 4       | Delhi   | 71000  | 95          | 2023-02-14   |\n| 109    | Mohit    | 33  | M      | 5       | Gurgaon | 55000  | 68          | 2019-12-01   |\n| 110    | Simran   | 28  | F      | 5       | Delhi   | 60000  | 82          | 2022-09-25   |\n| 111    | Arjun    | 24  | M      | 1       | Gurgaon | 59000  | 76          | 2023-06-11   |\n| 112    | Pooja    | 32  | F      | 3       | Noida   | 88000  | 94          | 2017-04-20   |\n| 113    | Nitin    | 29  | M      | 4       | Delhi   | 64000  | 72          | 2021-01-05   |\n| 114    | Kavita   | 27  | F      | 5       | Gurgaon | 63000  | 89          | 2020-10-16   |\n| 115    | Deepak   | 36  | M      | 2       | Noida   | 57000  | 65          | 2018-03-28   |\n+--------+----------+-----+--------+---------+---------+--------+-------------+--------------+",
-    "sampleOutput": "emp_id | employee_name | department | age | salary | performance | performance_category | salary_category | age_category | joining_year | joining_month\n-------+---------------+------------+-----+--------+-------------+----------------------+-----------------+--------------+--------------+--------------\n108    | Anjali        | Marketing  | 25  | 71000  | 95          | Excellent            | Medium          | Young        | 2023         | February     \n112    | Pooja         | Finance    | 32  | 88000  | 94          | Excellent            | High            | Middle       | 2017         | April        \n102    | Priya         | IT         | 26  | 72000  | 92          | Excellent            | Medium          | Young        | 2020         | March        \n105    | Karan         | Finance    | 35  | 85000  | 91          | Excellent            | High            | Senior       | 2018         | May          \n114    | Kavita        | Sales      | 27  | 63000  | 89          | Good                 | Medium          | Young        | 2020         | October      \n104    | Neha          | HR         | 29  | 62000  | 88          | Good                 | Medium          | Middle       | 2022         | January      \n\n(Total 15 rows)",
-    "tableSchema": "CREATE TABLE department (\n    dept_id INT PRIMARY KEY,\n    dept_name VARCHAR(50) NOT NULL,\n    location VARCHAR(50)\n);\n\nCREATE TABLE employee (\n    emp_id INT PRIMARY KEY,\n    emp_name VARCHAR(50) NOT NULL,\n    age INT,\n    gender CHAR(1),\n    dept_id INT,\n    city VARCHAR(50),\n    salary INT,\n    performance INT,\n    joining_date DATE,\n    FOREIGN KEY (dept_id) REFERENCES department(dept_id)\n);",
-    "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(101, 'Aman', 28, 'M', 1, 'Delhi', 65000, 85, '2021-06-15'),\n(102, 'Priya', 26, 'F', 1, 'Noida', 72000, 92, '2020-03-10'),\n(103, 'Rohit', 31, 'M', 2, 'Delhi', 58000, 74, '2019-08-21'),\n(104, 'Neha', 29, 'F', 2, 'Noida', 62000, 88, '2022-01-12'),\n(105, 'Karan', 35, 'M', 3, 'Gurgaon', 85000, 91, '2018-05-17'),\n(106, 'Riya', 27, 'F', 3, 'Delhi', 78000, 79, '2021-11-03'),\n(107, 'Vikas', 30, 'M', 4, 'Noida', 68000, 83, '2020-07-19'),\n(108, 'Anjali', 25, 'F', 4, 'Delhi', 71000, 95, '2023-02-14'),\n(109, 'Mohit', 33, 'M', 5, 'Gurgaon', 55000, 68, '2019-12-01'),\n(110, 'Simran', 28, 'F', 5, 'Delhi', 60000, 82, '2022-09-25'),\n(111, 'Arjun', 24, 'M', 1, 'Gurgaon', 59000, 76, '2023-06-11'),\n(112, 'Pooja', 32, 'F', 3, 'Noida', 88000, 94, '2017-04-20'),\n(113, 'Nitin', 29, 'M', 4, 'Delhi', 64000, 72, '2021-01-05'),\n(114, 'Kavita', 27, 'F', 5, 'Gurgaon', 63000, 89, '2020-10-16'),\n(115, 'Deepak', 36, 'M', 2, 'Noida', 57000, 65, '2018-03-28');",
-    "boilerplate": "-- Write your SQL query below\nSELECT e.emp_id,\n       e.emp_name AS employee_name,\n       d.dept_name AS department,\n       e.age,\n       e.salary,\n       e.performance,\n       CASE \n           WHEN e.performance >= 90 THEN 'Excellent'\n           WHEN e.performance >= 80 THEN 'Good'\n           WHEN e.performance >= 70 THEN 'Average'\n           ELSE 'Poor'\n       END AS performance_category,\n       CASE \n           WHEN e.salary >= 80000 THEN 'High'\n           WHEN e.salary >= 60000 THEN 'Medium'\n           ELSE 'Low'\n       END AS salary_category,\n       CASE \n           WHEN e.age < 28 THEN 'Young'\n           WHEN e.age BETWEEN 28 AND 32 THEN 'Middle'\n           ELSE 'Senior'\n       END AS age_category,\n       YEAR(e.joining_date) AS joining_year,\n       MONTHNAME(e.joining_date) AS joining_month\nFROM employee e\nJOIN department d ON e.dept_id = d.dept_id\nORDER BY e.performance DESC, e.emp_id ASC;",
-    "testCases": [
-      {
-        "id": 1,
-        "description": "Standard corporate dataset (15 employees, 5 departments)",
-        "isSample": true,
-        "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(101, 'Aman', 28, 'M', 1, 'Delhi', 65000, 85, '2021-06-15'),\n(102, 'Priya', 26, 'F', 1, 'Noida', 72000, 92, '2020-03-10'),\n(103, 'Rohit', 31, 'M', 2, 'Delhi', 58000, 74, '2019-08-21'),\n(104, 'Neha', 29, 'F', 2, 'Noida', 62000, 88, '2022-01-12'),\n(105, 'Karan', 35, 'M', 3, 'Gurgaon', 85000, 91, '2018-05-17'),\n(106, 'Riya', 27, 'F', 3, 'Delhi', 78000, 79, '2021-11-03'),\n(107, 'Vikas', 30, 'M', 4, 'Noida', 68000, 83, '2020-07-19'),\n(108, 'Anjali', 25, 'F', 4, 'Delhi', 71000, 95, '2023-02-14'),\n(109, 'Mohit', 33, 'M', 5, 'Gurgaon', 55000, 68, '2019-12-01'),\n(110, 'Simran', 28, 'F', 5, 'Delhi', 60000, 82, '2022-09-25'),\n(111, 'Arjun', 24, 'M', 1, 'Gurgaon', 59000, 76, '2023-06-11'),\n(112, 'Pooja', 32, 'F', 3, 'Noida', 88000, 94, '2017-04-20'),\n(113, 'Nitin', 29, 'M', 4, 'Delhi', 64000, 72, '2021-01-05'),\n(114, 'Kavita', 27, 'F', 5, 'Gurgaon', 63000, 89, '2020-10-16'),\n(115, 'Deepak', 36, 'M', 2, 'Noida', 57000, 65, '2018-03-28');",
-        "expectedColumns": [
-          "emp_id",
-          "employee_name",
-          "department",
-          "age",
-          "salary",
-          "performance",
-          "performance_category",
-          "salary_category",
-          "age_category",
-          "joining_year",
-          "joining_month"
-        ],
-        "expectedRows": [
-          [
-            108,
-            "Anjali",
-            "Marketing",
-            25,
-            71000,
-            95,
-            "Excellent",
-            "Medium",
-            "Young",
-            2023,
-            "February"
-          ],
-          [
-            112,
-            "Pooja",
-            "Finance",
-            32,
-            88000,
-            94,
-            "Excellent",
-            "High",
-            "Middle",
-            2017,
-            "April"
-          ],
-          [
-            102,
-            "Priya",
-            "IT",
-            26,
-            72000,
-            92,
-            "Excellent",
-            "Medium",
-            "Young",
-            2020,
-            "March"
-          ],
-          [
-            105,
-            "Karan",
-            "Finance",
-            35,
-            85000,
-            91,
-            "Excellent",
-            "High",
-            "Senior",
-            2018,
-            "May"
-          ],
-          [
-            114,
-            "Kavita",
-            "Sales",
-            27,
-            63000,
-            89,
-            "Good",
-            "Medium",
-            "Young",
-            2020,
-            "October"
-          ],
-          [
-            104,
-            "Neha",
-            "HR",
-            29,
-            62000,
-            88,
-            "Good",
-            "Medium",
-            "Middle",
-            2022,
-            "January"
-          ],
-          [
-            101,
-            "Aman",
-            "IT",
-            28,
-            65000,
-            85,
-            "Good",
-            "Medium",
-            "Middle",
-            2021,
-            "June"
-          ],
-          [
-            107,
-            "Vikas",
-            "Marketing",
-            30,
-            68000,
-            83,
-            "Good",
-            "Medium",
-            "Middle",
-            2020,
-            "July"
-          ],
-          [
-            110,
-            "Simran",
-            "Sales",
-            28,
-            60000,
-            82,
-            "Good",
-            "Medium",
-            "Middle",
-            2022,
-            "September"
-          ],
-          [
-            106,
-            "Riya",
-            "Finance",
-            27,
-            78000,
-            79,
-            "Average",
-            "Medium",
-            "Young",
-            2021,
-            "November"
-          ],
-          [
-            111,
-            "Arjun",
-            "IT",
-            24,
-            59000,
-            76,
-            "Average",
-            "Low",
-            "Young",
-            2023,
-            "June"
-          ],
-          [
-            103,
-            "Rohit",
-            "HR",
-            31,
-            58000,
-            74,
-            "Average",
-            "Low",
-            "Middle",
-            2019,
-            "August"
-          ],
-          [
-            113,
-            "Nitin",
-            "Marketing",
-            29,
-            64000,
-            72,
-            "Average",
-            "Medium",
-            "Middle",
-            2021,
-            "January"
-          ],
-          [
-            109,
-            "Mohit",
-            "Sales",
-            33,
-            55000,
-            68,
-            "Poor",
-            "Low",
-            "Senior",
-            2019,
-            "December"
-          ],
-          [
-            115,
-            "Deepak",
-            "HR",
-            36,
-            57000,
-            65,
-            "Poor",
-            "Low",
-            "Senior",
-            2018,
-            "March"
-          ]
-        ],
-        "orderSensitive": true
-      },
-      {
-        "id": 2,
-        "description": "Diverse salary and demographic distribution test",
-        "isSample": false,
-        "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(201, 'Aakash', 29, 'M', 1, 'Delhi', 75000, 88, '2021-08-10'),\n(202, 'Anita', 27, 'F', 4, 'Noida', 74000, 93, '2022-04-18'),\n(203, 'Rohan', 26, 'M', 1, 'Delhi', 68000, 89, '2020-11-20'),\n(204, 'Sunita', 30, 'F', 3, 'Gurgaon', 82000, 92, '2019-02-14'),\n(205, 'Manish', 34, 'M', 2, 'Noida', 61000, 77, '2020-05-22'),\n(206, 'Divya', 28, 'F', 5, 'Delhi', 66000, 84, '2021-09-01'),\n(207, 'Amit', 25, 'M', 4, 'Delhi', 62000, 87, '2023-01-15'),\n(208, 'Reena', 31, 'F', 3, 'Noida', 89000, 96, '2018-07-19'),\n(209, 'Varun', 32, 'M', 5, 'Gurgaon', 58000, 73, '2020-03-11'),\n(210, 'Geeta', 29, 'F', 1, 'Noida', 70000, 91, '2022-10-05');",
-        "expectedColumns": [
-          "emp_id",
-          "employee_name",
-          "department",
-          "age",
-          "salary",
-          "performance",
-          "performance_category",
-          "salary_category",
-          "age_category",
-          "joining_year",
-          "joining_month"
-        ],
-        "expectedRows": [
-          [
-            208,
-            "Reena",
-            "Finance",
-            31,
-            89000,
-            96,
-            "Excellent",
-            "High",
-            "Middle",
-            2018,
-            "July"
-          ],
-          [
-            202,
-            "Anita",
-            "Marketing",
-            27,
-            74000,
-            93,
-            "Excellent",
-            "Medium",
-            "Young",
-            2022,
-            "April"
-          ],
-          [
-            204,
-            "Sunita",
-            "Finance",
-            30,
-            82000,
-            92,
-            "Excellent",
-            "High",
-            "Middle",
-            2019,
-            "February"
-          ],
-          [
-            210,
-            "Geeta",
-            "IT",
-            29,
-            70000,
-            91,
-            "Excellent",
-            "Medium",
-            "Middle",
-            2022,
-            "October"
-          ],
-          [
-            203,
-            "Rohan",
-            "IT",
-            26,
-            68000,
-            89,
-            "Good",
-            "Medium",
-            "Young",
-            2020,
-            "November"
-          ],
-          [
-            201,
-            "Aakash",
-            "IT",
-            29,
-            75000,
-            88,
-            "Good",
-            "Medium",
-            "Middle",
-            2021,
-            "August"
-          ],
-          [
-            207,
-            "Amit",
-            "Marketing",
-            25,
-            62000,
-            87,
-            "Good",
-            "Medium",
-            "Young",
-            2023,
-            "January"
-          ],
-          [
-            206,
-            "Divya",
-            "Sales",
-            28,
-            66000,
-            84,
-            "Good",
-            "Medium",
-            "Middle",
-            2021,
-            "September"
-          ],
-          [
-            205,
-            "Manish",
-            "HR",
-            34,
-            61000,
-            77,
-            "Average",
-            "Medium",
-            "Senior",
-            2020,
-            "May"
-          ],
-          [
-            209,
-            "Varun",
-            "Sales",
-            32,
-            58000,
-            73,
-            "Average",
-            "Low",
-            "Middle",
-            2020,
-            "March"
-          ]
-        ],
-        "orderSensitive": true
-      },
-      {
-        "id": 3,
-        "description": "Boundary conditions and date range validation test",
-        "isSample": false,
-        "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(301, 'Aditi', 25, 'F', 1, 'Delhi', 60000, 90, '2020-01-01'),\n(302, 'Alok', 32, 'M', 4, 'Noida', 80000, 89, '2021-03-15'),\n(303, 'Savitri', 28, 'F', 3, 'Gurgaon', 85000, 95, '2019-06-20'),\n(304, 'Rohit', 27, 'M', 2, 'Delhi', 59000, 78, '2022-08-10'),\n(305, 'Kavita', 31, 'F', 5, 'Delhi', 62000, 83, '2020-12-25'),\n(306, 'Naveen', 35, 'M', 3, 'Noida', 90000, 92, '2017-09-14'),\n(307, 'Ankit', 26, 'M', 1, 'Noida', 67000, 86, '2023-04-05');",
-        "expectedColumns": [
-          "emp_id",
-          "employee_name",
-          "department",
-          "age",
-          "salary",
-          "performance",
-          "performance_category",
-          "salary_category",
-          "age_category",
-          "joining_year",
-          "joining_month"
-        ],
-        "expectedRows": [
-          [
-            303,
-            "Savitri",
-            "Finance",
-            28,
-            85000,
-            95,
-            "Excellent",
-            "High",
-            "Middle",
-            2019,
-            "June"
-          ],
-          [
-            306,
-            "Naveen",
-            "Finance",
-            35,
-            90000,
-            92,
-            "Excellent",
-            "High",
-            "Senior",
-            2017,
-            "September"
-          ],
-          [
-            301,
-            "Aditi",
-            "IT",
-            25,
-            60000,
-            90,
-            "Excellent",
-            "Medium",
-            "Young",
-            2020,
-            "January"
-          ],
-          [
-            302,
-            "Alok",
-            "Marketing",
-            32,
-            80000,
-            89,
-            "Good",
-            "High",
-            "Middle",
-            2021,
-            "March"
-          ],
-          [
-            307,
-            "Ankit",
-            "IT",
-            26,
-            67000,
-            86,
-            "Good",
-            "Medium",
-            "Young",
-            2023,
-            "April"
-          ],
-          [
-            305,
-            "Kavita",
-            "Sales",
-            31,
-            62000,
-            83,
-            "Good",
-            "Medium",
-            "Middle",
-            2020,
-            "December"
-          ],
-          [
-            304,
-            "Rohit",
-            "HR",
-            27,
-            59000,
-            78,
-            "Average",
-            "Low",
-            "Young",
-            2022,
-            "August"
-          ]
-        ],
-        "orderSensitive": true
-      }
-    ]
-  },
-  {
-    "id": 19,
-    "title": "Department Performance and Gender Diversity Audit",
+    "title": "Department Performance and Executive Management Dashboard",
     "difficulty": "Hard",
     "points": 100,
-    "category": "SQL",
     "track": "SQL",
-    "subtopic": "Department Diversity Audit",
+    "category": "SQL",
+    "subtopic": "INNER JOIN, GROUP BY & HAVING",
+    "description": "The executive management team of a growing organization wants to develop a department-wise performance dashboard to identify departments that demonstrate strong financial performance and employee productivity.\n\nThe company wants to prioritize departments that maintain a sufficient employee workforce, offer competitive salaries and consistently achieve high employee performance scores.\n\nThe management team has decided that a department will be considered eligible for additional investment and performance incentives only when it satisfies multiple organizational requirements.\n\nYou are provided with two relational tables:\n- `employee`: Stores employee details, including salary, gender, performance and department ID.\n- `department`: Stores department identification, department names and official office locations.\n\nThe tables are connected through the common `dept_id` column.\n\nWrite a single SQL query using INNER JOIN, GROUP BY, aggregate functions, CASE and HAVING to generate the executive report.\n\n### Requirements\nFor each department, calculate:\n1. `dept_id` and `department` (`d.dept_name`).\n2. `total_employees`: Total employee count (`COUNT(e.emp_id)`).\n3. `male_count`: Total male employees (`SUM(CASE WHEN e.gender = 'M' THEN 1 ELSE 0 END)`).\n4. `female_count`: Total female employees (`SUM(CASE WHEN e.gender = 'F' THEN 1 ELSE 0 END)`).\n5. `average_salary`: Average employee salary, rounded to two decimal places (`ROUND(AVG(e.salary), 2)`).\n6. `average_performance`: Average employee performance score, rounded to two decimal places (`ROUND(AVG(e.performance), 2)`).\n7. `highest_salary`: Highest salary paid in the department (`MAX(e.salary)`).\n8. `highest_performance`: Highest performance score achieved in the department (`MAX(e.performance)`).\n9. `high_performers`: Number of employees with performance >= 80.\n10. `department_category` using CASE:\n    - Average performance >= 85: 'Top Department'\n    - Average performance >= 75 and below 85: 'Good Department'\n    - Below 75: 'Needs Improvement'\n\n### Filtering Conditions (HAVING)\nOnly include departments satisfying all of the following requirements:\n- At least 3 employees (`COUNT(e.emp_id) >= 3`)\n- Average salary strictly greater than \u20b960,000 (`AVG(e.salary) > 60000`)\n- Average performance strictly greater than 75 (`AVG(e.performance) > 75`)\n- At least one employee has a performance score of 90 or higher (`MAX(e.performance) >= 90`)\n\n### Sorting Requirements\n1. Sort by `average_salary` in descending order.\n2. For equal average salaries, sort by `average_performance` in descending order.\n3. Use `dept_id` ASC as a final tie-breaker.",
     "type": "sql",
-    "tags": [
-      "SQL",
-      "CASE + GROUP BY",
-      "HAVING",
-      "Conditional Aggregates",
-      "ROUND"
-    ],
-    "description": "## Department Performance and Gender Diversity Audit\n\nA company wants to identify departments that have both a high proportion of top performers and balanced female representation.\n\n### For every department, calculate:\n1. `department`: Department name (`d.dept_name`).\n2. `total_employees`: Total employee count (`COUNT(e.emp_id)`).\n3. `high_performers`: Count of employees with `performance >= 80`.\n4. `low_performers`: Count of employees with `performance < 80`.\n5. `female_employees`: Total female employees (`gender = 'F'`).\n6. `high_performer_percentage`: `ROUND(high_performers * 100.0 / total_employees, 2)`.\n7. `female_percentage`: `ROUND(female_employees * 100.0 / total_employees, 2)`.\n8. `high_salary_employees`: Count of employees earning `salary >= 70000`.\n9. `low_salary_employees`: Count of employees earning `salary < 70000`.\n\n### Filtering Conditions (HAVING):\n- The number of `high_performers` must be strictly greater than `low_performers`.\n- More than 50% of employees in the department must be female (`female_percentage > 50.0`).\n\n### Sorting:\nSort alphabetically by department name.\n\n### Output Columns:\n`department`, `total_employees`, `high_performers`, `low_performers`, `female_employees`, `high_performer_percentage`, `female_percentage`, `high_salary_employees`, `low_salary_employees`",
-    "sampleInput": "-- department Table:\n+---------+-----------+----------+\n| dept_id | dept_name | location |\n+---------+-----------+----------+\n| 1       | IT        | Delhi    |\n| 2       | HR        | Noida    |\n| 3       | Finance   | Gurgaon  |\n| 4       | Marketing | Delhi    |\n| 5       | Sales     | Gurgaon  |\n+---------+-----------+----------+\n\n-- employee Table (15 records):\n+--------+----------+-----+--------+---------+---------+--------+-------------+--------------+\n| emp_id | emp_name | age | gender | dept_id | city    | salary | performance | joining_date |\n+--------+----------+-----+--------+---------+---------+--------+-------------+--------------+\n| 101    | Aman     | 28  | M      | 1       | Delhi   | 65000  | 85          | 2021-06-15   |\n| 102    | Priya    | 26  | F      | 1       | Noida   | 72000  | 92          | 2020-03-10   |\n| 103    | Rohit    | 31  | M      | 2       | Delhi   | 58000  | 74          | 2019-08-21   |\n| 104    | Neha     | 29  | F      | 2       | Noida   | 62000  | 88          | 2022-01-12   |\n| 105    | Karan    | 35  | M      | 3       | Gurgaon | 85000  | 91          | 2018-05-17   |\n| 106    | Riya     | 27  | F      | 3       | Delhi   | 78000  | 79          | 2021-11-03   |\n| 107    | Vikas    | 30  | M      | 4       | Noida   | 68000  | 83          | 2020-07-19   |\n| 108    | Anjali   | 25  | F      | 4       | Delhi   | 71000  | 95          | 2023-02-14   |\n| 109    | Mohit    | 33  | M      | 5       | Gurgaon | 55000  | 68          | 2019-12-01   |\n| 110    | Simran   | 28  | F      | 5       | Delhi   | 60000  | 82          | 2022-09-25   |\n| 111    | Arjun    | 24  | M      | 1       | Gurgaon | 59000  | 76          | 2023-06-11   |\n| 112    | Pooja    | 32  | F      | 3       | Noida   | 88000  | 94          | 2017-04-20   |\n| 113    | Nitin    | 29  | M      | 4       | Delhi   | 64000  | 72          | 2021-01-05   |\n| 114    | Kavita   | 27  | F      | 5       | Gurgaon | 63000  | 89          | 2020-10-16   |\n| 115    | Deepak   | 36  | M      | 2       | Noida   | 57000  | 65          | 2018-03-28   |\n+--------+----------+-----+--------+---------+---------+--------+-------------+--------------+",
-    "sampleOutput": "department | total_employees | high_performers | low_performers | female_employees | high_performer_percentage | female_percentage | high_salary_employees | low_salary_employees\n-----------+-----------------+-----------------+----------------+------------------+---------------------------+-------------------+-----------------------+---------------------\nFinance    | 3               | 2               | 1              | 2                | 66.67                     | 66.67             | 3                     | 0                   \nSales      | 3               | 2               | 1              | 2                | 66.67                     | 66.67             | 0                     | 3                   \n\n(2 rows)",
     "tableSchema": "CREATE TABLE department (\n    dept_id INT PRIMARY KEY,\n    dept_name VARCHAR(50) NOT NULL,\n    location VARCHAR(50)\n);\n\nCREATE TABLE employee (\n    emp_id INT PRIMARY KEY,\n    emp_name VARCHAR(50) NOT NULL,\n    age INT,\n    gender CHAR(1),\n    dept_id INT,\n    city VARCHAR(50),\n    salary INT,\n    performance INT,\n    joining_date DATE,\n    FOREIGN KEY (dept_id) REFERENCES department(dept_id)\n);",
-    "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(101, 'Aman', 28, 'M', 1, 'Delhi', 65000, 85, '2021-06-15'),\n(102, 'Priya', 26, 'F', 1, 'Noida', 72000, 92, '2020-03-10'),\n(103, 'Rohit', 31, 'M', 2, 'Delhi', 58000, 74, '2019-08-21'),\n(104, 'Neha', 29, 'F', 2, 'Noida', 62000, 88, '2022-01-12'),\n(105, 'Karan', 35, 'M', 3, 'Gurgaon', 85000, 91, '2018-05-17'),\n(106, 'Riya', 27, 'F', 3, 'Delhi', 78000, 79, '2021-11-03'),\n(107, 'Vikas', 30, 'M', 4, 'Noida', 68000, 83, '2020-07-19'),\n(108, 'Anjali', 25, 'F', 4, 'Delhi', 71000, 95, '2023-02-14'),\n(109, 'Mohit', 33, 'M', 5, 'Gurgaon', 55000, 68, '2019-12-01'),\n(110, 'Simran', 28, 'F', 5, 'Delhi', 60000, 82, '2022-09-25'),\n(111, 'Arjun', 24, 'M', 1, 'Gurgaon', 59000, 76, '2023-06-11'),\n(112, 'Pooja', 32, 'F', 3, 'Noida', 88000, 94, '2017-04-20'),\n(113, 'Nitin', 29, 'M', 4, 'Delhi', 64000, 72, '2021-01-05'),\n(114, 'Kavita', 27, 'F', 5, 'Gurgaon', 63000, 89, '2020-10-16'),\n(115, 'Deepak', 36, 'M', 2, 'Noida', 57000, 65, '2018-03-28');",
-    "boilerplate": "-- Write your SQL query below\nSELECT d.dept_name AS department,\n       COUNT(e.emp_id) AS total_employees,\n       SUM(CASE WHEN e.performance >= 80 THEN 1 ELSE 0 END) AS high_performers,\n       SUM(CASE WHEN e.performance < 80 THEN 1 ELSE 0 END) AS low_performers,\n       SUM(CASE WHEN e.gender = 'F' THEN 1 ELSE 0 END) AS female_employees,\n       ROUND(SUM(CASE WHEN e.performance >= 80 THEN 1.0 ELSE 0.0 END) * 100.0 / COUNT(e.emp_id), 2) AS high_performer_percentage,\n       ROUND(SUM(CASE WHEN e.gender = 'F' THEN 1.0 ELSE 0.0 END) * 100.0 / COUNT(e.emp_id), 2) AS female_percentage,\n       SUM(CASE WHEN e.salary >= 70000 THEN 1 ELSE 0 END) AS high_salary_employees,\n       SUM(CASE WHEN e.salary < 70000 THEN 1 ELSE 0 END) AS low_salary_employees\nFROM employee e\nJOIN department d ON e.dept_id = d.dept_id\nGROUP BY d.dept_name\nHAVING \nORDER BY d.dept_name ASC;",
+    "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon'),\n(6, 'Research', 'Mumbai');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(101, 'Aman', 28, 'M', 1, 'Delhi', 65000, 85, '2021-06-15'),\n(102, 'Priya', 26, 'F', 1, 'Noida', 72000, 92, '2020-03-10'),\n(103, 'Rohit', 31, 'M', 2, 'Delhi', 58000, 74, '2019-08-21'),\n(104, 'Neha', 29, 'F', 2, 'Noida', 62000, 88, '2022-01-12'),\n(105, 'Karan', 35, 'M', 3, 'Gurgaon', 85000, 91, '2018-05-17'),\n(106, 'Riya', 27, 'F', 3, 'Delhi', 78000, 79, '2021-11-03'),\n(107, 'Vikas', 30, 'M', 4, 'Noida', 68000, 83, '2020-07-19'),\n(108, 'Anjali', 25, 'F', 4, 'Delhi', 71000, 95, '2023-02-14'),\n(109, 'Mohit', 33, 'M', 5, 'Gurgaon', 55000, 68, '2019-12-01'),\n(110, 'Simran', 28, 'F', 5, 'Delhi', 60000, 82, '2022-09-25'),\n(111, 'Arjun', 24, 'M', 1, 'Gurgaon', 59000, 76, '2023-06-11'),\n(112, 'Pooja', 32, 'F', 3, 'Noida', 88000, 94, '2017-04-20'),\n(113, 'Nitin', 29, 'M', 4, 'Delhi', 64000, 72, '2021-01-05'),\n(114, 'Kavita', 27, 'F', 5, 'Gurgaon', 63000, 89, '2020-10-16'),\n(115, 'Deepak', 36, 'M', 2, 'Noida', 57000, 65, '2018-03-28');",
+    "sampleInput": "SELECT * FROM department;\nSELECT * FROM employee;",
+    "sampleOutput": "+---------+------------+-----------------+------------+--------------+----------------+---------------------+----------------+---------------------+-----------------+---------------------+\n| dept_id | department | total_employees | male_count | female_count | average_salary | average_performance | highest_salary | highest_performance | high_performers | department_category |\n+---------+------------+-----------------+------------+--------------+----------------+---------------------+----------------+---------------------+-----------------+---------------------+\n| 3       | Finance    | 3               | 1          | 2            | 83666.67       | 88.0                | 88000          | 94                  | 2               | Top Department      |\n| 4       | Marketing  | 3               | 2          | 1            | 67666.67       | 83.33               | 71000          | 95                  | 2               | Good Department     |\n| 1       | IT         | 3               | 2          | 1            | 65333.33       | 84.33               | 72000          | 92                  | 2               | Good Department     |\n+---------+------------+-----------------+------------+--------------+----------------+---------------------+----------------+---------------------+-----------------+---------------------+",
+    "boilerplate": "-- Write your MySQL query below\n-- Schema: department (dept_id, dept_name, location)\n--         employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date)\n\n",
     "testCases": [
       {
         "id": 1,
-        "description": "Standard corporate dataset (15 employees, 5 departments)",
+        "description": "Standard Company Dataset (15 Employees, 6 Departments)",
         "isSample": true,
-        "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(101, 'Aman', 28, 'M', 1, 'Delhi', 65000, 85, '2021-06-15'),\n(102, 'Priya', 26, 'F', 1, 'Noida', 72000, 92, '2020-03-10'),\n(103, 'Rohit', 31, 'M', 2, 'Delhi', 58000, 74, '2019-08-21'),\n(104, 'Neha', 29, 'F', 2, 'Noida', 62000, 88, '2022-01-12'),\n(105, 'Karan', 35, 'M', 3, 'Gurgaon', 85000, 91, '2018-05-17'),\n(106, 'Riya', 27, 'F', 3, 'Delhi', 78000, 79, '2021-11-03'),\n(107, 'Vikas', 30, 'M', 4, 'Noida', 68000, 83, '2020-07-19'),\n(108, 'Anjali', 25, 'F', 4, 'Delhi', 71000, 95, '2023-02-14'),\n(109, 'Mohit', 33, 'M', 5, 'Gurgaon', 55000, 68, '2019-12-01'),\n(110, 'Simran', 28, 'F', 5, 'Delhi', 60000, 82, '2022-09-25'),\n(111, 'Arjun', 24, 'M', 1, 'Gurgaon', 59000, 76, '2023-06-11'),\n(112, 'Pooja', 32, 'F', 3, 'Noida', 88000, 94, '2017-04-20'),\n(113, 'Nitin', 29, 'M', 4, 'Delhi', 64000, 72, '2021-01-05'),\n(114, 'Kavita', 27, 'F', 5, 'Gurgaon', 63000, 89, '2020-10-16'),\n(115, 'Deepak', 36, 'M', 2, 'Noida', 57000, 65, '2018-03-28');",
-        "expectedColumns": [
-          "department",
-          "total_employees",
-          "high_performers",
-          "low_performers",
-          "female_employees",
-          "high_performer_percentage",
-          "female_percentage",
-          "high_salary_employees",
-          "low_salary_employees"
-        ],
-        "expectedRows": [
-          [
-            "Finance",
-            3,
-            2,
-            1,
-            2,
-            66.67,
-            66.67,
-            3,
-            0
-          ],
-          [
-            "Sales",
-            3,
-            2,
-            1,
-            2,
-            66.67,
-            66.67,
-            0,
-            3
-          ]
-        ],
-        "orderSensitive": true
-      },
-      {
-        "id": 2,
-        "description": "Diverse salary and demographic distribution test",
-        "isSample": false,
-        "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(201, 'Aakash', 29, 'M', 1, 'Delhi', 75000, 88, '2021-08-10'),\n(202, 'Anita', 27, 'F', 4, 'Noida', 74000, 93, '2022-04-18'),\n(203, 'Rohan', 26, 'M', 1, 'Delhi', 68000, 89, '2020-11-20'),\n(204, 'Sunita', 30, 'F', 3, 'Gurgaon', 82000, 92, '2019-02-14'),\n(205, 'Manish', 34, 'M', 2, 'Noida', 61000, 77, '2020-05-22'),\n(206, 'Divya', 28, 'F', 5, 'Delhi', 66000, 84, '2021-09-01'),\n(207, 'Amit', 25, 'M', 4, 'Delhi', 62000, 87, '2023-01-15'),\n(208, 'Reena', 31, 'F', 3, 'Noida', 89000, 96, '2018-07-19'),\n(209, 'Varun', 32, 'M', 5, 'Gurgaon', 58000, 73, '2020-03-11'),\n(210, 'Geeta', 29, 'F', 1, 'Noida', 70000, 91, '2022-10-05');",
-        "expectedColumns": [
-          "department",
-          "total_employees",
-          "high_performers",
-          "low_performers",
-          "female_employees",
-          "high_performer_percentage",
-          "female_percentage",
-          "high_salary_employees",
-          "low_salary_employees"
-        ],
-        "expectedRows": [
-          [
-            "Finance",
-            2,
-            2,
-            0,
-            2,
-            100.0,
-            100.0,
-            2,
-            0
-          ]
-        ],
-        "orderSensitive": true
-      },
-      {
-        "id": 3,
-        "description": "Boundary conditions and date range validation test",
-        "isSample": false,
-        "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(301, 'Aditi', 25, 'F', 1, 'Delhi', 60000, 90, '2020-01-01'),\n(302, 'Alok', 32, 'M', 4, 'Noida', 80000, 89, '2021-03-15'),\n(303, 'Savitri', 28, 'F', 3, 'Gurgaon', 85000, 95, '2019-06-20'),\n(304, 'Rohit', 27, 'M', 2, 'Delhi', 59000, 78, '2022-08-10'),\n(305, 'Kavita', 31, 'F', 5, 'Delhi', 62000, 83, '2020-12-25'),\n(306, 'Naveen', 35, 'M', 3, 'Noida', 90000, 92, '2017-09-14'),\n(307, 'Ankit', 26, 'M', 1, 'Noida', 67000, 86, '2023-04-05');",
-        "expectedColumns": [
-          "department",
-          "total_employees",
-          "high_performers",
-          "low_performers",
-          "female_employees",
-          "high_performer_percentage",
-          "female_percentage",
-          "high_salary_employees",
-          "low_salary_employees"
-        ],
-        "expectedRows": [
-          [
-            "Sales",
-            1,
-            1,
-            0,
-            1,
-            100.0,
-            100.0,
-            0,
-            1
-          ]
-        ],
-        "orderSensitive": true
-      }
-    ]
-  },
-  {
-    "id": 20,
-    "title": "Annual Employee Recruitment and Hiring Trend Analysis",
-    "difficulty": "Medium",
-    "points": 50,
-    "category": "SQL",
-    "track": "SQL",
-    "subtopic": "Annual Recruitment Trends",
-    "type": "sql",
-    "tags": [
-      "SQL",
-      "Date Functions",
-      "YEAR",
-      "GROUP BY",
-      "HAVING",
-      "ROUND"
-    ],
-    "description": "## Annual Employee Recruitment and Hiring Trend Analysis\n\nAnalyze company hiring history between **2019 and 2023** to observe recruitment volume and candidate performance by cohort year.\n\n### Requirements:\n1. Consider employees who joined between **January 1, 2019 and December 31, 2023** (inclusive).\n2. Extract the joining year using `YEAR(joining_date) AS joining_year`.\n3. Group by `joining_year`.\n4. Calculate:\n   - `total_employees`: `COUNT(emp_id)`.\n   - `average_performance`: `ROUND(AVG(performance), 2)`.\n   - `earliest_joining_date`: `MIN(joining_date)`.\n   - `latest_joining_date`: `MAX(joining_date)`.\n5. Only display years in which **more than one employee was recruited** (`COUNT > 1`).\n6. Sort by `total_employees` in descending order, then by `joining_year` in ascending order.\n\n### Output Columns:\n`joining_year`, `total_employees`, `average_performance`, `earliest_joining_date`, `latest_joining_date`",
-    "sampleInput": "-- department Table:\n+---------+-----------+----------+\n| dept_id | dept_name | location |\n+---------+-----------+----------+\n| 1       | IT        | Delhi    |\n| 2       | HR        | Noida    |\n| 3       | Finance   | Gurgaon  |\n| 4       | Marketing | Delhi    |\n| 5       | Sales     | Gurgaon  |\n+---------+-----------+----------+\n\n-- employee Table (15 records):\n+--------+----------+-----+--------+---------+---------+--------+-------------+--------------+\n| emp_id | emp_name | age | gender | dept_id | city    | salary | performance | joining_date |\n+--------+----------+-----+--------+---------+---------+--------+-------------+--------------+\n| 101    | Aman     | 28  | M      | 1       | Delhi   | 65000  | 85          | 2021-06-15   |\n| 102    | Priya    | 26  | F      | 1       | Noida   | 72000  | 92          | 2020-03-10   |\n| 103    | Rohit    | 31  | M      | 2       | Delhi   | 58000  | 74          | 2019-08-21   |\n| 104    | Neha     | 29  | F      | 2       | Noida   | 62000  | 88          | 2022-01-12   |\n| 105    | Karan    | 35  | M      | 3       | Gurgaon | 85000  | 91          | 2018-05-17   |\n| 106    | Riya     | 27  | F      | 3       | Delhi   | 78000  | 79          | 2021-11-03   |\n| 107    | Vikas    | 30  | M      | 4       | Noida   | 68000  | 83          | 2020-07-19   |\n| 108    | Anjali   | 25  | F      | 4       | Delhi   | 71000  | 95          | 2023-02-14   |\n| 109    | Mohit    | 33  | M      | 5       | Gurgaon | 55000  | 68          | 2019-12-01   |\n| 110    | Simran   | 28  | F      | 5       | Delhi   | 60000  | 82          | 2022-09-25   |\n| 111    | Arjun    | 24  | M      | 1       | Gurgaon | 59000  | 76          | 2023-06-11   |\n| 112    | Pooja    | 32  | F      | 3       | Noida   | 88000  | 94          | 2017-04-20   |\n| 113    | Nitin    | 29  | M      | 4       | Delhi   | 64000  | 72          | 2021-01-05   |\n| 114    | Kavita   | 27  | F      | 5       | Gurgaon | 63000  | 89          | 2020-10-16   |\n| 115    | Deepak   | 36  | M      | 2       | Noida   | 57000  | 65          | 2018-03-28   |\n+--------+----------+-----+--------+---------+---------+--------+-------------+--------------+",
-    "sampleOutput": "joining_year | total_employees | average_performance | earliest_joining_date | latest_joining_date\n-------------+-----------------+---------------------+-----------------------+--------------------\n2020         | 3               | 88.0                | 2020-03-10            | 2020-10-16         \n2021         | 3               | 78.67               | 2021-01-05            | 2021-11-03         \n2019         | 2               | 71.0                | 2019-08-21            | 2019-12-01         \n2022         | 2               | 85.0                | 2022-01-12            | 2022-09-25         \n2023         | 2               | 85.5                | 2023-02-14            | 2023-06-11         \n\n(5 rows)",
-    "tableSchema": "CREATE TABLE department (\n    dept_id INT PRIMARY KEY,\n    dept_name VARCHAR(50) NOT NULL,\n    location VARCHAR(50)\n);\n\nCREATE TABLE employee (\n    emp_id INT PRIMARY KEY,\n    emp_name VARCHAR(50) NOT NULL,\n    age INT,\n    gender CHAR(1),\n    dept_id INT,\n    city VARCHAR(50),\n    salary INT,\n    performance INT,\n    joining_date DATE,\n    FOREIGN KEY (dept_id) REFERENCES department(dept_id)\n);",
-    "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(101, 'Aman', 28, 'M', 1, 'Delhi', 65000, 85, '2021-06-15'),\n(102, 'Priya', 26, 'F', 1, 'Noida', 72000, 92, '2020-03-10'),\n(103, 'Rohit', 31, 'M', 2, 'Delhi', 58000, 74, '2019-08-21'),\n(104, 'Neha', 29, 'F', 2, 'Noida', 62000, 88, '2022-01-12'),\n(105, 'Karan', 35, 'M', 3, 'Gurgaon', 85000, 91, '2018-05-17'),\n(106, 'Riya', 27, 'F', 3, 'Delhi', 78000, 79, '2021-11-03'),\n(107, 'Vikas', 30, 'M', 4, 'Noida', 68000, 83, '2020-07-19'),\n(108, 'Anjali', 25, 'F', 4, 'Delhi', 71000, 95, '2023-02-14'),\n(109, 'Mohit', 33, 'M', 5, 'Gurgaon', 55000, 68, '2019-12-01'),\n(110, 'Simran', 28, 'F', 5, 'Delhi', 60000, 82, '2022-09-25'),\n(111, 'Arjun', 24, 'M', 1, 'Gurgaon', 59000, 76, '2023-06-11'),\n(112, 'Pooja', 32, 'F', 3, 'Noida', 88000, 94, '2017-04-20'),\n(113, 'Nitin', 29, 'M', 4, 'Delhi', 64000, 72, '2021-01-05'),\n(114, 'Kavita', 27, 'F', 5, 'Gurgaon', 63000, 89, '2020-10-16'),\n(115, 'Deepak', 36, 'M', 2, 'Noida', 57000, 65, '2018-03-28');",
-    "boilerplate": "-- Write your SQL query below\nSELECT YEAR(joining_date) AS joining_year,\n       COUNT(emp_id) AS total_employees,\n       ROUND(AVG(performance), 2) AS average_performance,\n       MIN(joining_date) AS earliest_joining_date,\n       MAX(joining_date) AS latest_joining_date\nFROM employee\nWHERE joining_date BETWEEN '2019-01-01' AND '2023-12-31'\nGROUP BY YEAR(joining_date)\nHAVING COUNT(emp_id) > 1\nORDER BY total_employees DESC, joining_year ASC;",
-    "testCases": [
-      {
-        "id": 1,
-        "description": "Standard corporate dataset (15 employees, 5 departments)",
-        "isSample": true,
-        "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(101, 'Aman', 28, 'M', 1, 'Delhi', 65000, 85, '2021-06-15'),\n(102, 'Priya', 26, 'F', 1, 'Noida', 72000, 92, '2020-03-10'),\n(103, 'Rohit', 31, 'M', 2, 'Delhi', 58000, 74, '2019-08-21'),\n(104, 'Neha', 29, 'F', 2, 'Noida', 62000, 88, '2022-01-12'),\n(105, 'Karan', 35, 'M', 3, 'Gurgaon', 85000, 91, '2018-05-17'),\n(106, 'Riya', 27, 'F', 3, 'Delhi', 78000, 79, '2021-11-03'),\n(107, 'Vikas', 30, 'M', 4, 'Noida', 68000, 83, '2020-07-19'),\n(108, 'Anjali', 25, 'F', 4, 'Delhi', 71000, 95, '2023-02-14'),\n(109, 'Mohit', 33, 'M', 5, 'Gurgaon', 55000, 68, '2019-12-01'),\n(110, 'Simran', 28, 'F', 5, 'Delhi', 60000, 82, '2022-09-25'),\n(111, 'Arjun', 24, 'M', 1, 'Gurgaon', 59000, 76, '2023-06-11'),\n(112, 'Pooja', 32, 'F', 3, 'Noida', 88000, 94, '2017-04-20'),\n(113, 'Nitin', 29, 'M', 4, 'Delhi', 64000, 72, '2021-01-05'),\n(114, 'Kavita', 27, 'F', 5, 'Gurgaon', 63000, 89, '2020-10-16'),\n(115, 'Deepak', 36, 'M', 2, 'Noida', 57000, 65, '2018-03-28');",
-        "expectedColumns": [
-          "joining_year",
-          "total_employees",
-          "average_performance",
-          "earliest_joining_date",
-          "latest_joining_date"
-        ],
-        "expectedRows": [
-          [
-            2020,
-            3,
-            88.0,
-            "2020-03-10",
-            "2020-10-16"
-          ],
-          [
-            2021,
-            3,
-            78.67,
-            "2021-01-05",
-            "2021-11-03"
-          ],
-          [
-            2019,
-            2,
-            71.0,
-            "2019-08-21",
-            "2019-12-01"
-          ],
-          [
-            2022,
-            2,
-            85.0,
-            "2022-01-12",
-            "2022-09-25"
-          ],
-          [
-            2023,
-            2,
-            85.5,
-            "2023-02-14",
-            "2023-06-11"
-          ]
-        ],
-        "orderSensitive": true
-      },
-      {
-        "id": 2,
-        "description": "Diverse salary and demographic distribution test",
-        "isSample": false,
-        "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(201, 'Aakash', 29, 'M', 1, 'Delhi', 75000, 88, '2021-08-10'),\n(202, 'Anita', 27, 'F', 4, 'Noida', 74000, 93, '2022-04-18'),\n(203, 'Rohan', 26, 'M', 1, 'Delhi', 68000, 89, '2020-11-20'),\n(204, 'Sunita', 30, 'F', 3, 'Gurgaon', 82000, 92, '2019-02-14'),\n(205, 'Manish', 34, 'M', 2, 'Noida', 61000, 77, '2020-05-22'),\n(206, 'Divya', 28, 'F', 5, 'Delhi', 66000, 84, '2021-09-01'),\n(207, 'Amit', 25, 'M', 4, 'Delhi', 62000, 87, '2023-01-15'),\n(208, 'Reena', 31, 'F', 3, 'Noida', 89000, 96, '2018-07-19'),\n(209, 'Varun', 32, 'M', 5, 'Gurgaon', 58000, 73, '2020-03-11'),\n(210, 'Geeta', 29, 'F', 1, 'Noida', 70000, 91, '2022-10-05');",
-        "expectedColumns": [
-          "joining_year",
-          "total_employees",
-          "average_performance",
-          "earliest_joining_date",
-          "latest_joining_date"
-        ],
-        "expectedRows": [
-          [
-            2020,
-            3,
-            79.67,
-            "2020-03-11",
-            "2020-11-20"
-          ],
-          [
-            2021,
-            2,
-            86.0,
-            "2021-08-10",
-            "2021-09-01"
-          ],
-          [
-            2022,
-            2,
-            92.0,
-            "2022-04-18",
-            "2022-10-05"
-          ]
-        ],
-        "orderSensitive": true
-      },
-      {
-        "id": 3,
-        "description": "Boundary conditions and date range validation test",
-        "isSample": false,
-        "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(301, 'Aditi', 25, 'F', 1, 'Delhi', 60000, 90, '2020-01-01'),\n(302, 'Alok', 32, 'M', 4, 'Noida', 80000, 89, '2021-03-15'),\n(303, 'Savitri', 28, 'F', 3, 'Gurgaon', 85000, 95, '2019-06-20'),\n(304, 'Rohit', 27, 'M', 2, 'Delhi', 59000, 78, '2022-08-10'),\n(305, 'Kavita', 31, 'F', 5, 'Delhi', 62000, 83, '2020-12-25'),\n(306, 'Naveen', 35, 'M', 3, 'Noida', 90000, 92, '2017-09-14'),\n(307, 'Ankit', 26, 'M', 1, 'Noida', 67000, 86, '2023-04-05');",
-        "expectedColumns": [
-          "joining_year",
-          "total_employees",
-          "average_performance",
-          "earliest_joining_date",
-          "latest_joining_date"
-        ],
-        "expectedRows": [
-          [
-            2020,
-            2,
-            86.5,
-            "2020-01-01",
-            "2020-12-25"
-          ]
-        ],
-        "orderSensitive": true
-      }
-    ]
-  },
-  {
-    "id": 21,
-    "title": "Executive Department Performance and Workforce Intelligence Dashboard",
-    "difficulty": "Hard",
-    "points": 100,
-    "category": "SQL",
-    "track": "SQL",
-    "subtopic": "Executive Dashboard (Hard)",
-    "type": "sql",
-    "tags": [
-      "SQL",
-      "Multiple SQL Concepts",
-      "CASE",
-      "GROUP BY",
-      "HAVING",
-      "ROUND",
-      "MAX"
-    ],
-    "description": "## Executive Department Performance and Workforce Intelligence Dashboard\n\nDevelop a comprehensive centralized executive dashboard comparing department headcount, diversity, salary, and quality.\n\n### For each department, calculate:\n1. `dept_id`, `department` (`d.dept_name`).\n2. `total_employees`: `COUNT(e.emp_id)`.\n3. `male_count`: Total male employees.\n4. `female_count`: Total female employees.\n5. `average_salary`: `ROUND(AVG(e.salary), 2)`.\n6. `average_performance`: `ROUND(AVG(e.performance), 2)`.\n7. `high_performers`: Count of employees with `performance >= 80`.\n8. `highest_salary`: `MAX(e.salary)`.\n9. `highest_performance`: `MAX(e.performance)`.\n10. `department_category` (CASE expression):\n    - `Average performance >= 85` -> `'Top Department'`\n    - `Average performance >= 75` -> `'Good Department'`\n    - `Average performance < 75` -> `'Needs Improvement'`\n\n### Filtering Conditions (HAVING):\n- Department must have **at least 3 employees**.\n- Average salary must be **greater than \u20b960,000**.\n- Average performance score must be **greater than 75**.\n- At least one employee in the department must have a performance score of **90 or higher** (`MAX(performance) >= 90`).\n\n### Sorting:\nSort by `average_salary` in descending order, then by `average_performance` in descending order.\n\n### Output Columns:\n`dept_id`, `department`, `total_employees`, `male_count`, `female_count`, `average_salary`, `average_performance`, `high_performers`, `highest_salary`, `highest_performance`, `department_category`",
-    "sampleInput": "-- department Table:\n+---------+-----------+----------+\n| dept_id | dept_name | location |\n+---------+-----------+----------+\n| 1       | IT        | Delhi    |\n| 2       | HR        | Noida    |\n| 3       | Finance   | Gurgaon  |\n| 4       | Marketing | Delhi    |\n| 5       | Sales     | Gurgaon  |\n+---------+-----------+----------+\n\n-- employee Table (15 records):\n+--------+----------+-----+--------+---------+---------+--------+-------------+--------------+\n| emp_id | emp_name | age | gender | dept_id | city    | salary | performance | joining_date |\n+--------+----------+-----+--------+---------+---------+--------+-------------+--------------+\n| 101    | Aman     | 28  | M      | 1       | Delhi   | 65000  | 85          | 2021-06-15   |\n| 102    | Priya    | 26  | F      | 1       | Noida   | 72000  | 92          | 2020-03-10   |\n| 103    | Rohit    | 31  | M      | 2       | Delhi   | 58000  | 74          | 2019-08-21   |\n| 104    | Neha     | 29  | F      | 2       | Noida   | 62000  | 88          | 2022-01-12   |\n| 105    | Karan    | 35  | M      | 3       | Gurgaon | 85000  | 91          | 2018-05-17   |\n| 106    | Riya     | 27  | F      | 3       | Delhi   | 78000  | 79          | 2021-11-03   |\n| 107    | Vikas    | 30  | M      | 4       | Noida   | 68000  | 83          | 2020-07-19   |\n| 108    | Anjali   | 25  | F      | 4       | Delhi   | 71000  | 95          | 2023-02-14   |\n| 109    | Mohit    | 33  | M      | 5       | Gurgaon | 55000  | 68          | 2019-12-01   |\n| 110    | Simran   | 28  | F      | 5       | Delhi   | 60000  | 82          | 2022-09-25   |\n| 111    | Arjun    | 24  | M      | 1       | Gurgaon | 59000  | 76          | 2023-06-11   |\n| 112    | Pooja    | 32  | F      | 3       | Noida   | 88000  | 94          | 2017-04-20   |\n| 113    | Nitin    | 29  | M      | 4       | Delhi   | 64000  | 72          | 2021-01-05   |\n| 114    | Kavita   | 27  | F      | 5       | Gurgaon | 63000  | 89          | 2020-10-16   |\n| 115    | Deepak   | 36  | M      | 2       | Noida   | 57000  | 65          | 2018-03-28   |\n+--------+----------+-----+--------+---------+---------+--------+-------------+--------------+",
-    "sampleOutput": "dept_id | department | total_employees | male_count | female_count | average_salary | average_performance | high_performers | highest_salary | highest_performance | department_category\n--------+------------+-----------------+------------+--------------+----------------+---------------------+-----------------+----------------+---------------------+--------------------\n3       | Finance    | 3               | 1          | 2            | 83666.67       | 88.0                | 2               | 88000          | 94                  | Top Department     \n4       | Marketing  | 3               | 2          | 1            | 67666.67       | 83.33               | 2               | 71000          | 95                  | Good Department    \n1       | IT         | 3               | 2          | 1            | 65333.33       | 84.33               | 2               | 72000          | 92                  | Good Department    \n\n(3 rows)",
-    "tableSchema": "CREATE TABLE department (\n    dept_id INT PRIMARY KEY,\n    dept_name VARCHAR(50) NOT NULL,\n    location VARCHAR(50)\n);\n\nCREATE TABLE employee (\n    emp_id INT PRIMARY KEY,\n    emp_name VARCHAR(50) NOT NULL,\n    age INT,\n    gender CHAR(1),\n    dept_id INT,\n    city VARCHAR(50),\n    salary INT,\n    performance INT,\n    joining_date DATE,\n    FOREIGN KEY (dept_id) REFERENCES department(dept_id)\n);",
-    "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(101, 'Aman', 28, 'M', 1, 'Delhi', 65000, 85, '2021-06-15'),\n(102, 'Priya', 26, 'F', 1, 'Noida', 72000, 92, '2020-03-10'),\n(103, 'Rohit', 31, 'M', 2, 'Delhi', 58000, 74, '2019-08-21'),\n(104, 'Neha', 29, 'F', 2, 'Noida', 62000, 88, '2022-01-12'),\n(105, 'Karan', 35, 'M', 3, 'Gurgaon', 85000, 91, '2018-05-17'),\n(106, 'Riya', 27, 'F', 3, 'Delhi', 78000, 79, '2021-11-03'),\n(107, 'Vikas', 30, 'M', 4, 'Noida', 68000, 83, '2020-07-19'),\n(108, 'Anjali', 25, 'F', 4, 'Delhi', 71000, 95, '2023-02-14'),\n(109, 'Mohit', 33, 'M', 5, 'Gurgaon', 55000, 68, '2019-12-01'),\n(110, 'Simran', 28, 'F', 5, 'Delhi', 60000, 82, '2022-09-25'),\n(111, 'Arjun', 24, 'M', 1, 'Gurgaon', 59000, 76, '2023-06-11'),\n(112, 'Pooja', 32, 'F', 3, 'Noida', 88000, 94, '2017-04-20'),\n(113, 'Nitin', 29, 'M', 4, 'Delhi', 64000, 72, '2021-01-05'),\n(114, 'Kavita', 27, 'F', 5, 'Gurgaon', 63000, 89, '2020-10-16'),\n(115, 'Deepak', 36, 'M', 2, 'Noida', 57000, 65, '2018-03-28');",
-    "boilerplate": "-- Write your SQL query below\nSELECT d.dept_id,\n       d.dept_name AS department,\n       COUNT(e.emp_id) AS total_employees,\n       SUM(CASE WHEN e.gender = 'M' THEN 1 ELSE 0 END) AS male_count,\n       SUM(CASE WHEN e.gender = 'F' THEN 1 ELSE 0 END) AS female_count,\n       ROUND(AVG(e.salary), 2) AS average_salary,\n       ROUND(AVG(e.performance), 2) AS average_performance,\n       SUM(CASE WHEN e.performance >= 80 THEN 1 ELSE 0 END) AS high_performers,\n       MAX(e.salary) AS highest_salary,\n       MAX(e.performance) AS highest_performance,\n       CASE\n           WHEN AVG(e.performance) >= 85 THEN 'Top Department'\n           WHEN AVG(e.performance) >= 75 THEN 'Good Department'\n           ELSE 'Needs Improvement'\n       END AS department_category\nFROM department d\nJOIN employee e ON d.dept_id = e.dept_id\nGROUP BY d.dept_id, d.dept_name\nHAVING COUNT(e.emp_id) >= 3\n   AND AVG(e.salary) > 60000\n   AND AVG(e.performance) > 75\n   AND MAX(e.performance) >= 90\nORDER BY average_salary DESC, average_performance DESC;",
-    "testCases": [
-      {
-        "id": 1,
-        "description": "Standard corporate dataset (15 employees, 5 departments)",
-        "isSample": true,
-        "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(101, 'Aman', 28, 'M', 1, 'Delhi', 65000, 85, '2021-06-15'),\n(102, 'Priya', 26, 'F', 1, 'Noida', 72000, 92, '2020-03-10'),\n(103, 'Rohit', 31, 'M', 2, 'Delhi', 58000, 74, '2019-08-21'),\n(104, 'Neha', 29, 'F', 2, 'Noida', 62000, 88, '2022-01-12'),\n(105, 'Karan', 35, 'M', 3, 'Gurgaon', 85000, 91, '2018-05-17'),\n(106, 'Riya', 27, 'F', 3, 'Delhi', 78000, 79, '2021-11-03'),\n(107, 'Vikas', 30, 'M', 4, 'Noida', 68000, 83, '2020-07-19'),\n(108, 'Anjali', 25, 'F', 4, 'Delhi', 71000, 95, '2023-02-14'),\n(109, 'Mohit', 33, 'M', 5, 'Gurgaon', 55000, 68, '2019-12-01'),\n(110, 'Simran', 28, 'F', 5, 'Delhi', 60000, 82, '2022-09-25'),\n(111, 'Arjun', 24, 'M', 1, 'Gurgaon', 59000, 76, '2023-06-11'),\n(112, 'Pooja', 32, 'F', 3, 'Noida', 88000, 94, '2017-04-20'),\n(113, 'Nitin', 29, 'M', 4, 'Delhi', 64000, 72, '2021-01-05'),\n(114, 'Kavita', 27, 'F', 5, 'Gurgaon', 63000, 89, '2020-10-16'),\n(115, 'Deepak', 36, 'M', 2, 'Noida', 57000, 65, '2018-03-28');",
+        "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon'),\n(6, 'Research', 'Mumbai');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(101, 'Aman', 28, 'M', 1, 'Delhi', 65000, 85, '2021-06-15'),\n(102, 'Priya', 26, 'F', 1, 'Noida', 72000, 92, '2020-03-10'),\n(103, 'Rohit', 31, 'M', 2, 'Delhi', 58000, 74, '2019-08-21'),\n(104, 'Neha', 29, 'F', 2, 'Noida', 62000, 88, '2022-01-12'),\n(105, 'Karan', 35, 'M', 3, 'Gurgaon', 85000, 91, '2018-05-17'),\n(106, 'Riya', 27, 'F', 3, 'Delhi', 78000, 79, '2021-11-03'),\n(107, 'Vikas', 30, 'M', 4, 'Noida', 68000, 83, '2020-07-19'),\n(108, 'Anjali', 25, 'F', 4, 'Delhi', 71000, 95, '2023-02-14'),\n(109, 'Mohit', 33, 'M', 5, 'Gurgaon', 55000, 68, '2019-12-01'),\n(110, 'Simran', 28, 'F', 5, 'Delhi', 60000, 82, '2022-09-25'),\n(111, 'Arjun', 24, 'M', 1, 'Gurgaon', 59000, 76, '2023-06-11'),\n(112, 'Pooja', 32, 'F', 3, 'Noida', 88000, 94, '2017-04-20'),\n(113, 'Nitin', 29, 'M', 4, 'Delhi', 64000, 72, '2021-01-05'),\n(114, 'Kavita', 27, 'F', 5, 'Gurgaon', 63000, 89, '2020-10-16'),\n(115, 'Deepak', 36, 'M', 2, 'Noida', 57000, 65, '2018-03-28');",
         "expectedColumns": [
           "dept_id",
           "department",
@@ -2912,9 +2001,9 @@
           "female_count",
           "average_salary",
           "average_performance",
-          "high_performers",
           "highest_salary",
           "highest_performance",
+          "high_performers",
           "department_category"
         ],
         "expectedRows": [
@@ -2926,9 +2015,9 @@
             2,
             83666.67,
             88.0,
-            2,
             88000,
             94,
+            2,
             "Top Department"
           ],
           [
@@ -2939,9 +2028,9 @@
             1,
             67666.67,
             83.33,
-            2,
             71000,
             95,
+            2,
             "Good Department"
           ],
           [
@@ -2952,9 +2041,9 @@
             1,
             65333.33,
             84.33,
-            2,
             72000,
             92,
+            2,
             "Good Department"
           ]
         ],
@@ -2962,9 +2051,9 @@
       },
       {
         "id": 2,
-        "description": "Diverse salary and demographic distribution test",
+        "description": "Dataset 2: Edge Boundaries & Alternative Cohorts",
         "isSample": false,
-        "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(201, 'Aakash', 29, 'M', 1, 'Delhi', 75000, 88, '2021-08-10'),\n(202, 'Anita', 27, 'F', 4, 'Noida', 74000, 93, '2022-04-18'),\n(203, 'Rohan', 26, 'M', 1, 'Delhi', 68000, 89, '2020-11-20'),\n(204, 'Sunita', 30, 'F', 3, 'Gurgaon', 82000, 92, '2019-02-14'),\n(205, 'Manish', 34, 'M', 2, 'Noida', 61000, 77, '2020-05-22'),\n(206, 'Divya', 28, 'F', 5, 'Delhi', 66000, 84, '2021-09-01'),\n(207, 'Amit', 25, 'M', 4, 'Delhi', 62000, 87, '2023-01-15'),\n(208, 'Reena', 31, 'F', 3, 'Noida', 89000, 96, '2018-07-19'),\n(209, 'Varun', 32, 'M', 5, 'Gurgaon', 58000, 73, '2020-03-11'),\n(210, 'Geeta', 29, 'F', 1, 'Noida', 70000, 91, '2022-10-05');",
+        "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon'),\n(6, 'Research', 'Mumbai');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(201, 'Aditya', 27, 'M', 1, 'Delhi', 74000, 89, '2021-04-12'),\n(202, 'Alka', 25, 'F', 4, 'Noida', 69000, 93, '2022-03-15'),\n(203, 'Amitabh', 30, 'M', 1, 'Gurgaon', 78000, 91, '2020-11-20'),\n(204, 'Sonia', 29, 'F', 3, 'Delhi', 84000, 92, '2019-02-14'),\n(205, 'Manish', 34, 'M', 2, 'Noida', 61000, 77, '2020-05-22'),\n(206, 'Divya', 28, 'F', 5, 'Delhi', 66000, 84, '2021-09-01'),\n(207, 'Anita', 26, 'F', 4, 'Delhi', 73000, 96, '2023-01-15'),\n(208, 'Reena', 31, 'F', 3, 'Noida', 89000, 94, '2018-07-19'),\n(209, 'Varun', 32, 'M', 5, 'Gurgaon', 58000, 73, '2020-03-11'),\n(210, 'Geeta', 29, 'F', 1, 'Noida', 70000, 89, '2022-10-05');",
         "expectedColumns": [
           "dept_id",
           "department",
@@ -2973,9 +2062,9 @@
           "female_count",
           "average_salary",
           "average_performance",
-          "high_performers",
           "highest_salary",
           "highest_performance",
+          "high_performers",
           "department_category"
         ],
         "expectedRows": [
@@ -2985,11 +2074,11 @@
             3,
             2,
             1,
-            71000.0,
-            89.33,
-            3,
-            75000,
+            74000.0,
+            89.67,
+            78000,
             91,
+            3,
             "Top Department"
           ]
         ],
@@ -2997,9 +2086,9 @@
       },
       {
         "id": 3,
-        "description": "Boundary conditions and date range validation test",
+        "description": "Dataset 3: Boundary Salaries & Distinct Department Sizes",
         "isSample": false,
-        "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(301, 'Aditi', 25, 'F', 1, 'Delhi', 60000, 90, '2020-01-01'),\n(302, 'Alok', 32, 'M', 4, 'Noida', 80000, 89, '2021-03-15'),\n(303, 'Savitri', 28, 'F', 3, 'Gurgaon', 85000, 95, '2019-06-20'),\n(304, 'Rohit', 27, 'M', 2, 'Delhi', 59000, 78, '2022-08-10'),\n(305, 'Kavita', 31, 'F', 5, 'Delhi', 62000, 83, '2020-12-25'),\n(306, 'Naveen', 35, 'M', 3, 'Noida', 90000, 92, '2017-09-14'),\n(307, 'Ankit', 26, 'M', 1, 'Noida', 67000, 86, '2023-04-05');",
+        "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon'),\n(6, 'Research', 'Mumbai');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(301, 'Ananya', 25, 'F', 1, 'Delhi', 60000, 90, '2020-01-01'),\n(302, 'Ashish', 32, 'M', 4, 'Noida', 80000, 88, '2021-03-15'),\n(303, 'Savitri', 28, 'F', 3, 'Gurgaon', 85000, 95, '2019-06-20'),\n(304, 'Rohit', 27, 'M', 2, 'Delhi', 59000, 78, '2022-08-10'),\n(305, 'Kavita', 31, 'F', 5, 'Delhi', 62000, 83, '2020-12-25'),\n(306, 'Priya', 26, 'F', 3, 'Delhi', 79000, 91, '2021-05-18'),\n(307, 'Arun', 30, 'M', 1, 'Gurgaon', 68000, 89, '2020-09-09');",
         "expectedColumns": [
           "dept_id",
           "department",
@@ -3008,12 +2097,906 @@
           "female_count",
           "average_salary",
           "average_performance",
-          "high_performers",
           "highest_salary",
           "highest_performance",
+          "high_performers",
           "department_category"
         ],
         "expectedRows": [],
+        "orderSensitive": true
+      }
+    ]
+  },
+  {
+    "id": 18,
+    "title": "Complete Department Directory Using LEFT JOIN",
+    "difficulty": "Medium",
+    "points": 50,
+    "track": "SQL",
+    "category": "SQL",
+    "subtopic": "LEFT JOIN & NULL Handling",
+    "description": "An organization is developing a centralized department directory to maintain a complete record of all its registered departments and the employees assigned to each department.\n\nThe HR department wants to generate a report that displays every department along with the employees working in it. However, some departments may have recently been created and may not yet have any employees assigned to them.\n\nThe management team wants to ensure that such departments are not excluded from the final report.\n\nYou are provided with two relational tables:\n- `department`: Contains department IDs, department names and official office locations.\n- `employee`: Contains employee IDs, names, salaries and department IDs.\n\nWrite an SQL query using LEFT JOIN to generate a complete department directory.\n\nThe `department` table must be treated as the left-hand table so that every department appears in the output, regardless of whether it has matching employee records.\n\n### Requirements\n1. Display `dept_id` (Department ID).\n2. Display `department` (Department name from `department.dept_name`).\n3. Display `department_location` (Official department location from `department.location`).\n4. Display `emp_id` (Employee ID).\n5. Display `employee_name` (Employee name from `employee.emp_name`).\n6. Display `employee_salary` (Employee salary from `employee.salary`).\n7. Include all departments, including those without employees (such as Research).\n8. For departments without employees, employee-related columns must display `NULL`.\n9. Sort results by `dept_id` in ascending order.\n10. For departments containing multiple employees, sort their employees by `emp_id` in ascending order.\n\n### Acceptance Criteria (10 Checks)\n- Exactly 16 rows returned (15 staffed employee rows + 1 unstaffed Research row).\n- LEFT JOIN preserves all 6 departments.\n- Research displays with emp_id = NULL, employee_name = NULL, employee_salary = NULL.\n- Sorting is dept_id ASC, emp_id ASC.",
+    "type": "sql",
+    "tableSchema": "CREATE TABLE department (\n    dept_id INT PRIMARY KEY,\n    dept_name VARCHAR(50) NOT NULL,\n    location VARCHAR(50)\n);\n\nCREATE TABLE employee (\n    emp_id INT PRIMARY KEY,\n    emp_name VARCHAR(50) NOT NULL,\n    age INT,\n    gender CHAR(1),\n    dept_id INT,\n    city VARCHAR(50),\n    salary INT,\n    performance INT,\n    joining_date DATE,\n    FOREIGN KEY (dept_id) REFERENCES department(dept_id)\n);",
+    "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon'),\n(6, 'Research', 'Mumbai');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(101, 'Aman', 28, 'M', 1, 'Delhi', 65000, 85, '2021-06-15'),\n(102, 'Priya', 26, 'F', 1, 'Noida', 72000, 92, '2020-03-10'),\n(103, 'Rohit', 31, 'M', 2, 'Delhi', 58000, 74, '2019-08-21'),\n(104, 'Neha', 29, 'F', 2, 'Noida', 62000, 88, '2022-01-12'),\n(105, 'Karan', 35, 'M', 3, 'Gurgaon', 85000, 91, '2018-05-17'),\n(106, 'Riya', 27, 'F', 3, 'Delhi', 78000, 79, '2021-11-03'),\n(107, 'Vikas', 30, 'M', 4, 'Noida', 68000, 83, '2020-07-19'),\n(108, 'Anjali', 25, 'F', 4, 'Delhi', 71000, 95, '2023-02-14'),\n(109, 'Mohit', 33, 'M', 5, 'Gurgaon', 55000, 68, '2019-12-01'),\n(110, 'Simran', 28, 'F', 5, 'Delhi', 60000, 82, '2022-09-25'),\n(111, 'Arjun', 24, 'M', 1, 'Gurgaon', 59000, 76, '2023-06-11'),\n(112, 'Pooja', 32, 'F', 3, 'Noida', 88000, 94, '2017-04-20'),\n(113, 'Nitin', 29, 'M', 4, 'Delhi', 64000, 72, '2021-01-05'),\n(114, 'Kavita', 27, 'F', 5, 'Gurgaon', 63000, 89, '2020-10-16'),\n(115, 'Deepak', 36, 'M', 2, 'Noida', 57000, 65, '2018-03-28');",
+    "sampleInput": "SELECT * FROM department;\nSELECT * FROM employee;",
+    "sampleOutput": "+---------+------------+---------------------+--------+---------------+-----------------+\n| dept_id | department | department_location | emp_id | employee_name | employee_salary |\n+---------+------------+---------------------+--------+---------------+-----------------+\n| 1       | IT         | Delhi               | 101    | Aman          | 65000           |\n| 1       | IT         | Delhi               | 102    | Priya         | 72000           |\n| 1       | IT         | Delhi               | 111    | Arjun         | 59000           |\n| 2       | HR         | Noida               | 103    | Rohit         | 58000           |\n| 2       | HR         | Noida               | 104    | Neha          | 62000           |\n| 2       | HR         | Noida               | 115    | Deepak        | 57000           |\n| 3       | Finance    | Gurgaon             | 105    | Karan         | 85000           |\n| 3       | Finance    | Gurgaon             | 106    | Riya          | 78000           |\n| 3       | Finance    | Gurgaon             | 112    | Pooja         | 88000           |\n| 4       | Marketing  | Delhi               | 107    | Vikas         | 68000           |\n| 4       | Marketing  | Delhi               | 108    | Anjali        | 71000           |\n| 4       | Marketing  | Delhi               | 113    | Nitin         | 64000           |\n| 5       | Sales      | Gurgaon             | 109    | Mohit         | 55000           |\n| 5       | Sales      | Gurgaon             | 110    | Simran        | 60000           |\n| 5       | Sales      | Gurgaon             | 114    | Kavita        | 63000           |\n| 6       | Research   | Mumbai              | NULL   | NULL          | NULL            |\n+---------+------------+---------------------+--------+---------------+-----------------+",
+    "boilerplate": "-- Write your MySQL query below\n-- Schema: department (dept_id, dept_name, location)\n--         employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date)\n\n",
+    "testCases": [
+      {
+        "id": 1,
+        "description": "Standard Company Dataset (15 Employees, 6 Departments)",
+        "isSample": true,
+        "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon'),\n(6, 'Research', 'Mumbai');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(101, 'Aman', 28, 'M', 1, 'Delhi', 65000, 85, '2021-06-15'),\n(102, 'Priya', 26, 'F', 1, 'Noida', 72000, 92, '2020-03-10'),\n(103, 'Rohit', 31, 'M', 2, 'Delhi', 58000, 74, '2019-08-21'),\n(104, 'Neha', 29, 'F', 2, 'Noida', 62000, 88, '2022-01-12'),\n(105, 'Karan', 35, 'M', 3, 'Gurgaon', 85000, 91, '2018-05-17'),\n(106, 'Riya', 27, 'F', 3, 'Delhi', 78000, 79, '2021-11-03'),\n(107, 'Vikas', 30, 'M', 4, 'Noida', 68000, 83, '2020-07-19'),\n(108, 'Anjali', 25, 'F', 4, 'Delhi', 71000, 95, '2023-02-14'),\n(109, 'Mohit', 33, 'M', 5, 'Gurgaon', 55000, 68, '2019-12-01'),\n(110, 'Simran', 28, 'F', 5, 'Delhi', 60000, 82, '2022-09-25'),\n(111, 'Arjun', 24, 'M', 1, 'Gurgaon', 59000, 76, '2023-06-11'),\n(112, 'Pooja', 32, 'F', 3, 'Noida', 88000, 94, '2017-04-20'),\n(113, 'Nitin', 29, 'M', 4, 'Delhi', 64000, 72, '2021-01-05'),\n(114, 'Kavita', 27, 'F', 5, 'Gurgaon', 63000, 89, '2020-10-16'),\n(115, 'Deepak', 36, 'M', 2, 'Noida', 57000, 65, '2018-03-28');",
+        "expectedColumns": [
+          "dept_id",
+          "department",
+          "department_location",
+          "emp_id",
+          "employee_name",
+          "employee_salary"
+        ],
+        "expectedRows": [
+          [
+            1,
+            "IT",
+            "Delhi",
+            101,
+            "Aman",
+            65000
+          ],
+          [
+            1,
+            "IT",
+            "Delhi",
+            102,
+            "Priya",
+            72000
+          ],
+          [
+            1,
+            "IT",
+            "Delhi",
+            111,
+            "Arjun",
+            59000
+          ],
+          [
+            2,
+            "HR",
+            "Noida",
+            103,
+            "Rohit",
+            58000
+          ],
+          [
+            2,
+            "HR",
+            "Noida",
+            104,
+            "Neha",
+            62000
+          ],
+          [
+            2,
+            "HR",
+            "Noida",
+            115,
+            "Deepak",
+            57000
+          ],
+          [
+            3,
+            "Finance",
+            "Gurgaon",
+            105,
+            "Karan",
+            85000
+          ],
+          [
+            3,
+            "Finance",
+            "Gurgaon",
+            106,
+            "Riya",
+            78000
+          ],
+          [
+            3,
+            "Finance",
+            "Gurgaon",
+            112,
+            "Pooja",
+            88000
+          ],
+          [
+            4,
+            "Marketing",
+            "Delhi",
+            107,
+            "Vikas",
+            68000
+          ],
+          [
+            4,
+            "Marketing",
+            "Delhi",
+            108,
+            "Anjali",
+            71000
+          ],
+          [
+            4,
+            "Marketing",
+            "Delhi",
+            113,
+            "Nitin",
+            64000
+          ],
+          [
+            5,
+            "Sales",
+            "Gurgaon",
+            109,
+            "Mohit",
+            55000
+          ],
+          [
+            5,
+            "Sales",
+            "Gurgaon",
+            110,
+            "Simran",
+            60000
+          ],
+          [
+            5,
+            "Sales",
+            "Gurgaon",
+            114,
+            "Kavita",
+            63000
+          ],
+          [
+            6,
+            "Research",
+            "Mumbai",
+            null,
+            null,
+            null
+          ]
+        ],
+        "orderSensitive": true
+      },
+      {
+        "id": 2,
+        "description": "Dataset 2: Edge Boundaries & Alternative Cohorts",
+        "isSample": false,
+        "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon'),\n(6, 'Research', 'Mumbai');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(201, 'Aditya', 27, 'M', 1, 'Delhi', 74000, 89, '2021-04-12'),\n(202, 'Alka', 25, 'F', 4, 'Noida', 69000, 93, '2022-03-15'),\n(203, 'Amitabh', 30, 'M', 1, 'Gurgaon', 78000, 91, '2020-11-20'),\n(204, 'Sonia', 29, 'F', 3, 'Delhi', 84000, 92, '2019-02-14'),\n(205, 'Manish', 34, 'M', 2, 'Noida', 61000, 77, '2020-05-22'),\n(206, 'Divya', 28, 'F', 5, 'Delhi', 66000, 84, '2021-09-01'),\n(207, 'Anita', 26, 'F', 4, 'Delhi', 73000, 96, '2023-01-15'),\n(208, 'Reena', 31, 'F', 3, 'Noida', 89000, 94, '2018-07-19'),\n(209, 'Varun', 32, 'M', 5, 'Gurgaon', 58000, 73, '2020-03-11'),\n(210, 'Geeta', 29, 'F', 1, 'Noida', 70000, 89, '2022-10-05');",
+        "expectedColumns": [
+          "dept_id",
+          "department",
+          "department_location",
+          "emp_id",
+          "employee_name",
+          "employee_salary"
+        ],
+        "expectedRows": [
+          [
+            1,
+            "IT",
+            "Delhi",
+            201,
+            "Aditya",
+            74000
+          ],
+          [
+            1,
+            "IT",
+            "Delhi",
+            203,
+            "Amitabh",
+            78000
+          ],
+          [
+            1,
+            "IT",
+            "Delhi",
+            210,
+            "Geeta",
+            70000
+          ],
+          [
+            2,
+            "HR",
+            "Noida",
+            205,
+            "Manish",
+            61000
+          ],
+          [
+            3,
+            "Finance",
+            "Gurgaon",
+            204,
+            "Sonia",
+            84000
+          ],
+          [
+            3,
+            "Finance",
+            "Gurgaon",
+            208,
+            "Reena",
+            89000
+          ],
+          [
+            4,
+            "Marketing",
+            "Delhi",
+            202,
+            "Alka",
+            69000
+          ],
+          [
+            4,
+            "Marketing",
+            "Delhi",
+            207,
+            "Anita",
+            73000
+          ],
+          [
+            5,
+            "Sales",
+            "Gurgaon",
+            206,
+            "Divya",
+            66000
+          ],
+          [
+            5,
+            "Sales",
+            "Gurgaon",
+            209,
+            "Varun",
+            58000
+          ],
+          [
+            6,
+            "Research",
+            "Mumbai",
+            null,
+            null,
+            null
+          ]
+        ],
+        "orderSensitive": true
+      },
+      {
+        "id": 3,
+        "description": "Dataset 3: Boundary Salaries & Distinct Department Sizes",
+        "isSample": false,
+        "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon'),\n(6, 'Research', 'Mumbai');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(301, 'Ananya', 25, 'F', 1, 'Delhi', 60000, 90, '2020-01-01'),\n(302, 'Ashish', 32, 'M', 4, 'Noida', 80000, 88, '2021-03-15'),\n(303, 'Savitri', 28, 'F', 3, 'Gurgaon', 85000, 95, '2019-06-20'),\n(304, 'Rohit', 27, 'M', 2, 'Delhi', 59000, 78, '2022-08-10'),\n(305, 'Kavita', 31, 'F', 5, 'Delhi', 62000, 83, '2020-12-25'),\n(306, 'Priya', 26, 'F', 3, 'Delhi', 79000, 91, '2021-05-18'),\n(307, 'Arun', 30, 'M', 1, 'Gurgaon', 68000, 89, '2020-09-09');",
+        "expectedColumns": [
+          "dept_id",
+          "department",
+          "department_location",
+          "emp_id",
+          "employee_name",
+          "employee_salary"
+        ],
+        "expectedRows": [
+          [
+            1,
+            "IT",
+            "Delhi",
+            301,
+            "Ananya",
+            60000
+          ],
+          [
+            1,
+            "IT",
+            "Delhi",
+            307,
+            "Arun",
+            68000
+          ],
+          [
+            2,
+            "HR",
+            "Noida",
+            304,
+            "Rohit",
+            59000
+          ],
+          [
+            3,
+            "Finance",
+            "Gurgaon",
+            303,
+            "Savitri",
+            85000
+          ],
+          [
+            3,
+            "Finance",
+            "Gurgaon",
+            306,
+            "Priya",
+            79000
+          ],
+          [
+            4,
+            "Marketing",
+            "Delhi",
+            302,
+            "Ashish",
+            80000
+          ],
+          [
+            5,
+            "Sales",
+            "Gurgaon",
+            305,
+            "Kavita",
+            62000
+          ],
+          [
+            6,
+            "Research",
+            "Mumbai",
+            null,
+            null,
+            null
+          ]
+        ],
+        "orderSensitive": true
+      }
+    ]
+  },
+  {
+    "id": 19,
+    "title": "Department Staffing and Vacancy Audit Using RIGHT JOIN",
+    "difficulty": "Medium",
+    "points": 50,
+    "track": "SQL",
+    "category": "SQL",
+    "subtopic": "RIGHT JOIN & Vacancy Auditing",
+    "description": "The operations management team of a company wants to perform a staffing audit to understand the current workforce distribution across all registered departments.\n\nThe company maintains multiple departments, and management wants a report that identifies which departments have active employees and which departments are currently unstaffed.\n\nIn particular, newly created departments must remain visible in the report even when no employee has been assigned to them.\n\nYou are provided with two tables:\n- `employee`: Contains employee details, including salary, performance and department ID.\n- `department`: Contains all registered departments and their office locations.\n\nWrite a single SQL query using RIGHT JOIN, GROUP BY, aggregate functions and CASE to generate a department staffing report.\n\nFor this problem, use the `employee` table on the left side and the `department` table on the right side of the RIGHT JOIN.\n\n### Requirements\nFor every department, calculate and display:\n1. `dept_id`: Department ID (`d.dept_id`).\n2. `department`: Department name (`d.dept_name`).\n3. `location`: Office location (`d.location`).\n4. `total_employees`: Employee count (`COUNT(e.emp_id)`).\n5. `total_salary`: Total salary expenditure (`COALESCE(SUM(e.salary), 0)`).\n6. `average_salary`: Average employee salary, rounded to two decimal places (`ROUND(AVG(e.salary), 2)`).\n7. `highest_performance`: Maximum performance score (`MAX(e.performance)`).\n8. `staffing_status` using CASE:\n   - At least 1 employee: 'Staffed'\n   - 0 employees: 'No Employees'\n\n### Additional Requirements\n- Use RIGHT JOIN: `FROM employee e RIGHT JOIN department d ON e.dept_id = d.dept_id`.\n- Use `COUNT(e.emp_id)` instead of `COUNT(*)` so unstaffed departments return 0 employees.\n- Use `COALESCE` so unstaffed departments show total_salary = 0.\n- For departments with 0 employees, `average_salary` and `highest_performance` must remain NULL.\n- Group records by `d.dept_id`, `d.dept_name`, `d.location`.\n- Sort results by `d.dept_id` in ascending order.",
+    "type": "sql",
+    "tableSchema": "CREATE TABLE department (\n    dept_id INT PRIMARY KEY,\n    dept_name VARCHAR(50) NOT NULL,\n    location VARCHAR(50)\n);\n\nCREATE TABLE employee (\n    emp_id INT PRIMARY KEY,\n    emp_name VARCHAR(50) NOT NULL,\n    age INT,\n    gender CHAR(1),\n    dept_id INT,\n    city VARCHAR(50),\n    salary INT,\n    performance INT,\n    joining_date DATE,\n    FOREIGN KEY (dept_id) REFERENCES department(dept_id)\n);",
+    "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon'),\n(6, 'Research', 'Mumbai');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(101, 'Aman', 28, 'M', 1, 'Delhi', 65000, 85, '2021-06-15'),\n(102, 'Priya', 26, 'F', 1, 'Noida', 72000, 92, '2020-03-10'),\n(103, 'Rohit', 31, 'M', 2, 'Delhi', 58000, 74, '2019-08-21'),\n(104, 'Neha', 29, 'F', 2, 'Noida', 62000, 88, '2022-01-12'),\n(105, 'Karan', 35, 'M', 3, 'Gurgaon', 85000, 91, '2018-05-17'),\n(106, 'Riya', 27, 'F', 3, 'Delhi', 78000, 79, '2021-11-03'),\n(107, 'Vikas', 30, 'M', 4, 'Noida', 68000, 83, '2020-07-19'),\n(108, 'Anjali', 25, 'F', 4, 'Delhi', 71000, 95, '2023-02-14'),\n(109, 'Mohit', 33, 'M', 5, 'Gurgaon', 55000, 68, '2019-12-01'),\n(110, 'Simran', 28, 'F', 5, 'Delhi', 60000, 82, '2022-09-25'),\n(111, 'Arjun', 24, 'M', 1, 'Gurgaon', 59000, 76, '2023-06-11'),\n(112, 'Pooja', 32, 'F', 3, 'Noida', 88000, 94, '2017-04-20'),\n(113, 'Nitin', 29, 'M', 4, 'Delhi', 64000, 72, '2021-01-05'),\n(114, 'Kavita', 27, 'F', 5, 'Gurgaon', 63000, 89, '2020-10-16'),\n(115, 'Deepak', 36, 'M', 2, 'Noida', 57000, 65, '2018-03-28');",
+    "sampleInput": "SELECT * FROM department;\nSELECT * FROM employee;",
+    "sampleOutput": "+---------+------------+----------+-----------------+--------------+----------------+---------------------+-----------------+\n| dept_id | department | location | total_employees | total_salary | average_salary | highest_performance | staffing_status |\n+---------+------------+----------+-----------------+--------------+----------------+---------------------+-----------------+\n| 1       | IT         | Delhi    | 3               | 196000       | 65333.33       | 92                  | Staffed         |\n| 2       | HR         | Noida    | 3               | 177000       | 59000.0        | 88                  | Staffed         |\n| 3       | Finance    | Gurgaon  | 3               | 251000       | 83666.67       | 94                  | Staffed         |\n| 4       | Marketing  | Delhi    | 3               | 203000       | 67666.67       | 95                  | Staffed         |\n| 5       | Sales      | Gurgaon  | 3               | 178000       | 59333.33       | 89                  | Staffed         |\n| 6       | Research   | Mumbai   | 0               | 0            | NULL           | NULL                | No Employees    |\n+---------+------------+----------+-----------------+--------------+----------------+---------------------+-----------------+",
+    "boilerplate": "-- Write your MySQL query below\n-- Schema: department (dept_id, dept_name, location)\n--         employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date)\n\n",
+    "testCases": [
+      {
+        "id": 1,
+        "description": "Standard Company Dataset (15 Employees, 6 Departments)",
+        "isSample": true,
+        "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon'),\n(6, 'Research', 'Mumbai');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(101, 'Aman', 28, 'M', 1, 'Delhi', 65000, 85, '2021-06-15'),\n(102, 'Priya', 26, 'F', 1, 'Noida', 72000, 92, '2020-03-10'),\n(103, 'Rohit', 31, 'M', 2, 'Delhi', 58000, 74, '2019-08-21'),\n(104, 'Neha', 29, 'F', 2, 'Noida', 62000, 88, '2022-01-12'),\n(105, 'Karan', 35, 'M', 3, 'Gurgaon', 85000, 91, '2018-05-17'),\n(106, 'Riya', 27, 'F', 3, 'Delhi', 78000, 79, '2021-11-03'),\n(107, 'Vikas', 30, 'M', 4, 'Noida', 68000, 83, '2020-07-19'),\n(108, 'Anjali', 25, 'F', 4, 'Delhi', 71000, 95, '2023-02-14'),\n(109, 'Mohit', 33, 'M', 5, 'Gurgaon', 55000, 68, '2019-12-01'),\n(110, 'Simran', 28, 'F', 5, 'Delhi', 60000, 82, '2022-09-25'),\n(111, 'Arjun', 24, 'M', 1, 'Gurgaon', 59000, 76, '2023-06-11'),\n(112, 'Pooja', 32, 'F', 3, 'Noida', 88000, 94, '2017-04-20'),\n(113, 'Nitin', 29, 'M', 4, 'Delhi', 64000, 72, '2021-01-05'),\n(114, 'Kavita', 27, 'F', 5, 'Gurgaon', 63000, 89, '2020-10-16'),\n(115, 'Deepak', 36, 'M', 2, 'Noida', 57000, 65, '2018-03-28');",
+        "expectedColumns": [
+          "dept_id",
+          "department",
+          "location",
+          "total_employees",
+          "total_salary",
+          "average_salary",
+          "highest_performance",
+          "staffing_status"
+        ],
+        "expectedRows": [
+          [
+            1,
+            "IT",
+            "Delhi",
+            3,
+            196000,
+            65333.33,
+            92,
+            "Staffed"
+          ],
+          [
+            2,
+            "HR",
+            "Noida",
+            3,
+            177000,
+            59000.0,
+            88,
+            "Staffed"
+          ],
+          [
+            3,
+            "Finance",
+            "Gurgaon",
+            3,
+            251000,
+            83666.67,
+            94,
+            "Staffed"
+          ],
+          [
+            4,
+            "Marketing",
+            "Delhi",
+            3,
+            203000,
+            67666.67,
+            95,
+            "Staffed"
+          ],
+          [
+            5,
+            "Sales",
+            "Gurgaon",
+            3,
+            178000,
+            59333.33,
+            89,
+            "Staffed"
+          ],
+          [
+            6,
+            "Research",
+            "Mumbai",
+            0,
+            0,
+            null,
+            null,
+            "No Employees"
+          ]
+        ],
+        "orderSensitive": true
+      },
+      {
+        "id": 2,
+        "description": "Dataset 2: Edge Boundaries & Alternative Cohorts",
+        "isSample": false,
+        "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon'),\n(6, 'Research', 'Mumbai');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(201, 'Aditya', 27, 'M', 1, 'Delhi', 74000, 89, '2021-04-12'),\n(202, 'Alka', 25, 'F', 4, 'Noida', 69000, 93, '2022-03-15'),\n(203, 'Amitabh', 30, 'M', 1, 'Gurgaon', 78000, 91, '2020-11-20'),\n(204, 'Sonia', 29, 'F', 3, 'Delhi', 84000, 92, '2019-02-14'),\n(205, 'Manish', 34, 'M', 2, 'Noida', 61000, 77, '2020-05-22'),\n(206, 'Divya', 28, 'F', 5, 'Delhi', 66000, 84, '2021-09-01'),\n(207, 'Anita', 26, 'F', 4, 'Delhi', 73000, 96, '2023-01-15'),\n(208, 'Reena', 31, 'F', 3, 'Noida', 89000, 94, '2018-07-19'),\n(209, 'Varun', 32, 'M', 5, 'Gurgaon', 58000, 73, '2020-03-11'),\n(210, 'Geeta', 29, 'F', 1, 'Noida', 70000, 89, '2022-10-05');",
+        "expectedColumns": [
+          "dept_id",
+          "department",
+          "location",
+          "total_employees",
+          "total_salary",
+          "average_salary",
+          "highest_performance",
+          "staffing_status"
+        ],
+        "expectedRows": [
+          [
+            1,
+            "IT",
+            "Delhi",
+            3,
+            222000,
+            74000.0,
+            91,
+            "Staffed"
+          ],
+          [
+            2,
+            "HR",
+            "Noida",
+            1,
+            61000,
+            61000.0,
+            77,
+            "Staffed"
+          ],
+          [
+            3,
+            "Finance",
+            "Gurgaon",
+            2,
+            173000,
+            86500.0,
+            94,
+            "Staffed"
+          ],
+          [
+            4,
+            "Marketing",
+            "Delhi",
+            2,
+            142000,
+            71000.0,
+            96,
+            "Staffed"
+          ],
+          [
+            5,
+            "Sales",
+            "Gurgaon",
+            2,
+            124000,
+            62000.0,
+            84,
+            "Staffed"
+          ],
+          [
+            6,
+            "Research",
+            "Mumbai",
+            0,
+            0,
+            null,
+            null,
+            "No Employees"
+          ]
+        ],
+        "orderSensitive": true
+      },
+      {
+        "id": 3,
+        "description": "Dataset 3: Boundary Salaries & Distinct Department Sizes",
+        "isSample": false,
+        "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon'),\n(6, 'Research', 'Mumbai');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(301, 'Ananya', 25, 'F', 1, 'Delhi', 60000, 90, '2020-01-01'),\n(302, 'Ashish', 32, 'M', 4, 'Noida', 80000, 88, '2021-03-15'),\n(303, 'Savitri', 28, 'F', 3, 'Gurgaon', 85000, 95, '2019-06-20'),\n(304, 'Rohit', 27, 'M', 2, 'Delhi', 59000, 78, '2022-08-10'),\n(305, 'Kavita', 31, 'F', 5, 'Delhi', 62000, 83, '2020-12-25'),\n(306, 'Priya', 26, 'F', 3, 'Delhi', 79000, 91, '2021-05-18'),\n(307, 'Arun', 30, 'M', 1, 'Gurgaon', 68000, 89, '2020-09-09');",
+        "expectedColumns": [
+          "dept_id",
+          "department",
+          "location",
+          "total_employees",
+          "total_salary",
+          "average_salary",
+          "highest_performance",
+          "staffing_status"
+        ],
+        "expectedRows": [
+          [
+            1,
+            "IT",
+            "Delhi",
+            2,
+            128000,
+            64000.0,
+            90,
+            "Staffed"
+          ],
+          [
+            2,
+            "HR",
+            "Noida",
+            1,
+            59000,
+            59000.0,
+            78,
+            "Staffed"
+          ],
+          [
+            3,
+            "Finance",
+            "Gurgaon",
+            2,
+            164000,
+            82000.0,
+            95,
+            "Staffed"
+          ],
+          [
+            4,
+            "Marketing",
+            "Delhi",
+            1,
+            80000,
+            80000.0,
+            88,
+            "Staffed"
+          ],
+          [
+            5,
+            "Sales",
+            "Gurgaon",
+            1,
+            62000,
+            62000.0,
+            83,
+            "Staffed"
+          ],
+          [
+            6,
+            "Research",
+            "Mumbai",
+            0,
+            0,
+            null,
+            null,
+            "No Employees"
+          ]
+        ],
+        "orderSensitive": true
+      }
+    ]
+  },
+  {
+    "id": 20,
+    "title": "Department Performance Classification and Workforce Diversity Audit",
+    "difficulty": "Hard",
+    "points": 100,
+    "track": "SQL",
+    "category": "SQL",
+    "subtopic": "CASE Aggregation, Diversity & Audit",
+    "description": "The Human Resources analytics team wants to perform a detailed analysis of workforce diversity, salary distribution and employee performance across different departments.\n\nSenior management believes that departments should maintain a strong proportion of high-performing employees while also ensuring adequate female representation.\n\nThe company wants to identify departments that meet both requirements and generate a detailed report showing the composition of employees according to their performance and salary categories.\n\nYou are provided with two relational tables:\n- `employee`: Stores employee information, including salary, gender, performance and department ID.\n- `department`: Stores department names and department IDs.\n\nWrite a single SQL query using INNER JOIN, CASE, conditional aggregation, GROUP BY and HAVING to generate the department-wise audit report.\n\n### Requirements\nFor each department, calculate:\n1. `department`: Department name (`d.dept_name`).\n2. `total_employees`: Total employees (`COUNT(e.emp_id)`).\n3. `male_count`: Male employees (`SUM(CASE WHEN e.gender = 'M' THEN 1 ELSE 0 END)`).\n4. `female_count`: Female employees (`SUM(CASE WHEN e.gender = 'F' THEN 1 ELSE 0 END)`).\n5. `high_performers`: Employees with performance >= 80.\n6. `low_performers`: Employees with performance < 80.\n7. `excellent_count`: Performance >= 90.\n8. `good_count`: Performance 80\u201389.\n9. `average_count`: Performance 70\u201379.\n10. `poor_count`: Performance below 70.\n11. `high_salary_count`: Salary >= \u20b970,000.\n12. `low_salary_count`: Salary below \u20b970,000.\n13. `high_performer_percentage`: `ROUND(100.0 * high_performers / total_employees, 2)`.\n14. `female_percentage`: `ROUND(100.0 * female_count / total_employees, 2)`.\n\n### Filtering Conditions (HAVING)\nOnly return departments satisfying both conditions:\n- The number of high-performing employees must be greater than low-performing employees (`high_performers > low_performers`).\n- More than 50% of employees in the department must be female (`female_percentage > 50.0`).\n\nSort departments alphabetically by `department` in ascending order.",
+    "type": "sql",
+    "tableSchema": "CREATE TABLE department (\n    dept_id INT PRIMARY KEY,\n    dept_name VARCHAR(50) NOT NULL,\n    location VARCHAR(50)\n);\n\nCREATE TABLE employee (\n    emp_id INT PRIMARY KEY,\n    emp_name VARCHAR(50) NOT NULL,\n    age INT,\n    gender CHAR(1),\n    dept_id INT,\n    city VARCHAR(50),\n    salary INT,\n    performance INT,\n    joining_date DATE,\n    FOREIGN KEY (dept_id) REFERENCES department(dept_id)\n);",
+    "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon'),\n(6, 'Research', 'Mumbai');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(101, 'Aman', 28, 'M', 1, 'Delhi', 65000, 85, '2021-06-15'),\n(102, 'Priya', 26, 'F', 1, 'Noida', 72000, 92, '2020-03-10'),\n(103, 'Rohit', 31, 'M', 2, 'Delhi', 58000, 74, '2019-08-21'),\n(104, 'Neha', 29, 'F', 2, 'Noida', 62000, 88, '2022-01-12'),\n(105, 'Karan', 35, 'M', 3, 'Gurgaon', 85000, 91, '2018-05-17'),\n(106, 'Riya', 27, 'F', 3, 'Delhi', 78000, 79, '2021-11-03'),\n(107, 'Vikas', 30, 'M', 4, 'Noida', 68000, 83, '2020-07-19'),\n(108, 'Anjali', 25, 'F', 4, 'Delhi', 71000, 95, '2023-02-14'),\n(109, 'Mohit', 33, 'M', 5, 'Gurgaon', 55000, 68, '2019-12-01'),\n(110, 'Simran', 28, 'F', 5, 'Delhi', 60000, 82, '2022-09-25'),\n(111, 'Arjun', 24, 'M', 1, 'Gurgaon', 59000, 76, '2023-06-11'),\n(112, 'Pooja', 32, 'F', 3, 'Noida', 88000, 94, '2017-04-20'),\n(113, 'Nitin', 29, 'M', 4, 'Delhi', 64000, 72, '2021-01-05'),\n(114, 'Kavita', 27, 'F', 5, 'Gurgaon', 63000, 89, '2020-10-16'),\n(115, 'Deepak', 36, 'M', 2, 'Noida', 57000, 65, '2018-03-28');",
+    "sampleInput": "SELECT * FROM department;\nSELECT * FROM employee;",
+    "sampleOutput": "+------------+-----------------+------------+--------------+-----------------+----------------+-----------------+------------+---------------+------------+-------------------+------------------+---------------------------+-------------------+\n| department | total_employees | male_count | female_count | high_performers | low_performers | excellent_count | good_count | average_count | poor_count | high_salary_count | low_salary_count | high_performer_percentage | female_percentage |\n+------------+-----------------+------------+--------------+-----------------+----------------+-----------------+------------+---------------+------------+-------------------+------------------+---------------------------+-------------------+\n| Finance    | 3               | 1          | 2            | 2               | 1              | 2               | 0          | 1             | 0          | 3                 | 0                | 66.67                     | 66.67             |\n| Sales      | 3               | 1          | 2            | 2               | 1              | 0               | 2          | 0             | 1          | 0                 | 3                | 66.67                     | 66.67             |\n+------------+-----------------+------------+--------------+-----------------+----------------+-----------------+------------+---------------+------------+-------------------+------------------+---------------------------+-------------------+",
+    "boilerplate": "-- Write your MySQL query below\n-- Schema: department (dept_id, dept_name, location)\n--         employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date)\n\n",
+    "testCases": [
+      {
+        "id": 1,
+        "description": "Standard Company Dataset (15 Employees, 6 Departments)",
+        "isSample": true,
+        "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon'),\n(6, 'Research', 'Mumbai');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(101, 'Aman', 28, 'M', 1, 'Delhi', 65000, 85, '2021-06-15'),\n(102, 'Priya', 26, 'F', 1, 'Noida', 72000, 92, '2020-03-10'),\n(103, 'Rohit', 31, 'M', 2, 'Delhi', 58000, 74, '2019-08-21'),\n(104, 'Neha', 29, 'F', 2, 'Noida', 62000, 88, '2022-01-12'),\n(105, 'Karan', 35, 'M', 3, 'Gurgaon', 85000, 91, '2018-05-17'),\n(106, 'Riya', 27, 'F', 3, 'Delhi', 78000, 79, '2021-11-03'),\n(107, 'Vikas', 30, 'M', 4, 'Noida', 68000, 83, '2020-07-19'),\n(108, 'Anjali', 25, 'F', 4, 'Delhi', 71000, 95, '2023-02-14'),\n(109, 'Mohit', 33, 'M', 5, 'Gurgaon', 55000, 68, '2019-12-01'),\n(110, 'Simran', 28, 'F', 5, 'Delhi', 60000, 82, '2022-09-25'),\n(111, 'Arjun', 24, 'M', 1, 'Gurgaon', 59000, 76, '2023-06-11'),\n(112, 'Pooja', 32, 'F', 3, 'Noida', 88000, 94, '2017-04-20'),\n(113, 'Nitin', 29, 'M', 4, 'Delhi', 64000, 72, '2021-01-05'),\n(114, 'Kavita', 27, 'F', 5, 'Gurgaon', 63000, 89, '2020-10-16'),\n(115, 'Deepak', 36, 'M', 2, 'Noida', 57000, 65, '2018-03-28');",
+        "expectedColumns": [
+          "department",
+          "total_employees",
+          "male_count",
+          "female_count",
+          "high_performers",
+          "low_performers",
+          "excellent_count",
+          "good_count",
+          "average_count",
+          "poor_count",
+          "high_salary_count",
+          "low_salary_count",
+          "high_performer_percentage",
+          "female_percentage"
+        ],
+        "expectedRows": [
+          [
+            "Finance",
+            3,
+            1,
+            2,
+            2,
+            1,
+            2,
+            0,
+            1,
+            0,
+            3,
+            0,
+            66.67,
+            66.67
+          ],
+          [
+            "Sales",
+            3,
+            1,
+            2,
+            2,
+            1,
+            0,
+            2,
+            0,
+            1,
+            0,
+            3,
+            66.67,
+            66.67
+          ]
+        ],
+        "orderSensitive": true
+      },
+      {
+        "id": 2,
+        "description": "Dataset 2: Edge Boundaries & Alternative Cohorts",
+        "isSample": false,
+        "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon'),\n(6, 'Research', 'Mumbai');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(201, 'Aditya', 27, 'M', 1, 'Delhi', 74000, 89, '2021-04-12'),\n(202, 'Alka', 25, 'F', 4, 'Noida', 69000, 93, '2022-03-15'),\n(203, 'Amitabh', 30, 'M', 1, 'Gurgaon', 78000, 91, '2020-11-20'),\n(204, 'Sonia', 29, 'F', 3, 'Delhi', 84000, 92, '2019-02-14'),\n(205, 'Manish', 34, 'M', 2, 'Noida', 61000, 77, '2020-05-22'),\n(206, 'Divya', 28, 'F', 5, 'Delhi', 66000, 84, '2021-09-01'),\n(207, 'Anita', 26, 'F', 4, 'Delhi', 73000, 96, '2023-01-15'),\n(208, 'Reena', 31, 'F', 3, 'Noida', 89000, 94, '2018-07-19'),\n(209, 'Varun', 32, 'M', 5, 'Gurgaon', 58000, 73, '2020-03-11'),\n(210, 'Geeta', 29, 'F', 1, 'Noida', 70000, 89, '2022-10-05');",
+        "expectedColumns": [
+          "department",
+          "total_employees",
+          "male_count",
+          "female_count",
+          "high_performers",
+          "low_performers",
+          "excellent_count",
+          "good_count",
+          "average_count",
+          "poor_count",
+          "high_salary_count",
+          "low_salary_count",
+          "high_performer_percentage",
+          "female_percentage"
+        ],
+        "expectedRows": [
+          [
+            "Finance",
+            2,
+            0,
+            2,
+            2,
+            0,
+            2,
+            0,
+            0,
+            0,
+            2,
+            0,
+            100.0,
+            100.0
+          ],
+          [
+            "Marketing",
+            2,
+            0,
+            2,
+            2,
+            0,
+            2,
+            0,
+            0,
+            0,
+            1,
+            1,
+            100.0,
+            100.0
+          ]
+        ],
+        "orderSensitive": true
+      },
+      {
+        "id": 3,
+        "description": "Dataset 3: Boundary Salaries & Distinct Department Sizes",
+        "isSample": false,
+        "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon'),\n(6, 'Research', 'Mumbai');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(301, 'Ananya', 25, 'F', 1, 'Delhi', 60000, 90, '2020-01-01'),\n(302, 'Ashish', 32, 'M', 4, 'Noida', 80000, 88, '2021-03-15'),\n(303, 'Savitri', 28, 'F', 3, 'Gurgaon', 85000, 95, '2019-06-20'),\n(304, 'Rohit', 27, 'M', 2, 'Delhi', 59000, 78, '2022-08-10'),\n(305, 'Kavita', 31, 'F', 5, 'Delhi', 62000, 83, '2020-12-25'),\n(306, 'Priya', 26, 'F', 3, 'Delhi', 79000, 91, '2021-05-18'),\n(307, 'Arun', 30, 'M', 1, 'Gurgaon', 68000, 89, '2020-09-09');",
+        "expectedColumns": [
+          "department",
+          "total_employees",
+          "male_count",
+          "female_count",
+          "high_performers",
+          "low_performers",
+          "excellent_count",
+          "good_count",
+          "average_count",
+          "poor_count",
+          "high_salary_count",
+          "low_salary_count",
+          "high_performer_percentage",
+          "female_percentage"
+        ],
+        "expectedRows": [
+          [
+            "Finance",
+            2,
+            0,
+            2,
+            2,
+            0,
+            2,
+            0,
+            0,
+            0,
+            2,
+            0,
+            100.0,
+            100.0
+          ],
+          [
+            "Sales",
+            1,
+            0,
+            1,
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            1,
+            100.0,
+            100.0
+          ]
+        ],
+        "orderSensitive": true
+      }
+    ]
+  },
+  {
+    "id": 21,
+    "title": "Annual Recruitment Trends and Hiring Cohort Analysis",
+    "difficulty": "Medium",
+    "points": 50,
+    "track": "SQL",
+    "category": "SQL",
+    "subtopic": "Date Functions, Cohort & HAVING",
+    "description": "The Human Resources department wants to analyze the organization's recruitment history to identify its busiest hiring years.\n\nThe company has hired employees across several years, and management wants to understand how recruitment volume has changed over time. In addition to the number of employees hired, management wants to examine the average performance of employees recruited during each year.\n\nThe organization also wants to determine how many different departments participated in recruitment during each year.\n\nYou are provided with two relational tables:\n- `employee`: Stores employee information, joining dates, performance scores and department IDs.\n- `department`: Stores department identification and department names.\n\nBoth tables are connected through `dept_id`.\n\nWrite a SQL query using INNER JOIN, YEAR(), GROUP BY, aggregate functions and HAVING to generate an annual recruitment report.\n\n### Requirements\n1. Consider employees who joined between January 1, 2019 and December 31, 2023, inclusive (`joining_date BETWEEN '2019-01-01' AND '2023-12-31'`).\n2. Extract the joining year using `YEAR(joining_date)`.\n3. Group employee records according to their `joining_year`.\n4. Calculate `total_employees`: Total employees hired in that year.\n5. Calculate `average_performance`: Average employee performance, rounded to two decimal places.\n6. Find `earliest_joining_date`: Earliest joining date recorded in each year (`MIN(joining_date)`).\n7. Find `latest_joining_date`: Latest joining date recorded in each year (`MAX(joining_date)`).\n8. Calculate `departments_represented`: Count of distinct departments represented (`COUNT(DISTINCT d.dept_id)`).\n9. Display only years in which more than two employees were recruited (`HAVING COUNT(e.emp_id) > 2`).\n10. Sort results by `total_employees` in descending order. If two years have the same employee count, sort by `joining_year` in ascending order.",
+    "type": "sql",
+    "tableSchema": "CREATE TABLE department (\n    dept_id INT PRIMARY KEY,\n    dept_name VARCHAR(50) NOT NULL,\n    location VARCHAR(50)\n);\n\nCREATE TABLE employee (\n    emp_id INT PRIMARY KEY,\n    emp_name VARCHAR(50) NOT NULL,\n    age INT,\n    gender CHAR(1),\n    dept_id INT,\n    city VARCHAR(50),\n    salary INT,\n    performance INT,\n    joining_date DATE,\n    FOREIGN KEY (dept_id) REFERENCES department(dept_id)\n);",
+    "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon'),\n(6, 'Research', 'Mumbai');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(101, 'Aman', 28, 'M', 1, 'Delhi', 65000, 85, '2021-06-15'),\n(102, 'Priya', 26, 'F', 1, 'Noida', 72000, 92, '2020-03-10'),\n(103, 'Rohit', 31, 'M', 2, 'Delhi', 58000, 74, '2019-08-21'),\n(104, 'Neha', 29, 'F', 2, 'Noida', 62000, 88, '2022-01-12'),\n(105, 'Karan', 35, 'M', 3, 'Gurgaon', 85000, 91, '2018-05-17'),\n(106, 'Riya', 27, 'F', 3, 'Delhi', 78000, 79, '2021-11-03'),\n(107, 'Vikas', 30, 'M', 4, 'Noida', 68000, 83, '2020-07-19'),\n(108, 'Anjali', 25, 'F', 4, 'Delhi', 71000, 95, '2023-02-14'),\n(109, 'Mohit', 33, 'M', 5, 'Gurgaon', 55000, 68, '2019-12-01'),\n(110, 'Simran', 28, 'F', 5, 'Delhi', 60000, 82, '2022-09-25'),\n(111, 'Arjun', 24, 'M', 1, 'Gurgaon', 59000, 76, '2023-06-11'),\n(112, 'Pooja', 32, 'F', 3, 'Noida', 88000, 94, '2017-04-20'),\n(113, 'Nitin', 29, 'M', 4, 'Delhi', 64000, 72, '2021-01-05'),\n(114, 'Kavita', 27, 'F', 5, 'Gurgaon', 63000, 89, '2020-10-16'),\n(115, 'Deepak', 36, 'M', 2, 'Noida', 57000, 65, '2018-03-28');",
+    "sampleInput": "SELECT * FROM department;\nSELECT * FROM employee;",
+    "sampleOutput": "+--------------+-----------------+---------------------+-----------------------+---------------------+-------------------------+\n| joining_year | total_employees | average_performance | earliest_joining_date | latest_joining_date | departments_represented |\n+--------------+-----------------+---------------------+-----------------------+---------------------+-------------------------+\n| 2020         | 3               | 88.0                | 2020-03-10            | 2020-10-16          | 3                       |\n| 2021         | 3               | 78.67               | 2021-01-05            | 2021-11-03          | 3                       |\n+--------------+-----------------+---------------------+-----------------------+---------------------+-------------------------+",
+    "boilerplate": "-- Write your MySQL query below\n-- Schema: department (dept_id, dept_name, location)\n--         employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date)\n\n",
+    "testCases": [
+      {
+        "id": 1,
+        "description": "Standard Company Dataset (15 Employees, 6 Departments)",
+        "isSample": true,
+        "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon'),\n(6, 'Research', 'Mumbai');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(101, 'Aman', 28, 'M', 1, 'Delhi', 65000, 85, '2021-06-15'),\n(102, 'Priya', 26, 'F', 1, 'Noida', 72000, 92, '2020-03-10'),\n(103, 'Rohit', 31, 'M', 2, 'Delhi', 58000, 74, '2019-08-21'),\n(104, 'Neha', 29, 'F', 2, 'Noida', 62000, 88, '2022-01-12'),\n(105, 'Karan', 35, 'M', 3, 'Gurgaon', 85000, 91, '2018-05-17'),\n(106, 'Riya', 27, 'F', 3, 'Delhi', 78000, 79, '2021-11-03'),\n(107, 'Vikas', 30, 'M', 4, 'Noida', 68000, 83, '2020-07-19'),\n(108, 'Anjali', 25, 'F', 4, 'Delhi', 71000, 95, '2023-02-14'),\n(109, 'Mohit', 33, 'M', 5, 'Gurgaon', 55000, 68, '2019-12-01'),\n(110, 'Simran', 28, 'F', 5, 'Delhi', 60000, 82, '2022-09-25'),\n(111, 'Arjun', 24, 'M', 1, 'Gurgaon', 59000, 76, '2023-06-11'),\n(112, 'Pooja', 32, 'F', 3, 'Noida', 88000, 94, '2017-04-20'),\n(113, 'Nitin', 29, 'M', 4, 'Delhi', 64000, 72, '2021-01-05'),\n(114, 'Kavita', 27, 'F', 5, 'Gurgaon', 63000, 89, '2020-10-16'),\n(115, 'Deepak', 36, 'M', 2, 'Noida', 57000, 65, '2018-03-28');",
+        "expectedColumns": [
+          "joining_year",
+          "total_employees",
+          "average_performance",
+          "earliest_joining_date",
+          "latest_joining_date",
+          "departments_represented"
+        ],
+        "expectedRows": [
+          [
+            2020,
+            3,
+            88.0,
+            "2020-03-10",
+            "2020-10-16",
+            3
+          ],
+          [
+            2021,
+            3,
+            78.67,
+            "2021-01-05",
+            "2021-11-03",
+            3
+          ]
+        ],
+        "orderSensitive": true
+      },
+      {
+        "id": 2,
+        "description": "Dataset 2: Edge Boundaries & Alternative Cohorts",
+        "isSample": false,
+        "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon'),\n(6, 'Research', 'Mumbai');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(201, 'Aditya', 27, 'M', 1, 'Delhi', 74000, 89, '2021-04-12'),\n(202, 'Alka', 25, 'F', 4, 'Noida', 69000, 93, '2022-03-15'),\n(203, 'Amitabh', 30, 'M', 1, 'Gurgaon', 78000, 91, '2020-11-20'),\n(204, 'Sonia', 29, 'F', 3, 'Delhi', 84000, 92, '2019-02-14'),\n(205, 'Manish', 34, 'M', 2, 'Noida', 61000, 77, '2020-05-22'),\n(206, 'Divya', 28, 'F', 5, 'Delhi', 66000, 84, '2021-09-01'),\n(207, 'Anita', 26, 'F', 4, 'Delhi', 73000, 96, '2023-01-15'),\n(208, 'Reena', 31, 'F', 3, 'Noida', 89000, 94, '2018-07-19'),\n(209, 'Varun', 32, 'M', 5, 'Gurgaon', 58000, 73, '2020-03-11'),\n(210, 'Geeta', 29, 'F', 1, 'Noida', 70000, 89, '2022-10-05');",
+        "expectedColumns": [
+          "joining_year",
+          "total_employees",
+          "average_performance",
+          "earliest_joining_date",
+          "latest_joining_date",
+          "departments_represented"
+        ],
+        "expectedRows": [
+          [
+            2020,
+            3,
+            80.33,
+            "2020-03-11",
+            "2020-11-20",
+            3
+          ]
+        ],
+        "orderSensitive": true
+      },
+      {
+        "id": 3,
+        "description": "Dataset 3: Boundary Salaries & Distinct Department Sizes",
+        "isSample": false,
+        "testData": "INSERT INTO department (dept_id, dept_name, location) VALUES\n(1, 'IT', 'Delhi'),\n(2, 'HR', 'Noida'),\n(3, 'Finance', 'Gurgaon'),\n(4, 'Marketing', 'Delhi'),\n(5, 'Sales', 'Gurgaon'),\n(6, 'Research', 'Mumbai');\n\nINSERT INTO employee (emp_id, emp_name, age, gender, dept_id, city, salary, performance, joining_date) VALUES\n(301, 'Ananya', 25, 'F', 1, 'Delhi', 60000, 90, '2020-01-01'),\n(302, 'Ashish', 32, 'M', 4, 'Noida', 80000, 88, '2021-03-15'),\n(303, 'Savitri', 28, 'F', 3, 'Gurgaon', 85000, 95, '2019-06-20'),\n(304, 'Rohit', 27, 'M', 2, 'Delhi', 59000, 78, '2022-08-10'),\n(305, 'Kavita', 31, 'F', 5, 'Delhi', 62000, 83, '2020-12-25'),\n(306, 'Priya', 26, 'F', 3, 'Delhi', 79000, 91, '2021-05-18'),\n(307, 'Arun', 30, 'M', 1, 'Gurgaon', 68000, 89, '2020-09-09');",
+        "expectedColumns": [
+          "joining_year",
+          "total_employees",
+          "average_performance",
+          "earliest_joining_date",
+          "latest_joining_date",
+          "departments_represented"
+        ],
+        "expectedRows": [
+          [
+            2020,
+            3,
+            87.33,
+            "2020-01-01",
+            "2020-12-25",
+            2
+          ]
+        ],
         "orderSensitive": true
       }
     ]

@@ -151,6 +151,10 @@ const SQL_DICTIONARY = [
   { text: 'IS NULL', kind: 'keyword', icon: '🔑', detail: 'Check for NULL' },
   { text: 'IS NOT NULL', kind: 'keyword', icon: '🔑', detail: 'Check for NOT NULL' },
   { text: 'JOIN', kind: 'keyword', icon: '🔑', detail: 'JOIN table ON ...' },
+  { text: 'INNER JOIN', kind: 'keyword', icon: '🔑', detail: 'INNER JOIN table ON ...' },
+  { text: 'LEFT JOIN', kind: 'keyword', icon: '🔑', detail: 'LEFT JOIN table ON ...' },
+  { text: 'RIGHT JOIN', kind: 'keyword', icon: '🔑', detail: 'RIGHT JOIN table ON ...' },
+  { text: 'COALESCE', kind: 'function', icon: '⚡', detail: 'COALESCE(val, fallback)' },
   { text: 'CASE', kind: 'keyword', icon: '🔑', detail: 'CASE WHEN .. THEN .. END' },
 
   // ── Aggregate & Date Functions ──
@@ -189,6 +193,15 @@ const SQL_DICTIONARY = [
   // ── Common Problem Aliases ──
   { text: 'employee_name', kind: 'field', icon: '🏷️', detail: 'emp_name AS employee_name' },
   { text: 'employee_salary', kind: 'field', icon: '🏷️', detail: 'salary AS employee_salary' },
+  { text: 'department_location', kind: 'field', icon: '🏷️', detail: 'd.location AS department_location' },
+  { text: 'staffing_status', kind: 'field', icon: '🏷️', detail: 'staffing_status' },
+  { text: 'departments_represented', kind: 'field', icon: '🏷️', detail: 'COUNT(DISTINCT d.dept_id) AS departments_represented' },
+  { text: 'excellent_count', kind: 'field', icon: '🏷️', detail: 'excellent_count' },
+  { text: 'good_count', kind: 'field', icon: '🏷️', detail: 'good_count' },
+  { text: 'average_count', kind: 'field', icon: '🏷️', detail: 'average_count' },
+  { text: 'poor_count', kind: 'field', icon: '🏷️', detail: 'poor_count' },
+  { text: 'high_salary_count', kind: 'field', icon: '🏷️', detail: 'high_salary_count' },
+  { text: 'low_salary_count', kind: 'field', icon: '🏷️', detail: 'low_salary_count' },
   { text: 'performance_score', kind: 'field', icon: '🏷️', detail: 'performance AS performance_score' },
   { text: 'salary_difference', kind: 'field', icon: '🏷️', detail: 'salary_difference' },
   { text: 'female_total_salary', kind: 'field', icon: '🏷️', detail: 'female_total_salary' },
