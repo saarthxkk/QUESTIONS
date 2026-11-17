@@ -327,16 +327,17 @@ function setupCaseTabs(q) {
   tabsBar.innerHTML = '';
   activeCaseIdx = 0;
 
-  cases.slice(0, 3).forEach((tc, idx) => {
+  cases.slice(0, 8).forEach((tc, idx) => {
     const chip = document.createElement('button');
     chip.className = `case-chip ${idx === 0 ? 'active' : ''}`;
     chip.textContent = `Case ${idx + 1}`;
+    if (tc.description) chip.title = tc.description;
     chip.onclick = () => {
       document.querySelectorAll('.case-chip').forEach(c => c.classList.remove('active'));
       chip.classList.add('active');
       activeCaseIdx = idx;
       if (customInputEl) {
-        customInputEl.value = tc.input || '';
+        customInputEl.value = tc.input || tc.description || '';
       }
     };
     tabsBar.appendChild(chip);
