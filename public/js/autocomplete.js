@@ -1,879 +1,268 @@
 // ═══════════════════════════════════════════════════════════════
-// CodeArena — C++ Autocomplete Engine (VS Code Style)
+// CodeArena — Auto-Fill & IntelliSense Engine
+// VS Code & LeetCode Style Autocomplete for C++17 and MySQL
 // ═══════════════════════════════════════════════════════════════
 
-class CppAutocomplete {
-  constructor(editor) {
-    this.editor = editor;
-    this.dropdown = null;
-    this.selectedIndex = -1;
-    this.visible = false;
-    this.suggestions = [];
-    this.language = 'cpp';
-    
-    this.initDropdown();
-    this.bindEvents();
-    this.buildDictionary();
+const CPP_DICTIONARY = [
+  // ── Keywords ──
+  { text: 'auto', kind: 'keyword', icon: '🔑', detail: 'auto type deduction' },
+  { text: 'bool', kind: 'keyword', icon: '🔑', detail: 'boolean type' },
+  { text: 'break', kind: 'keyword', icon: '🔑', detail: 'break loop / switch' },
+  { text: 'case', kind: 'keyword', icon: '🔑', detail: 'switch case label' },
+  { text: 'catch', kind: 'keyword', icon: '🔑', detail: 'exception catch block' },
+  { text: 'char', kind: 'keyword', icon: '🔑', detail: 'character type' },
+  { text: 'class', kind: 'keyword', icon: '🔑', detail: 'class declaration' },
+  { text: 'const', kind: 'keyword', icon: '🔑', detail: 'const qualifier' },
+  { text: 'constexpr', kind: 'keyword', icon: '🔑', detail: 'compile-time constant' },
+  { text: 'continue', kind: 'keyword', icon: '🔑', detail: 'continue next iteration' },
+  { text: 'default', kind: 'keyword', icon: '🔑', detail: 'default switch case' },
+  { text: 'delete', kind: 'keyword', icon: '🔑', detail: 'deallocate memory' },
+  { text: 'do', kind: 'keyword', icon: '🔑', detail: 'do-while loop' },
+  { text: 'double', kind: 'keyword', icon: '🔑', detail: 'double precision float' },
+  { text: 'else', kind: 'keyword', icon: '🔑', detail: 'else branch' },
+  { text: 'enum', kind: 'keyword', icon: '🔑', detail: 'enumerated type' },
+  { text: 'false', kind: 'keyword', icon: '🔑', detail: 'boolean literal' },
+  { text: 'float', kind: 'keyword', icon: '🔑', detail: 'single precision float' },
+  { text: 'for', kind: 'keyword', icon: '🔑', detail: 'for loop' },
+  { text: 'if', kind: 'keyword', icon: '🔑', detail: 'if condition' },
+  { text: 'inline', kind: 'keyword', icon: '🔑', detail: 'inline function' },
+  { text: 'int', kind: 'keyword', icon: '🔑', detail: 'integer type' },
+  { text: 'long', kind: 'keyword', icon: '🔑', detail: 'long integer' },
+  { text: 'namespace', kind: 'keyword', icon: '🔑', detail: 'namespace declaration' },
+  { text: 'new', kind: 'keyword', icon: '🔑', detail: 'allocate memory' },
+  { text: 'nullptr', kind: 'keyword', icon: '🔑', detail: 'null pointer literal' },
+  { text: 'public', kind: 'keyword', icon: '🔑', detail: 'public access specifier' },
+  { text: 'private', kind: 'keyword', icon: '🔑', detail: 'private access specifier' },
+  { text: 'protected', kind: 'keyword', icon: '🔑', detail: 'protected access specifier' },
+  { text: 'return', kind: 'keyword', icon: '🔑', detail: 'return from function' },
+  { text: 'sizeof', kind: 'keyword', icon: '🔑', detail: 'size in bytes' },
+  { text: 'static', kind: 'keyword', icon: '🔑', detail: 'static storage duration' },
+  { text: 'struct', kind: 'keyword', icon: '🔑', detail: 'struct declaration' },
+  { text: 'switch', kind: 'keyword', icon: '🔑', detail: 'switch statement' },
+  { text: 'template', kind: 'keyword', icon: '🔑', detail: 'template declaration' },
+  { text: 'this', kind: 'keyword', icon: '🔑', detail: 'pointer to current object' },
+  { text: 'true', kind: 'keyword', icon: '🔑', detail: 'boolean literal' },
+  { text: 'typedef', kind: 'keyword', icon: '🔑', detail: 'type alias' },
+  { text: 'using', kind: 'keyword', icon: '🔑', detail: 'using namespace / alias' },
+  { text: 'void', kind: 'keyword', icon: '🔑', detail: 'empty / no return type' },
+  { text: 'while', kind: 'keyword', icon: '🔑', detail: 'while loop' },
+
+  // ── Common I/O & Objects ──
+  { text: 'cout', kind: 'object', icon: '📤', detail: 'std::cout << ...' },
+  { text: 'cin', kind: 'object', icon: '📥', detail: 'std::cin >> ...' },
+  { text: 'cerr', kind: 'object', icon: '📤', detail: 'std::cerr << ...' },
+  { text: 'endl', kind: 'object', icon: '↩️', detail: 'std::endl' },
+  { text: 'getline', kind: 'function', icon: '⚡', detail: 'getline(cin, str)' },
+  { text: 'printf', kind: 'function', icon: '⚡', detail: 'printf(format, ...)' },
+  { text: 'scanf', kind: 'function', icon: '⚡', detail: 'scanf(format, ...)' },
+
+  // ── STL Containers ──
+  { text: 'vector', kind: 'class', icon: '📦', detail: 'std::vector<T>' },
+  { text: 'string', kind: 'class', icon: '📦', detail: 'std::string' },
+  { text: 'map', kind: 'class', icon: '📦', detail: 'std::map<K,V>' },
+  { text: 'unordered_map', kind: 'class', icon: '📦', detail: 'std::unordered_map<K,V>' },
+  { text: 'set', kind: 'class', icon: '📦', detail: 'std::set<T>' },
+  { text: 'unordered_set', kind: 'class', icon: '📦', detail: 'std::unordered_set<T>' },
+  { text: 'queue', kind: 'class', icon: '📦', detail: 'std::queue<T>' },
+  { text: 'priority_queue', kind: 'class', icon: '📦', detail: 'std::priority_queue<T>' },
+  { text: 'stack', kind: 'class', icon: '📦', detail: 'std::stack<T>' },
+  { text: 'pair', kind: 'class', icon: '📦', detail: 'std::pair<A,B>' },
+
+  // ── STL Algorithms & Math ──
+  { text: 'sort', kind: 'function', icon: '⚡', detail: 'sort(v.begin(), v.end())' },
+  { text: 'reverse', kind: 'function', icon: '⚡', detail: 'reverse(v.begin(), v.end())' },
+  { text: 'max', kind: 'function', icon: '⚡', detail: 'max(a, b)' },
+  { text: 'min', kind: 'function', icon: '⚡', detail: 'min(a, b)' },
+  { text: 'swap', kind: 'function', icon: '⚡', detail: 'swap(a, b)' },
+  { text: 'abs', kind: 'function', icon: '⚡', detail: 'abs(n)' },
+  { text: 'lower_bound', kind: 'function', icon: '⚡', detail: 'lower_bound(beg, end, val)' },
+  { text: 'upper_bound', kind: 'function', icon: '⚡', detail: 'upper_bound(beg, end, val)' },
+
+  // ── Common Data Structure Elements ──
+  { text: 'Node', kind: 'class', icon: '🌳', detail: 'struct Node' },
+  { text: 'TreeNode', kind: 'class', icon: '🌳', detail: 'struct TreeNode' },
+  { text: 'ListNode', kind: 'class', icon: '🔗', detail: 'struct ListNode' },
+  { text: 'left', kind: 'field', icon: '🏷️', detail: 'Node* left' },
+  { text: 'right', kind: 'field', icon: '🏷️', detail: 'Node* right' },
+  { text: 'data', kind: 'field', icon: '🏷️', detail: 'int data / val' },
+  { text: 'val', kind: 'field', icon: '🏷️', detail: 'int val' },
+  { text: 'height', kind: 'field', icon: '🏷️', detail: 'int height' },
+  { text: 'push_back', kind: 'function', icon: '⚡', detail: 'v.push_back(x)' },
+  { text: 'size', kind: 'function', icon: '⚡', detail: 'c.size()' },
+  { text: 'empty', kind: 'function', icon: '⚡', detail: 'c.empty()' },
+  { text: 'begin', kind: 'function', icon: '⚡', detail: 'c.begin()' },
+  { text: 'end', kind: 'function', icon: '⚡', detail: 'c.end()' },
+
+  // ── C++ Snippets ──
+  {
+    text: 'fori',
+    kind: 'snippet',
+    icon: '✂️',
+    detail: 'for (int i = 0; i < n; i++)',
+    isSnippet: true,
+    body: 'for (int i = 0; i < n; i++) {\n    \n}'
+  },
+  {
+    text: 'fore',
+    kind: 'snippet',
+    icon: '✂️',
+    detail: 'for (auto& x : container)',
+    isSnippet: true,
+    body: 'for (auto& x : v) {\n    \n}'
+  },
+  {
+    text: 'node',
+    kind: 'snippet',
+    icon: '✂️',
+    detail: 'struct Node declaration',
+    isSnippet: true,
+    body: 'struct Node {\n    int data;\n    Node* left;\n    Node* right;\n    Node(int val) : data(val), left(nullptr), right(nullptr) {}\n};'
+  },
+  {
+    text: 'coutl',
+    kind: 'snippet',
+    icon: '✂️',
+    detail: 'cout << ... << endl;',
+    isSnippet: true,
+    body: 'cout <<  << endl;'
   }
+];
 
-  setLanguage(lang) {
-    this.language = lang;
-    if (lang === 'sql') {
-      this.buildSqlDictionary();
-    } else {
-      this.buildDictionary();
-    }
+const SQL_DICTIONARY = [
+  // ── SQL Core Keywords ──
+  { text: 'SELECT', kind: 'keyword', icon: '🔑', detail: 'SELECT col1, col2' },
+  { text: 'FROM', kind: 'keyword', icon: '🔑', detail: 'FROM table_name' },
+  { text: 'WHERE', kind: 'keyword', icon: '🔑', detail: 'WHERE condition' },
+  { text: 'GROUP BY', kind: 'keyword', icon: '🔑', detail: 'GROUP BY col1, col2' },
+  { text: 'HAVING', kind: 'keyword', icon: '🔑', detail: 'HAVING condition' },
+  { text: 'ORDER BY', kind: 'keyword', icon: '🔑', detail: 'ORDER BY col ASC|DESC' },
+  { text: 'LIMIT', kind: 'keyword', icon: '🔑', detail: 'LIMIT count' },
+  { text: 'AND', kind: 'keyword', icon: '🔑', detail: 'Logical AND' },
+  { text: 'OR', kind: 'keyword', icon: '🔑', detail: 'Logical OR' },
+  { text: 'NOT', kind: 'keyword', icon: '🔑', detail: 'Logical NOT' },
+  { text: 'BETWEEN', kind: 'keyword', icon: '🔑', detail: 'BETWEEN low AND high' },
+  { text: 'IN', kind: 'keyword', icon: '🔑', detail: 'col IN (val1, val2)' },
+  { text: 'NOT IN', kind: 'keyword', icon: '🔑', detail: 'col NOT IN (val1, val2)' },
+  { text: 'LIKE', kind: 'keyword', icon: '🔑', detail: "LIKE 'pattern%'" },
+  { text: 'DISTINCT', kind: 'keyword', icon: '🔑', detail: 'COUNT(DISTINCT col)' },
+  { text: 'AS', kind: 'keyword', icon: '🔑', detail: 'expression AS alias' },
+  { text: 'ASC', kind: 'keyword', icon: '🔑', detail: 'Ascending sort' },
+  { text: 'DESC', kind: 'keyword', icon: '🔑', detail: 'Descending sort' },
+  { text: 'IS NULL', kind: 'keyword', icon: '🔑', detail: 'Check for NULL' },
+  { text: 'IS NOT NULL', kind: 'keyword', icon: '🔑', detail: 'Check for NOT NULL' },
+  { text: 'JOIN', kind: 'keyword', icon: '🔑', detail: 'JOIN table ON ...' },
+  { text: 'CASE', kind: 'keyword', icon: '🔑', detail: 'CASE WHEN .. THEN .. END' },
+
+  // ── Aggregate & Date Functions ──
+  { text: 'COUNT(*)', kind: 'function', icon: '⚡', detail: 'COUNT(*) — all rows' },
+  { text: 'COUNT', kind: 'function', icon: '⚡', detail: 'COUNT(column)' },
+  { text: 'SUM', kind: 'function', icon: '⚡', detail: 'SUM(column)' },
+  { text: 'AVG', kind: 'function', icon: '⚡', detail: 'AVG(column)' },
+  { text: 'MAX', kind: 'function', icon: '⚡', detail: 'MAX(column)' },
+  { text: 'MIN', kind: 'function', icon: '⚡', detail: 'MIN(column)' },
+  { text: 'ROUND', kind: 'function', icon: '⚡', detail: 'ROUND(value, 2)' },
+  { text: 'YEAR', kind: 'function', icon: '⚡', detail: 'YEAR(dob)' },
+  { text: 'MONTH', kind: 'function', icon: '⚡', detail: 'MONTH(dob)' },
+  { text: 'MONTHNAME', kind: 'function', icon: '⚡', detail: 'MONTHNAME(dob)' },
+
+  // ── Database Schema Table & Columns ──
+  { text: 'student', kind: 'class', icon: '🗄️', detail: 'Table: student' },
+  { text: 'student_id', kind: 'field', icon: '🏷️', detail: 'student.student_id' },
+  { text: 'name', kind: 'field', icon: '🏷️', detail: 'student.name' },
+  { text: 'age', kind: 'field', icon: '🏷️', detail: 'student.age' },
+  { text: 'gender', kind: 'field', icon: '🏷️', detail: "student.gender ('M'/'F')" },
+  { text: 'city', kind: 'field', icon: '🏷️', detail: 'student.city' },
+  { text: 'email', kind: 'field', icon: '🏷️', detail: 'student.email' },
+  { text: 'marks', kind: 'field', icon: '🏷️', detail: 'student.marks' },
+  { text: 'dob', kind: 'field', icon: '🏷️', detail: 'student.dob' },
+
+  // ── Common Problem Aliases ──
+  { text: 'student_name', kind: 'field', icon: '🏷️', detail: 'name AS student_name' },
+  { text: 'student_marks', kind: 'field', icon: '🏷️', detail: 'marks AS student_marks' },
+  { text: 'total_students', kind: 'field', icon: '🏷️', detail: 'COUNT(*) AS total_students' },
+  { text: 'total_marks', kind: 'field', icon: '🏷️', detail: 'SUM(marks) AS total_marks' },
+  { text: 'average_marks', kind: 'field', icon: '🏷️', detail: 'ROUND(AVG(marks), 2) AS average_marks' },
+  { text: 'highest_marks', kind: 'field', icon: '🏷️', detail: 'MAX(marks) AS highest_marks' },
+  { text: 'lowest_marks', kind: 'field', icon: '🏷️', detail: 'MIN(marks) AS lowest_marks' },
+  { text: 'birth_year', kind: 'field', icon: '🏷️', detail: 'YEAR(dob) AS birth_year' },
+  { text: 'birth_month_number', kind: 'field', icon: '🏷️', detail: 'MONTH(dob) AS birth_month_number' },
+  { text: 'birth_month_name', kind: 'field', icon: '🏷️', detail: 'MONTHNAME(dob) AS birth_month_name' },
+  { text: 'average_age', kind: 'field', icon: '🏷️', detail: 'ROUND(AVG(age), 2) AS average_age' },
+  { text: 'unique_cities', kind: 'field', icon: '🏷️', detail: 'COUNT(DISTINCT city) AS unique_cities' },
+  { text: 'unique_ages', kind: 'field', icon: '🏷️', detail: 'COUNT(DISTINCT age) AS unique_ages' },
+  { text: 'unique_marks', kind: 'field', icon: '🏷️', detail: 'COUNT(DISTINCT marks) AS unique_marks' },
+
+  // ── SQL Snippets ──
+  {
+    text: 'sel',
+    kind: 'snippet',
+    icon: '✂️',
+    detail: 'SELECT * FROM student;',
+    isSnippet: true,
+    body: 'SELECT * FROM student;'
+  },
+  {
+    text: 'selgroup',
+    kind: 'snippet',
+    icon: '✂️',
+    detail: 'SELECT ... GROUP BY ...',
+    isSnippet: true,
+    body: 'SELECT city, COUNT(*) AS total_students\nFROM student\nGROUP BY city\nHAVING COUNT(*) >= 2\nORDER BY total_students DESC;'
   }
+];
 
-  buildSqlDictionary() {
-    this.dictionary = [
-      // ── SQL Core Keywords ──
-      { text: 'SELECT', kind: 'keyword', icon: '🔑', detail: 'SELECT col1, col2' },
-      { text: 'FROM', kind: 'keyword', icon: '🔑', detail: 'FROM table_name' },
-      { text: 'WHERE', kind: 'keyword', icon: '🔑', detail: 'WHERE condition' },
-      { text: 'GROUP BY', kind: 'keyword', icon: '🔑', detail: 'GROUP BY col1, col2' },
-      { text: 'HAVING', kind: 'keyword', icon: '🔑', detail: 'HAVING aggregate_condition' },
-      { text: 'ORDER BY', kind: 'keyword', icon: '🔑', detail: 'ORDER BY col ASC|DESC' },
-      { text: 'LIMIT', kind: 'keyword', icon: '🔑', detail: 'LIMIT n [OFFSET m]' },
-      { text: 'AND', kind: 'keyword', icon: '🔑', detail: 'Logical AND' },
-      { text: 'OR', kind: 'keyword', icon: '🔑', detail: 'Logical OR' },
-      { text: 'NOT', kind: 'keyword', icon: '🔑', detail: 'Logical NOT' },
-      { text: 'BETWEEN', kind: 'keyword', icon: '🔑', detail: 'val BETWEEN low AND high' },
-      { text: 'IN', kind: 'keyword', icon: '🔑', detail: 'col IN (val1, val2)' },
-      { text: 'NOT IN', kind: 'keyword', icon: '🔑', detail: 'col NOT IN (val1, val2)' },
-      { text: 'LIKE', kind: 'keyword', icon: '🔑', detail: "col LIKE 'pattern%'" },
-      { text: 'NOT LIKE', kind: 'keyword', icon: '🔑', detail: "col NOT LIKE 'pattern%'" },
-      { text: 'DISTINCT', kind: 'keyword', icon: '🔑', detail: 'COUNT(DISTINCT col)' },
-      { text: 'AS', kind: 'keyword', icon: '🔑', detail: 'expression AS alias_name' },
-      { text: 'ASC', kind: 'keyword', icon: '🔑', detail: 'Ascending sort order' },
-      { text: 'DESC', kind: 'keyword', icon: '🔑', detail: 'Descending sort order' },
-      { text: 'IS NULL', kind: 'keyword', icon: '🔑', detail: 'Check for NULL value' },
-      { text: 'IS NOT NULL', kind: 'keyword', icon: '🔑', detail: 'Check for non-NULL value' },
-      { text: 'JOIN', kind: 'keyword', icon: '🔑', detail: 'JOIN table ON condition' },
-      { text: 'INNER JOIN', kind: 'keyword', icon: '🔑', detail: 'INNER JOIN table ON condition' },
-      { text: 'LEFT JOIN', kind: 'keyword', icon: '🔑', detail: 'LEFT JOIN table ON condition' },
-      { text: 'RIGHT JOIN', kind: 'keyword', icon: '🔑', detail: 'RIGHT JOIN table ON condition' },
-      { text: 'UNION', kind: 'keyword', icon: '🔑', detail: 'Combine result sets' },
-      { text: 'UNION ALL', kind: 'keyword', icon: '🔑', detail: 'Combine result sets with duplicates' },
-      { text: 'CASE', kind: 'keyword', icon: '🔑', detail: 'CASE WHEN cond THEN val ELSE val END' },
-      { text: 'WHEN', kind: 'keyword', icon: '🔑', detail: 'WHEN condition THEN result' },
-      { text: 'THEN', kind: 'keyword', icon: '🔑', detail: 'THEN result' },
-      { text: 'ELSE', kind: 'keyword', icon: '🔑', detail: 'ELSE fallback_result' },
-      { text: 'END', kind: 'keyword', icon: '🔑', detail: 'END case statement' },
+window.CodeArenaDictionary = {
+  cpp: CPP_DICTIONARY,
+  sql: SQL_DICTIONARY
+};
 
-      // ── Aggregate & Math Functions ──
-      { text: 'COUNT(*)', kind: 'function', icon: '⚡', detail: 'COUNT(*) — count all rows' },
-      { text: 'COUNT', kind: 'function', icon: '⚡', detail: 'COUNT(col) or COUNT(DISTINCT col)' },
-      { text: 'SUM', kind: 'function', icon: '⚡', detail: 'SUM(numeric_col)' },
-      { text: 'AVG', kind: 'function', icon: '⚡', detail: 'AVG(numeric_col)' },
-      { text: 'MAX', kind: 'function', icon: '⚡', detail: 'MAX(column)' },
-      { text: 'MIN', kind: 'function', icon: '⚡', detail: 'MIN(column)' },
-      { text: 'ROUND', kind: 'function', icon: '⚡', detail: 'ROUND(number, decimals)' },
+// ─── CodeMirror Hint Helper ─────────────────────────────────────────
 
-      // ── Date Functions ──
-      { text: 'YEAR', kind: 'function', icon: '⚡', detail: 'YEAR(date_col)' },
-      { text: 'MONTH', kind: 'function', icon: '⚡', detail: 'MONTH(date_col) — 1 to 12' },
-      { text: 'MONTHNAME', kind: 'function', icon: '⚡', detail: 'MONTHNAME(date_col) — January..December' },
-      { text: 'DATE', kind: 'function', icon: '⚡', detail: 'DATE(datetime_val)' },
-      { text: 'DATEDIFF', kind: 'function', icon: '⚡', detail: 'DATEDIFF(date1, date2)' },
+if (typeof CodeMirror !== 'undefined') {
+  CodeMirror.registerHelper('hint', 'codearena', function(cm) {
+    const isSql = window.currentQuestion && window.currentQuestion.type === 'sql';
+    const dict = isSql ? SQL_DICTIONARY : CPP_DICTIONARY;
 
-      // ── Database Table & Columns ──
-      { text: 'student', kind: 'class', icon: '🗄️', detail: 'Table: student' },
-      { text: 'student_id', kind: 'field', icon: '🏷️', detail: 'Column: student.student_id (INT PK)' },
-      { text: 'name', kind: 'field', icon: '🏷️', detail: 'Column: student.name (VARCHAR)' },
-      { text: 'age', kind: 'field', icon: '🏷️', detail: 'Column: student.age (INT)' },
-      { text: 'gender', kind: 'field', icon: '🏷️', detail: "Column: student.gender ('M' or 'F')" },
-      { text: 'city', kind: 'field', icon: '🏷️', detail: 'Column: student.city (VARCHAR)' },
-      { text: 'email', kind: 'field', icon: '🏷️', detail: 'Column: student.email (VARCHAR UNIQUE)' },
-      { text: 'marks', kind: 'field', icon: '🏷️', detail: 'Column: student.marks (INT 0-100)' },
-      { text: 'dob', kind: 'field', icon: '🏷️', detail: 'Column: student.dob (DATE YYYY-MM-DD)' },
+    const cur = cm.getCursor();
+    const token = cm.getTokenAt(cur);
+    const line = cm.getLine(cur.line);
 
-      // ── Common Problem Aliases ──
-      { text: 'student_name', kind: 'field', icon: '🏷️', detail: 'Alias: name AS student_name' },
-      { text: 'student_marks', kind: 'field', icon: '🏷️', detail: 'Alias: marks AS student_marks' },
-      { text: 'total_students', kind: 'field', icon: '🏷️', detail: 'Alias: COUNT(*) AS total_students' },
-      { text: 'total_marks', kind: 'field', icon: '🏷️', detail: 'Alias: SUM(marks) AS total_marks' },
-      { text: 'average_marks', kind: 'field', icon: '🏷️', detail: 'Alias: ROUND(AVG(marks), 2) AS average_marks' },
-      { text: 'highest_marks', kind: 'field', icon: '🏷️', detail: 'Alias: MAX(marks) AS highest_marks' },
-      { text: 'lowest_marks', kind: 'field', icon: '🏷️', detail: 'Alias: MIN(marks) AS lowest_marks' },
-      { text: 'birth_year', kind: 'field', icon: '🏷️', detail: 'Alias: YEAR(dob) AS birth_year' },
-      { text: 'birth_month_number', kind: 'field', icon: '🏷️', detail: 'Alias: MONTH(dob) AS birth_month_number' },
-      { text: 'birth_month_name', kind: 'field', icon: '🏷️', detail: 'Alias: MONTHNAME(dob) AS birth_month_name' },
-      { text: 'average_age', kind: 'field', icon: '🏷️', detail: 'Alias: ROUND(AVG(age), 2) AS average_age' },
-      { text: 'unique_cities', kind: 'field', icon: '🏷️', detail: 'Alias: COUNT(DISTINCT city) AS unique_cities' },
-      { text: 'unique_ages', kind: 'field', icon: '🏷️', detail: 'Alias: COUNT(DISTINCT age) AS unique_ages' },
-      { text: 'unique_marks', kind: 'field', icon: '🏷️', detail: 'Alias: COUNT(DISTINCT marks) AS unique_marks' },
+    // Compute word range
+    let start = cur.ch;
+    let end = cur.ch;
+    while (start > 0 && /[a-zA-Z0-9_#]/.test(line.charAt(start - 1))) --start;
+    while (end < line.length && /[a-zA-Z0-9_#]/.test(line.charAt(end))) ++end;
 
-      // ── Common Cities ──
-      { text: "'Delhi'", kind: 'object', icon: '📍', detail: "City literal 'Delhi'" },
-      { text: "'Meerut'", kind: 'object', icon: '📍', detail: "City literal 'Meerut'" },
-      { text: "'Noida'", kind: 'object', icon: '📍', detail: "City literal 'Noida'" },
-      { text: "'Panipat'", kind: 'object', icon: '📍', detail: "City literal 'Panipat'" },
+    const word = line.slice(start, cur.ch);
+    if (!word || word.length < 1) return null;
 
-      // ── SQL Snippets ──
-      {
-        text: 'sel',
-        kind: 'snippet',
-        icon: '✂️',
-        detail: 'SELECT * FROM student;',
-        isSnippet: true,
-        body: 'SELECT * FROM student;'
-      },
-      {
-        text: 'selwhere',
-        kind: 'snippet',
-        icon: '✂️',
-        detail: 'SELECT ... FROM student WHERE ...',
-        isSnippet: true,
-        body: 'SELECT student_id, name, city, marks\nFROM student\nWHERE marks >= 75\nORDER BY marks DESC;'
-      },
-      {
-        text: 'grpby',
-        kind: 'snippet',
-        icon: '✂️',
-        detail: 'GROUP BY ... HAVING ...',
-        isSnippet: true,
-        body: 'GROUP BY city\nHAVING COUNT(*) >= 2'
-      },
-      {
-        text: 'cntdist',
-        kind: 'snippet',
-        icon: '✂️',
-        detail: 'COUNT(DISTINCT column)',
-        isSnippet: true,
-        body: 'COUNT(DISTINCT '
-      },
-      {
-        text: 'roundavg',
-        kind: 'snippet',
-        icon: '✂️',
-        detail: 'ROUND(AVG(col), 2)',
-        isSnippet: true,
-        body: 'ROUND(AVG(marks), 2) AS '
-      }
-    ];
-  }
-
-  // ─── Dictionary ─────────────────────────────────────────────
-
-  buildDictionary() {
-    this.dictionary = [
-      // ── Keywords ──
-      { text: 'auto', kind: 'keyword', icon: '🔑' },
-      { text: 'bool', kind: 'keyword', icon: '🔑' },
-      { text: 'break', kind: 'keyword', icon: '🔑' },
-      { text: 'case', kind: 'keyword', icon: '🔑' },
-      { text: 'catch', kind: 'keyword', icon: '🔑' },
-      { text: 'char', kind: 'keyword', icon: '🔑' },
-      { text: 'class', kind: 'keyword', icon: '🔑' },
-      { text: 'const', kind: 'keyword', icon: '🔑' },
-      { text: 'constexpr', kind: 'keyword', icon: '🔑' },
-      { text: 'continue', kind: 'keyword', icon: '🔑' },
-      { text: 'default', kind: 'keyword', icon: '🔑' },
-      { text: 'delete', kind: 'keyword', icon: '🔑' },
-      { text: 'do', kind: 'keyword', icon: '🔑' },
-      { text: 'double', kind: 'keyword', icon: '🔑' },
-      { text: 'else', kind: 'keyword', icon: '🔑' },
-      { text: 'enum', kind: 'keyword', icon: '🔑' },
-      { text: 'extern', kind: 'keyword', icon: '🔑' },
-      { text: 'false', kind: 'keyword', icon: '🔑' },
-      { text: 'float', kind: 'keyword', icon: '🔑' },
-      { text: 'for', kind: 'keyword', icon: '🔑' },
-      { text: 'friend', kind: 'keyword', icon: '🔑' },
-      { text: 'goto', kind: 'keyword', icon: '🔑' },
-      { text: 'if', kind: 'keyword', icon: '🔑' },
-      { text: 'inline', kind: 'keyword', icon: '🔑' },
-      { text: 'int', kind: 'keyword', icon: '🔑' },
-      { text: 'long', kind: 'keyword', icon: '🔑' },
-      { text: 'namespace', kind: 'keyword', icon: '🔑' },
-      { text: 'new', kind: 'keyword', icon: '🔑' },
-      { text: 'nullptr', kind: 'keyword', icon: '🔑' },
-      { text: 'operator', kind: 'keyword', icon: '🔑' },
-      { text: 'override', kind: 'keyword', icon: '🔑' },
-      { text: 'private', kind: 'keyword', icon: '🔑' },
-      { text: 'protected', kind: 'keyword', icon: '🔑' },
-      { text: 'public', kind: 'keyword', icon: '🔑' },
-      { text: 'return', kind: 'keyword', icon: '🔑' },
-      { text: 'short', kind: 'keyword', icon: '🔑' },
-      { text: 'signed', kind: 'keyword', icon: '🔑' },
-      { text: 'sizeof', kind: 'keyword', icon: '🔑' },
-      { text: 'static', kind: 'keyword', icon: '🔑' },
-      { text: 'static_cast', kind: 'keyword', icon: '🔑' },
-      { text: 'struct', kind: 'keyword', icon: '🔑' },
-      { text: 'switch', kind: 'keyword', icon: '🔑' },
-      { text: 'template', kind: 'keyword', icon: '🔑' },
-      { text: 'this', kind: 'keyword', icon: '🔑' },
-      { text: 'throw', kind: 'keyword', icon: '🔑' },
-      { text: 'true', kind: 'keyword', icon: '🔑' },
-      { text: 'try', kind: 'keyword', icon: '🔑' },
-      { text: 'typedef', kind: 'keyword', icon: '🔑' },
-      { text: 'typename', kind: 'keyword', icon: '🔑' },
-      { text: 'unsigned', kind: 'keyword', icon: '🔑' },
-      { text: 'using', kind: 'keyword', icon: '🔑' },
-      { text: 'virtual', kind: 'keyword', icon: '🔑' },
-      { text: 'void', kind: 'keyword', icon: '🔑' },
-      { text: 'volatile', kind: 'keyword', icon: '🔑' },
-      { text: 'while', kind: 'keyword', icon: '🔑' },
-
-      // ── I/O ──
-      { text: 'cout', kind: 'object', icon: '📤', detail: 'std::cout' },
-      { text: 'cin', kind: 'object', icon: '📥', detail: 'std::cin' },
-      { text: 'cerr', kind: 'object', icon: '📤', detail: 'std::cerr' },
-      { text: 'endl', kind: 'object', icon: '↩️', detail: 'std::endl' },
-      { text: 'getline', kind: 'function', icon: '⚡', detail: 'getline(cin, str)' },
-      { text: 'printf', kind: 'function', icon: '⚡', detail: 'printf(format, ...)' },
-      { text: 'scanf', kind: 'function', icon: '⚡', detail: 'scanf(format, ...)' },
-
-      // ── STL Containers ──
-      { text: 'vector', kind: 'class', icon: '📦', detail: 'std::vector<T>' },
-      { text: 'string', kind: 'class', icon: '📦', detail: 'std::string' },
-      { text: 'map', kind: 'class', icon: '📦', detail: 'std::map<K,V>' },
-      { text: 'unordered_map', kind: 'class', icon: '📦', detail: 'std::unordered_map<K,V>' },
-      { text: 'set', kind: 'class', icon: '📦', detail: 'std::set<T>' },
-      { text: 'unordered_set', kind: 'class', icon: '📦', detail: 'std::unordered_set<T>' },
-      { text: 'stack', kind: 'class', icon: '📦', detail: 'std::stack<T>' },
-      { text: 'queue', kind: 'class', icon: '📦', detail: 'std::queue<T>' },
-      { text: 'priority_queue', kind: 'class', icon: '📦', detail: 'std::priority_queue<T>' },
-      { text: 'deque', kind: 'class', icon: '📦', detail: 'std::deque<T>' },
-      { text: 'list', kind: 'class', icon: '📦', detail: 'std::list<T>' },
-      { text: 'pair', kind: 'class', icon: '📦', detail: 'std::pair<A,B>' },
-      { text: 'tuple', kind: 'class', icon: '📦', detail: 'std::tuple<T...>' },
-      { text: 'array', kind: 'class', icon: '📦', detail: 'std::array<T,N>' },
-      { text: 'bitset', kind: 'class', icon: '📦', detail: 'std::bitset<N>' },
-
-      // ── STL Algorithms ──
-      { text: 'sort', kind: 'function', icon: '⚡', detail: 'sort(begin, end)' },
-      { text: 'reverse', kind: 'function', icon: '⚡', detail: 'reverse(begin, end)' },
-      { text: 'find', kind: 'function', icon: '⚡', detail: 'find(begin, end, val)' },
-      { text: 'count', kind: 'function', icon: '⚡', detail: 'count(begin, end, val)' },
-      { text: 'lower_bound', kind: 'function', icon: '⚡', detail: 'lower_bound(begin, end, val)' },
-      { text: 'upper_bound', kind: 'function', icon: '⚡', detail: 'upper_bound(begin, end, val)' },
-      { text: 'binary_search', kind: 'function', icon: '⚡', detail: 'binary_search(begin, end, val)' },
-      { text: 'max_element', kind: 'function', icon: '⚡', detail: 'max_element(begin, end)' },
-      { text: 'min_element', kind: 'function', icon: '⚡', detail: 'min_element(begin, end)' },
-      { text: 'accumulate', kind: 'function', icon: '⚡', detail: 'accumulate(begin, end, init)' },
-      { text: 'next_permutation', kind: 'function', icon: '⚡', detail: 'next_permutation(begin, end)' },
-      { text: 'prev_permutation', kind: 'function', icon: '⚡', detail: 'prev_permutation(begin, end)' },
-      { text: 'unique', kind: 'function', icon: '⚡', detail: 'unique(begin, end)' },
-      { text: 'fill', kind: 'function', icon: '⚡', detail: 'fill(begin, end, val)' },
-      { text: 'swap', kind: 'function', icon: '⚡', detail: 'swap(a, b)' },
-      { text: 'min', kind: 'function', icon: '⚡', detail: 'min(a, b)' },
-      { text: 'max', kind: 'function', icon: '⚡', detail: 'max(a, b)' },
-      { text: 'abs', kind: 'function', icon: '⚡', detail: 'abs(x)' },
-      { text: 'pow', kind: 'function', icon: '⚡', detail: 'pow(base, exp)' },
-      { text: 'sqrt', kind: 'function', icon: '⚡', detail: 'sqrt(x)' },
-      { text: 'log', kind: 'function', icon: '⚡', detail: 'log(x)' },
-      { text: 'ceil', kind: 'function', icon: '⚡', detail: 'ceil(x)' },
-      { text: 'floor', kind: 'function', icon: '⚡', detail: 'floor(x)' },
-      { text: 'to_string', kind: 'function', icon: '⚡', detail: 'to_string(val)' },
-      { text: 'stoi', kind: 'function', icon: '⚡', detail: 'stoi(str)' },
-      { text: 'stol', kind: 'function', icon: '⚡', detail: 'stol(str)' },
-      { text: 'stoll', kind: 'function', icon: '⚡', detail: 'stoll(str)' },
-
-      // ── Member Methods ──
-      { text: 'push_back', kind: 'method', icon: '🔧', detail: '.push_back(val)' },
-      { text: 'pop_back', kind: 'method', icon: '🔧', detail: '.pop_back()' },
-      { text: 'push_front', kind: 'method', icon: '🔧', detail: '.push_front(val)' },
-      { text: 'pop_front', kind: 'method', icon: '🔧', detail: '.pop_front()' },
-      { text: 'begin', kind: 'method', icon: '🔧', detail: '.begin()' },
-      { text: 'end', kind: 'method', icon: '🔧', detail: '.end()' },
-      { text: 'size', kind: 'method', icon: '🔧', detail: '.size()' },
-      { text: 'empty', kind: 'method', icon: '🔧', detail: '.empty()' },
-      { text: 'clear', kind: 'method', icon: '🔧', detail: '.clear()' },
-      { text: 'insert', kind: 'method', icon: '🔧', detail: '.insert(pos, val)' },
-      { text: 'erase', kind: 'method', icon: '🔧', detail: '.erase(pos)' },
-      { text: 'front', kind: 'method', icon: '🔧', detail: '.front()' },
-      { text: 'back', kind: 'method', icon: '🔧', detail: '.back()' },
-      { text: 'top', kind: 'method', icon: '🔧', detail: '.top()' },
-      { text: 'push', kind: 'method', icon: '🔧', detail: '.push(val)' },
-      { text: 'pop', kind: 'method', icon: '🔧', detail: '.pop()' },
-      { text: 'length', kind: 'method', icon: '🔧', detail: '.length()' },
-      { text: 'substr', kind: 'method', icon: '🔧', detail: '.substr(pos, len)' },
-      { text: 'resize', kind: 'method', icon: '🔧', detail: '.resize(n)' },
-      { text: 'reserve', kind: 'method', icon: '🔧', detail: '.reserve(n)' },
-      { text: 'emplace_back', kind: 'method', icon: '🔧', detail: '.emplace_back(args...)' },
-      { text: 'make_pair', kind: 'function', icon: '⚡', detail: 'make_pair(a, b)' },
-      { text: 'first', kind: 'property', icon: '🏷️', detail: '.first' },
-      { text: 'second', kind: 'property', icon: '🏷️', detail: '.second' },
-
-      // ── Preprocessor ──
-      { text: '#include', kind: 'preprocessor', icon: '📎', detail: '#include <header>' },
-      { text: '#define', kind: 'preprocessor', icon: '📎', detail: '#define NAME value' },
-      { text: '#ifndef', kind: 'preprocessor', icon: '📎', detail: '#ifndef GUARD' },
-      { text: '#endif', kind: 'preprocessor', icon: '📎', detail: '#endif' },
-      { text: '#pragma', kind: 'preprocessor', icon: '📎', detail: '#pragma once' },
-
-      // ── Common Headers ──
-      { text: 'iostream', kind: 'header', icon: '📄', detail: '<iostream>' },
-      { text: 'algorithm', kind: 'header', icon: '📄', detail: '<algorithm>' },
-      { text: 'cmath', kind: 'header', icon: '📄', detail: '<cmath>' },
-      { text: 'cstring', kind: 'header', icon: '📄', detail: '<cstring>' },
-      { text: 'climits', kind: 'header', icon: '📄', detail: '<climits>' },
-      { text: 'numeric', kind: 'header', icon: '📄', detail: '<numeric>' },
-      { text: 'functional', kind: 'header', icon: '📄', detail: '<functional>' },
-      { text: 'cassert', kind: 'header', icon: '📄', detail: '<cassert>' },
-      { text: 'iomanip', kind: 'header', icon: '📄', detail: '<iomanip>' },
-      { text: 'sstream', kind: 'header', icon: '📄', detail: '<sstream>' },
-
-      // ── Common Types ──
-      { text: 'INT_MAX', kind: 'constant', icon: '🔢', detail: '2147483647' },
-      { text: 'INT_MIN', kind: 'constant', icon: '🔢', detail: '-2147483648' },
-      { text: 'LLONG_MAX', kind: 'constant', icon: '🔢', detail: '9223372036854775807' },
-      { text: 'LLONG_MIN', kind: 'constant', icon: '🔢', detail: '-9223372036854775808' },
-      { text: 'long long', kind: 'keyword', icon: '🔑', detail: '64-bit integer' },
-      { text: 'size_t', kind: 'keyword', icon: '🔑', detail: 'unsigned size type' },
-    ];
-
-    // ── Snippets (insert multi-line templates) ──
-    this.snippets = [
-      {
-        trigger: 'fori',
-        label: 'for (int i = 0; i < n; i++)',
-        kind: 'snippet',
-        icon: '✂️',
-        detail: 'For loop with index i',
-        body: 'for (int i = 0; i < n; i++) {\n    \n}'
-      },
-      {
-        trigger: 'forj',
-        label: 'for (int j = 0; j < m; j++)',
-        kind: 'snippet',
-        icon: '✂️',
-        detail: 'For loop with index j',
-        body: 'for (int j = 0; j < m; j++) {\n    \n}'
-      },
-      {
-        trigger: 'forr',
-        label: 'for (int i = n-1; i >= 0; i--)',
-        kind: 'snippet',
-        icon: '✂️',
-        detail: 'Reverse for loop',
-        body: 'for (int i = n - 1; i >= 0; i--) {\n    \n}'
-      },
-      {
-        trigger: 'fore',
-        label: 'for (auto& x : container)',
-        kind: 'snippet',
-        icon: '✂️',
-        detail: 'Range-based for loop',
-        body: 'for (auto& x : container) {\n    \n}'
-      },
-      {
-        trigger: 'while',
-        label: 'while (condition) { }',
-        kind: 'snippet',
-        icon: '✂️',
-        detail: 'While loop',
-        body: 'while (condition) {\n    \n}'
-      },
-      {
-        trigger: 'ife',
-        label: 'if ... else ...',
-        kind: 'snippet',
-        icon: '✂️',
-        detail: 'If-else block',
-        body: 'if (condition) {\n    \n} else {\n    \n}'
-      },
-      {
-        trigger: 'main',
-        label: 'int main() { ... }',
-        kind: 'snippet',
-        icon: '✂️',
-        detail: 'Main function',
-        body: 'int main() {\n    \n    return 0;\n}'
-      },
-      {
-        trigger: 'cout',
-        label: 'cout << val << endl;',
-        kind: 'snippet',
-        icon: '✂️',
-        detail: 'Print with newline',
-        body: 'cout << '
-      },
-      {
-        trigger: 'cin',
-        label: 'cin >> variable;',
-        kind: 'snippet',
-        icon: '✂️',
-        detail: 'Read input',
-        body: 'cin >> '
-      },
-      {
-        trigger: 'vec',
-        label: 'vector<int> v(n);',
-        kind: 'snippet',
-        icon: '✂️',
-        detail: 'Vector declaration',
-        body: 'vector<int> v(n);'
-      },
-      {
-        trigger: 'veci',
-        label: 'vector<int> v;',
-        kind: 'snippet',
-        icon: '✂️',
-        detail: 'Empty int vector',
-        body: 'vector<int> v;'
-      },
-      {
-        trigger: 'vec2d',
-        label: 'vector<vector<int>> grid(n, vector<int>(m));',
-        kind: 'snippet',
-        icon: '✂️',
-        detail: '2D vector',
-        body: 'vector<vector<int>> grid(n, vector<int>(m, 0));'
-      },
-      {
-        trigger: 'readn',
-        label: 'Read N integers into vector',
-        kind: 'snippet',
-        icon: '✂️',
-        detail: 'Input loop pattern',
-        body: 'int n;\ncin >> n;\nvector<int> v(n);\nfor (int i = 0; i < n; i++) cin >> v[i];'
-      },
-      {
-        trigger: 'printv',
-        label: 'Print vector elements',
-        kind: 'snippet',
-        icon: '✂️',
-        detail: 'Output loop pattern',
-        body: 'for (int i = 0; i < v.size(); i++) {\n    cout << v[i];\n    if (i < v.size() - 1) cout << " ";\n}\ncout << endl;'
-      },
-      {
-        trigger: 'sorta',
-        label: 'sort(v.begin(), v.end());',
-        kind: 'snippet',
-        icon: '✂️',
-        detail: 'Sort ascending',
-        body: 'sort(v.begin(), v.end());'
-      },
-      {
-        trigger: 'sortd',
-        label: 'sort descending',
-        kind: 'snippet',
-        icon: '✂️',
-        detail: 'Sort descending',
-        body: 'sort(v.begin(), v.end(), greater<int>());'
-      },
-      {
-        trigger: 'node',
-        label: 'struct Node { ... }',
-        kind: 'snippet',
-        icon: '✂️',
-        detail: 'Tree node struct',
-        body: 'struct Node {\n    int data;\n    Node* left;\n    Node* right;\n    Node(int val) : data(val), left(nullptr), right(nullptr) {}\n};'
-      },
-      {
-        trigger: 'lnode',
-        label: 'struct ListNode { ... }',
-        kind: 'snippet',
-        icon: '✂️',
-        detail: 'Linked list node',
-        body: 'struct ListNode {\n    int val;\n    ListNode* next;\n    ListNode(int x) : val(x), next(nullptr) {}\n};'
-      },
-      {
-        trigger: 'incall',
-        label: '#include all common headers',
-        kind: 'snippet',
-        icon: '✂️',
-        detail: 'Include bits/stdc++.h',
-        body: '#include <bits/stdc++.h>\nusing namespace std;'
-      },
-      {
-        trigger: 'incio',
-        label: '#include <iostream>',
-        kind: 'snippet',
-        icon: '✂️',
-        detail: 'Include iostream',
-        body: '#include <iostream>\nusing namespace std;'
-      },
-      {
-        trigger: 'fastio',
-        label: 'Fast I/O setup',
-        kind: 'snippet',
-        icon: '✂️',
-        detail: 'ios_base::sync_with_stdio(false)',
-        body: 'ios_base::sync_with_stdio(false);\ncin.tie(NULL);'
-      },
-      {
-        trigger: 'dfs',
-        label: 'DFS template',
-        kind: 'snippet',
-        icon: '✂️',
-        detail: 'Depth-first search',
-        body: 'void dfs(int node, vector<vector<int>>& adj, vector<bool>& visited) {\n    visited[node] = true;\n    for (int neighbor : adj[node]) {\n        if (!visited[neighbor]) {\n            dfs(neighbor, adj, visited);\n        }\n    }\n}'
-      },
-      {
-        trigger: 'bfs',
-        label: 'BFS template',
-        kind: 'snippet',
-        icon: '✂️',
-        detail: 'Breadth-first search',
-        body: 'void bfs(int start, vector<vector<int>>& adj) {\n    vector<bool> visited(adj.size(), false);\n    queue<int> q;\n    q.push(start);\n    visited[start] = true;\n    while (!q.empty()) {\n        int node = q.front();\n        q.pop();\n        for (int neighbor : adj[node]) {\n            if (!visited[neighbor]) {\n                visited[neighbor] = true;\n                q.push(neighbor);\n            }\n        }\n    }\n}'
-      },
-    ];
-  }
-
-  // ─── Dropdown UI ────────────────────────────────────────────
-
-  initDropdown() {
-    this.dropdown = document.createElement('div');
-    this.dropdown.className = 'autocomplete-dropdown';
-    this.dropdown.style.display = 'none';
-    document.body.appendChild(this.dropdown);
-
-    // Info tooltip
-    this.tooltip = document.createElement('div');
-    this.tooltip.className = 'autocomplete-tooltip';
-    this.tooltip.style.display = 'none';
-    document.body.appendChild(this.tooltip);
-  }
-
-  // ─── Events ─────────────────────────────────────────────────
-
-  bindEvents() {
-    this.editor.addEventListener('input', () => this.onInput());
-    this.editor.addEventListener('keydown', (e) => this.onKeyDown(e), true);
-    this.editor.addEventListener('blur', () => {
-      // Delay hide so click on dropdown works
-      setTimeout(() => this.hide(), 200);
-    });
-    this.editor.addEventListener('scroll', () => this.hide());
-
-    // Click on dropdown item
-    this.dropdown.addEventListener('mousedown', (e) => {
-      e.preventDefault(); // Prevent blur
-      const item = e.target.closest('.ac-item');
-      if (item) {
-        const idx = parseInt(item.dataset.index);
-        this.accept(idx);
-      }
-    });
-
-    // Hover on dropdown item
-    this.dropdown.addEventListener('mouseover', (e) => {
-      const item = e.target.closest('.ac-item');
-      if (item) {
-        const idx = parseInt(item.dataset.index);
-        this.selectItem(idx);
-      }
-    });
-  }
-
-  onInput() {
-    const word = this.getCurrentWord();
-    if (word.length < 2) {
-      this.hide();
-      return;
-    }
-    this.updateSuggestions(word);
-  }
-
-  onKeyDown(e) {
-    if (!this.visible) {
-      // Ctrl+Space to trigger manually
-      if (e.key === ' ' && e.ctrlKey) {
-        e.preventDefault();
-        const word = this.getCurrentWord();
-        if (word.length >= 1) {
-          this.updateSuggestions(word);
-        }
-      }
-      return;
-    }
-
-    switch (e.key) {
-      case 'ArrowDown':
-        e.preventDefault();
-        e.stopPropagation();
-        e.stopImmediatePropagation();
-        this.selectItem(Math.min(this.selectedIndex + 1, this.suggestions.length - 1));
-        break;
-
-      case 'ArrowUp':
-        e.preventDefault();
-        e.stopPropagation();
-        e.stopImmediatePropagation();
-        this.selectItem(Math.max(this.selectedIndex - 1, 0));
-        break;
-
-      case 'Tab':
-      case 'Enter':
-        if (this.selectedIndex >= 0) {
-          e.preventDefault();
-          e.stopPropagation();
-          e.stopImmediatePropagation();
-          this.accept(this.selectedIndex);
-        }
-        break;
-
-      case 'Escape':
-        e.preventDefault();
-        e.stopPropagation();
-        e.stopImmediatePropagation();
-        this.hide();
-        break;
-    }
-  }
-
-  // ─── Word Extraction ───────────────────────────────────────
-
-  getCurrentWord() {
-    const pos = this.editor.selectionStart;
-    const text = this.editor.value;
-    
-    // Walk backwards from cursor to find word start
-    let start = pos;
-    while (start > 0) {
-      const ch = text[start - 1];
-      if (/[a-zA-Z0-9_#]/.test(ch)) {
-        start--;
-      } else {
-        break;
-      }
-    }
-    
-    return text.substring(start, pos);
-  }
-
-  getWordStart() {
-    const pos = this.editor.selectionStart;
-    const text = this.editor.value;
-    let start = pos;
-    while (start > 0) {
-      const ch = text[start - 1];
-      if (/[a-zA-Z0-9_#]/.test(ch)) {
-        start--;
-      } else {
-        break;
-      }
-    }
-    return start;
-  }
-
-  // ─── Filtering ─────────────────────────────────────────────
-
-  updateSuggestions(word) {
     const lower = word.toLowerCase();
+    const matches = dict.filter(item => {
+      return item.text.toLowerCase().includes(lower);
+    }).sort((a, b) => {
+      const aStarts = a.text.toLowerCase().startsWith(lower);
+      const bStarts = b.text.toLowerCase().startsWith(lower);
+      if (aStarts && !bStarts) return -1;
+      if (!aStarts && bStarts) return 1;
+      return a.text.localeCompare(b.text);
+    }).slice(0, 12);
 
-    // High frequency programmer essentials to boost to the top
-    const highPriority = {
-      'cout': 50,
-      'cin': 49,
-      'endl': 45,
-      'vector': 40,
-      'int': 35,
-      'string': 34,
-      'return': 33,
-      'bool': 30,
-      'auto': 29,
-      'for': 28,
-      'if': 27,
-      'while': 26,
-      'push_back': 25,
-      'Node': 24,
-      'nullptr': 23,
-      '#include': 22
+    if (matches.length === 0) return null;
+
+    return {
+      from: CodeMirror.Pos(cur.line, start),
+      to: CodeMirror.Pos(cur.line, end),
+      list: matches.map(item => ({
+        text: item.isSnippet ? item.body : item.text,
+        displayText: item.text,
+        className: `cm-hint-${item.kind || 'keyword'}`,
+        render: function(el) {
+          el.innerHTML = `
+            <span class="hint-label"><span class="hint-icon">${item.icon || '▪'}</span><strong>${item.text}</strong></span>
+            <span class="hint-detail">${item.detail || item.kind || ''}</span>
+          `;
+        }
+      }))
     };
-
-    let matches = [];
-
-    // Snippet matches (prioritize)
-    for (const s of this.snippets) {
-      const trigLower = s.trigger.toLowerCase();
-      if (trigLower.startsWith(lower) || s.label.toLowerCase().includes(lower)) {
-        let baseScore = trigLower === lower ? 30 : (trigLower.startsWith(lower) ? 20 : 10);
-        if (highPriority[s.trigger]) baseScore += highPriority[s.trigger];
-        matches.push({
-          text: s.trigger,
-          displayText: s.label,
-          kind: s.kind,
-          icon: s.icon,
-          detail: s.detail,
-          isSnippet: true,
-          body: s.body,
-          score: baseScore
-        });
-      }
-    }
-
-    // Dictionary matches
-    for (const d of this.dictionary) {
-      const textLower = d.text.toLowerCase();
-      if (textLower.startsWith(lower)) {
-        let baseScore = textLower === lower ? 30 : 15;
-        if (highPriority[d.text]) baseScore += highPriority[d.text];
-        matches.push({
-          text: d.text,
-          displayText: d.text,
-          kind: d.kind,
-          icon: d.icon,
-          detail: d.detail || '',
-          isSnippet: false,
-          score: baseScore
-        });
-      }
-    }
-
-    // Sort: higher score first, then alphabetical
-    matches.sort((a, b) => b.score - a.score || a.displayText.localeCompare(b.displayText));
-
-    // Deduplicate by displayText
-    const seen = new Set();
-    matches = matches.filter(m => {
-      if (seen.has(m.displayText)) return false;
-      seen.add(m.displayText);
-      return true;
-    });
-
-    // Limit to 8 items
-    matches = matches.slice(0, 8);
-
-    this.suggestions = matches;
-
-    if (matches.length === 0) {
-      this.hide();
-      return;
-    }
-
-    // Don't show if only match is exactly what's typed
-    if (matches.length === 1 && matches[0].text.toLowerCase() === lower && !matches[0].isSnippet) {
-      this.hide();
-      return;
-    }
-
-    this.render();
-    this.selectItem(0);
-    this.show();
-  }
-
-  // ─── Rendering ─────────────────────────────────────────────
-
-  render() {
-    this.dropdown.innerHTML = this.suggestions.map((s, i) => `
-      <div class="ac-item ${i === this.selectedIndex ? 'selected' : ''}" data-index="${i}">
-        <span class="ac-icon">${s.icon}</span>
-        <span class="ac-text">${this.highlightMatch(s.displayText)}</span>
-        <span class="ac-kind">${s.kind}</span>
-      </div>
-    `).join('');
-
-    this.positionDropdown();
-  }
-
-  highlightMatch(text) {
-    const word = this.getCurrentWord().toLowerCase();
-    const idx = text.toLowerCase().indexOf(word);
-    if (idx === -1) return text;
-    return text.substring(0, idx) +
-           '<strong>' + text.substring(idx, idx + word.length) + '</strong>' +
-           text.substring(idx + word.length);
-  }
-
-  positionDropdown() {
-    const pos = this.editor.selectionStart;
-    const text = this.editor.value.substring(0, pos);
-    const lines = text.split('\n');
-    const lineNum = lines.length;
-    const colNum = lines[lines.length - 1].length;
-
-    // Get editor position and styles
-    const editorRect = this.editor.getBoundingClientRect();
-    const lineHeight = 19.5; // 13px font * 1.5
-    const charWidth = 7.82;  // JetBrains Mono 13px character width
-
-    let top = editorRect.top + 12 + (lineNum * lineHeight) - this.editor.scrollTop + 4;
-    let left = editorRect.left + 16 + (colNum * charWidth) - this.editor.scrollLeft;
-
-    // Boundary constraints
-    if (left < editorRect.left + 16) left = editorRect.left + 16;
-    if (left + 300 > window.innerWidth) left = window.innerWidth - 310;
-    if (top + 220 > window.innerHeight) {
-      top = top - 220 - lineHeight;
-    }
-
-    this.dropdown.style.top = `${top}px`;
-    this.dropdown.style.left = `${left}px`;
-  }
-
-  selectItem(idx) {
-    this.selectedIndex = idx;
-    const items = this.dropdown.querySelectorAll('.ac-item');
-    items.forEach((item, i) => {
-      item.classList.toggle('selected', i === idx);
-    });
-
-    // Scroll selected into view
-    if (items[idx]) {
-      items[idx].scrollIntoView({ block: 'nearest' });
-    }
-
-    // Show tooltip
-    if (this.suggestions[idx]) {
-      const s = this.suggestions[idx];
-      if (s.detail) {
-        this.tooltip.textContent = s.detail;
-        this.tooltip.style.display = 'block';
-        const rect = this.dropdown.getBoundingClientRect();
-        this.tooltip.style.top = rect.top + 'px';
-        this.tooltip.style.left = (rect.right + 6) + 'px';
-      } else {
-        this.tooltip.style.display = 'none';
-      }
-    }
-  }
-
-  // ─── Accept ─────────────────────────────────────────────────
-
-  accept(idx) {
-    const suggestion = this.suggestions[idx];
-    if (!suggestion) return;
-
-    const wordStart = this.getWordStart();
-    const pos = this.editor.selectionStart;
-    const before = this.editor.value.substring(0, wordStart);
-    const after = this.editor.value.substring(pos);
-
-    const insertText = suggestion.isSnippet ? suggestion.body : suggestion.text;
-    
-    this.editor.value = before + insertText + after;
-    
-    const newPos = wordStart + insertText.length;
-    this.editor.selectionStart = this.editor.selectionEnd = newPos;
-    
-    this.editor.focus();
-    this.hide();
-
-    // Trigger input event for line numbers update
-    this.editor.dispatchEvent(new Event('input'));
-  }
-
-  // ─── Show/Hide ─────────────────────────────────────────────
-
-  show() {
-    this.dropdown.style.display = 'block';
-    this.visible = true;
-  }
-
-  hide() {
-    this.dropdown.style.display = 'none';
-    this.tooltip.style.display = 'none';
-    this.visible = false;
-    this.selectedIndex = -1;
-    this.suggestions = [];
-  }
+  });
 }
-
-// Initialize when problem page loads
-document.addEventListener('DOMContentLoaded', () => {
-  // Wait a bit for editor to be ready
-  setTimeout(() => {
-    const editor = document.getElementById('codeEditor');
-    if (editor) {
-      window.autocomplete = new CppAutocomplete(editor);
-      if (window.currentQuestion && window.currentQuestion.type === 'sql') {
-        window.autocomplete.setLanguage('sql');
-      }
-    }
-  }, 500);
-});
-

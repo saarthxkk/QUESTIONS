@@ -1,9 +1,10 @@
 // ═══════════════════════════════════════════════════════════════
-// CodeArena — Problem Page (Editor + Compiler)
+// CodeArena — Problem Workspace (CodeMirror + Compiler)
 // ═══════════════════════════════════════════════════════════════
 
 let currentQuestion = null;
 let boilerplate = '';
+let cmEditor = null;
 
 document.addEventListener('DOMContentLoaded', async () => {
   const params = new URLSearchParams(window.location.search);
@@ -15,7 +16,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   await loadProblem(id);
-  setupEditor();
+  setupCodeMirror();
   setupResizer();
   setupTabs();
   setupCustomInput();
@@ -29,6 +30,7 @@ async function loadProblem(id) {
     const res = await fetch(`/api/questions/${id}`);
     if (!res.ok) throw new Error('Not found');
     currentQuestion = await res.json();
+    window.currentQuestion = currentQuestion;
     renderProblem();
   } catch (err) {
     document.getElementById('problemTitle').textContent = 'Problem not found';
@@ -37,6 +39,7 @@ async function loadProblem(id) {
 
 function renderProblem() {
   const q = currentQuestion;
+  const isSql = q.type === 'sql';
   const diffClass = q.difficulty.toLowerCase();
 
   // Navbar
@@ -44,7 +47,7 @@ function renderProblem() {
   const navDiff = document.getElementById('navDifficulty');
   navDiff.textContent = q.difficulty;
   navDiff.className = `difficulty-badge ${diffClass}`;
-  document.getElementById('navPoints').textContent = `${q.points} pts`;
+  document.getElementById('navPoints').textContent = `${q.points} PTS`;
   document.title = `${q.title} — CodeArena`;
 
   // Problem header
@@ -54,8 +57,18 @@ function renderProblem() {
   pill.textContent = q.difficulty;
   pill.className = `difficulty-pill ${diffClass}`;
 
-  document.getElementById('problemCategory').textContent = q.category;
-  
+  const catPill = document.getElementById('problemCategory');
+  catPill.textContent = q.category;
+  if (isSql) {
+    catPill.classList.add('cat-sql');
+  }
+
+  // Language badge in editor header
+  const langBadge = document.getElementById('editorLangBadge');
+  if (langBadge) {
+    langBadge.textContent = isSql ? 'MySQL 8.0' : 'C++17';
+  }
+
   // Tags
   const tagsContainer = document.getElementById('problemTags');
   tagsContainer.innerHTML = q.tags.map(t => `<span class="tag">${t}</span>`).join('');
@@ -67,28 +80,19 @@ function renderProblem() {
     document.getElementById('problemDescription').textContent = q.description;
   }
 
+  // Update sample headers
+  const inHeader = document.getElementById('sampleInputHeader');
+  const outHeader = document.getElementById('sampleOutputHeader');
+  if (inHeader) inHeader.textContent = isSql ? 'Sample Database Specimen (student table)' : 'Sample Input';
+  if (outHeader) outHeader.textContent = isSql ? 'Expected Query Result Table' : 'Expected Output';
+
   // Sample I/O
   document.getElementById('sampleInput').textContent = q.sampleInput;
   document.getElementById('sampleOutput').textContent = q.sampleOutput;
 
   // Boilerplate
   boilerplate = q.boilerplate || '';
-  const editor = document.getElementById('codeEditor');
-
-  // Language badge & Editor configuration
-  const langBadge = document.querySelector('.lang-badge');
-  const isSql = q.type === 'sql';
-  if (langBadge) {
-    langBadge.textContent = isSql ? 'MySQL 8.0' : 'C++17';
-  }
-
-  // Update sample headers if SQL
-  const sampleHeaders = document.querySelectorAll('.sample-section h3');
-  if (sampleHeaders.length >= 2) {
-    sampleHeaders[0].textContent = isSql ? 'Sample Database Records (student table)' : 'Sample Input';
-    sampleHeaders[1].textContent = isSql ? 'Expected Output Table' : 'Sample Output';
-  }
-
+  
   // Custom input placeholder & label
   const customHeader = document.querySelector('#toggleCustomInput span');
   const customInputEl = document.getElementById('customInput');
@@ -97,119 +101,94 @@ function renderProblem() {
   }
   if (customInputEl) {
     customInputEl.placeholder = isSql 
-      ? 'Enter custom SQL query (e.g. SELECT * FROM student;) or leave empty to run editor code...'
+      ? 'Enter custom SQL query (e.g. SELECT * FROM student;) or leave empty to test editor solution...'
       : 'Enter your custom test input here...';
+    customInputEl.value = isSql ? '' : q.sampleInput;
   }
 
-  // Autocomplete language switch
-  window.currentQuestion = q;
-  if (window.autocomplete) {
-    window.autocomplete.setLanguage(isSql ? 'sql' : 'cpp');
+  // If CodeMirror is already mounted, set content and mode
+  if (cmEditor) {
+    const savedCode = localStorage.getItem(`code_${q.id}`);
+    const initialCode = savedCode || boilerplate;
+    cmEditor.setValue(initialCode);
+    cmEditor.setOption('mode', isSql ? 'text/x-mysql' : 'text/x-c++src');
+    cmEditor.clearHistory();
   }
-  
-  // Load saved code or use boilerplate
-  const savedCode = localStorage.getItem(`code_${q.id}`);
-  editor.value = savedCode || boilerplate;
-  updateLineNumbers();
-
-  // Set custom input default
-  document.getElementById('customInput').value = isSql ? '' : q.sampleInput;
 }
 
-// ─── Editor Setup ───────────────────────────────────────────────
+// ─── CodeMirror Initialization ──────────────────────────────────
 
-function setupEditor() {
-  const editor = document.getElementById('codeEditor');
-  
-  // Line numbers
-  editor.addEventListener('input', () => {
-    updateLineNumbers();
-    // Auto-save
-    if (currentQuestion) {
-      localStorage.setItem(`code_${currentQuestion.id}`, editor.value);
-    }
-  });
+function setupCodeMirror() {
+  const textarea = document.getElementById('codeEditor');
+  const isSql = currentQuestion && currentQuestion.type === 'sql';
+  const savedCode = currentQuestion ? localStorage.getItem(`code_${currentQuestion.id}`) : null;
+  const initialCode = savedCode || boilerplate;
+  textarea.value = initialCode;
 
-  editor.addEventListener('scroll', () => {
-    document.getElementById('lineNumbers').scrollTop = editor.scrollTop;
-  });
-
-  // Tab support
-  editor.addEventListener('keydown', (e) => {
-    // If autocomplete popup is active, let autocomplete handle navigation and selection keys
-    if (window.autocomplete && window.autocomplete.visible) {
-      if (['Tab', 'Enter', 'ArrowUp', 'ArrowDown', 'Escape'].includes(e.key)) {
-        return;
-      }
-    }
-
-    if (e.key === 'Tab') {
-      e.preventDefault();
-      const start = editor.selectionStart;
-      const end = editor.selectionEnd;
-
-      if (e.shiftKey) {
-        // Shift+Tab: remove indent
-        const beforeCursor = editor.value.substring(0, start);
-        const lastNewline = beforeCursor.lastIndexOf('\n');
-        const lineStart = lastNewline + 1;
-        const line = editor.value.substring(lineStart);
-        
-        if (line.startsWith('    ')) {
-          editor.value = editor.value.substring(0, lineStart) + line.substring(4);
-          editor.selectionStart = editor.selectionEnd = Math.max(start - 4, lineStart);
-        } else if (line.startsWith('\t')) {
-          editor.value = editor.value.substring(0, lineStart) + line.substring(1);
-          editor.selectionStart = editor.selectionEnd = Math.max(start - 1, lineStart);
+  if (typeof CodeMirror !== 'undefined') {
+    cmEditor = CodeMirror.fromTextArea(textarea, {
+      lineNumbers: true,
+      mode: isSql ? 'text/x-mysql' : 'text/x-c++src',
+      theme: 'costar',
+      indentUnit: 4,
+      tabSize: 4,
+      indentWithTabs: false,
+      matchBrackets: true,
+      autoCloseBrackets: true,
+      lineWrapping: false,
+      extraKeys: {
+        "Tab": function(cm) {
+          if (cm.somethingSelected()) {
+            cm.indentSelection("add");
+          } else {
+            cm.replaceSelection("    ", "end");
+          }
+        },
+        "Shift-Tab": function(cm) {
+          cm.indentSelection("subtract");
+        },
+        "Ctrl-Space": function(cm) {
+          if (CodeMirror.hint && CodeMirror.hint.codearena) {
+            cm.showHint({ hint: CodeMirror.hint.codearena, completeSingle: false });
+          }
         }
-      } else {
-        // Tab: insert 4 spaces
-        editor.value = editor.value.substring(0, start) + '    ' + editor.value.substring(end);
-        editor.selectionStart = editor.selectionEnd = start + 4;
       }
-      updateLineNumbers();
-    }
+    });
 
-    // Auto-close brackets
-    const pairs = { '(': ')', '{': '}', '[': ']', '"': '"', "'": "'" };
-    if (pairs[e.key]) {
-      const start = editor.selectionStart;
-      const end = editor.selectionEnd;
-      if (start !== end) {
-        e.preventDefault();
-        const selected = editor.value.substring(start, end);
-        editor.value = editor.value.substring(0, start) + e.key + selected + pairs[e.key] + editor.value.substring(end);
-        editor.selectionStart = start + 1;
-        editor.selectionEnd = end + 1;
+    // Synchronize textarea & save to localStorage
+    cmEditor.on('change', () => {
+      textarea.value = cmEditor.getValue();
+      if (currentQuestion) {
+        localStorage.setItem(`code_${currentQuestion.id}`, textarea.value);
       }
-    }
+    });
 
-    // Enter: auto-indent
-    if (e.key === 'Enter') {
-      const start = editor.selectionStart;
-      const beforeCursor = editor.value.substring(0, start);
-      const currentLine = beforeCursor.split('\n').pop();
-      const indent = currentLine.match(/^\s*/)[0];
-      const lastChar = beforeCursor.trim().slice(-1);
-      
-      let extra = '';
-      if (lastChar === '{') {
-        extra = '    ';
+    // Auto-trigger hints while typing (VS Code Style)
+    cmEditor.on('inputRead', (cm, change) => {
+      if (change.origin === '+input' && change.text && change.text[0]) {
+        const curChar = change.text[0];
+        // Trigger on letter or underscore
+        if (/[a-zA-Z_]/.test(curChar)) {
+          if (CodeMirror.hint && CodeMirror.hint.codearena) {
+            cm.showHint({ hint: CodeMirror.hint.codearena, completeSingle: false });
+          }
+        }
       }
+    });
 
-      e.preventDefault();
-      const insertion = '\n' + indent + extra;
-      editor.value = editor.value.substring(0, start) + insertion + editor.value.substring(start);
-      editor.selectionStart = editor.selectionEnd = start + insertion.length;
-      updateLineNumbers();
-    }
-  });
+    // Refresh layout after render
+    setTimeout(() => cmEditor.refresh(), 100);
+  }
 
-  // Reset button
+  // Reset button logic
   document.getElementById('resetBtn').addEventListener('click', () => {
-    if (confirm('Reset code to the original boilerplate?')) {
-      editor.value = boilerplate;
-      updateLineNumbers();
+    if (confirm('Reset code to the original specimen boilerplate?')) {
+      if (cmEditor) {
+        cmEditor.setValue(boilerplate);
+        cmEditor.focus();
+      } else {
+        textarea.value = boilerplate;
+      }
       if (currentQuestion) {
         localStorage.removeItem(`code_${currentQuestion.id}`);
       }
@@ -217,11 +196,11 @@ function setupEditor() {
   });
 }
 
-function updateLineNumbers() {
-  const editor = document.getElementById('codeEditor');
-  const lines = editor.value.split('\n').length;
-  const numbers = Array.from({ length: lines }, (_, i) => i + 1).join('\n');
-  document.getElementById('lineNumbers').textContent = numbers;
+function getEditorCode() {
+  if (cmEditor) {
+    return cmEditor.getValue();
+  }
+  return document.getElementById('codeEditor').value;
 }
 
 // ─── Resizer ────────────────────────────────────────────────────
@@ -231,7 +210,7 @@ function setupResizer() {
   const left = document.getElementById('leftPanel');
   let isResizing = false;
 
-  resizer.addEventListener('mousedown', (e) => {
+  resizer.addEventListener('mousedown', () => {
     isResizing = true;
     resizer.classList.add('active');
     document.body.style.cursor = 'col-resize';
@@ -242,8 +221,9 @@ function setupResizer() {
     if (!isResizing) return;
     const containerWidth = document.querySelector('.split-layout').offsetWidth;
     const newWidth = (e.clientX / containerWidth) * 100;
-    if (newWidth > 20 && newWidth < 70) {
+    if (newWidth > 20 && newWidth < 75) {
       left.style.width = newWidth + '%';
+      if (cmEditor) cmEditor.refresh();
     }
   });
 
@@ -252,6 +232,7 @@ function setupResizer() {
     resizer.classList.remove('active');
     document.body.style.cursor = '';
     document.body.style.userSelect = '';
+    if (cmEditor) cmEditor.refresh();
   });
 }
 
@@ -275,32 +256,36 @@ function setupCustomInput() {
     const input = document.getElementById('customInput');
     input.classList.toggle('open');
     const header = document.getElementById('toggleCustomInput').querySelector('span');
-    header.textContent = input.classList.contains('open') ? '▼ Custom Input' : '▶ Custom Input';
+    const isSql = currentQuestion && currentQuestion.type === 'sql';
+    const label = isSql ? 'Custom Query / Test' : 'Custom Input';
+    header.textContent = input.classList.contains('open') ? `▼ ${label}` : `▶ ${label}`;
+    if (input.classList.contains('open')) {
+      input.focus();
+    }
   });
 }
 
-// ─── Run & Submit ───────────────────────────────────────────────
+// ─── Run & Submit Actions ───────────────────────────────────────
 
 function setupActions() {
   document.getElementById('runBtn').addEventListener('click', runCode);
   document.getElementById('submitBtn').addEventListener('click', submitCode);
   document.getElementById('clearConsole').addEventListener('click', () => {
-    document.getElementById('consoleOutput').textContent = '';
+    document.getElementById('consoleOutput').textContent = 'Console cleared.';
   });
 }
 
 async function runCode() {
   const isSql = currentQuestion && currentQuestion.type === 'sql';
   const customQuery = document.getElementById('customInput').value.trim();
-  const editorCode = document.getElementById('codeEditor').value;
-  // If custom query provided for SQL, run that; otherwise run editor code
+  const editorCode = getEditorCode();
   const code = (isSql && customQuery) ? customQuery : editorCode;
   const input = document.getElementById('customInput').value;
   const btn = document.getElementById('runBtn');
 
   btn.disabled = true;
   btn.innerHTML = '<span class="spinner"></span> Running...';
-  document.getElementById('consoleOutput').textContent = isSql ? 'Executing query against database...\n' : 'Compiling and running...\n';
+  document.getElementById('consoleOutput').textContent = isSql ? 'Executing query against in-memory database...\n' : 'Compiling and running against specimen input...\n';
 
   try {
     const res = await fetch('/api/run', {
@@ -320,16 +305,16 @@ async function runCode() {
     } else if (result.timeout) {
       output = `⏱ Time Limit Exceeded`;
     } else if (result.error && !result.success) {
-      output = `❌ Error:\n${result.error}`;
+      output = `❌ Execution Error:\n${result.error}`;
     } else {
       output = `✅ Result:\n${result.output}`;
       if (result.error) {
-        output += `\n⚠ Warning/Stderr:\n${result.error}`;
+        output += `\n⚠ Stderr:\n${result.error}`;
       }
     }
     document.getElementById('consoleOutput').textContent = output;
   } catch (err) {
-    document.getElementById('consoleOutput').textContent = `Error: ${err.message}`;
+    document.getElementById('consoleOutput').textContent = `Execution fault: ${err.message}`;
   } finally {
     btn.disabled = false;
     btn.innerHTML = '▶ Run';
@@ -337,7 +322,7 @@ async function runCode() {
 }
 
 async function submitCode() {
-  const code = document.getElementById('codeEditor').value;
+  const code = getEditorCode();
   const btn = document.getElementById('submitBtn');
 
   btn.disabled = true;
@@ -352,16 +337,16 @@ async function submitCode() {
     const result = await res.json();
     renderResults(result);
 
-    // Switch to results tab
+    // Switch to submissions tab
     document.querySelectorAll('.panel-tab').forEach(t => t.classList.remove('active'));
     document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
     document.querySelector('[data-tab="submissions"]').classList.add('active');
     document.getElementById('submissionsTab').classList.add('active');
   } catch (err) {
-    document.getElementById('consoleOutput').textContent = `Submission error: ${err.message}`;
+    document.getElementById('consoleOutput').textContent = `Submission fault: ${err.message}`;
   } finally {
     btn.disabled = false;
-    btn.innerHTML = 'Submit';
+    btn.innerHTML = 'Submit Solution';
   }
 }
 
@@ -372,18 +357,18 @@ function renderResults(result) {
   let html = `
     <div class="result-header">
       <span class="result-status ${isAccepted ? 'accepted' : 'failed'}">
-        ${isAccepted ? '✅ Accepted' : '❌ ' + result.status}
+        ${isAccepted ? '✓ Accepted' : '✗ ' + result.status}
       </span>
       <div class="result-score">
-        <strong>${result.points}</strong> / ${currentQuestion.points} points
+        <strong>${result.points}</strong> / ${currentQuestion.points} PTS
         &nbsp;•&nbsp;
-        ${result.passed}/${result.total} test cases passed
+        ${result.passed}/${result.total} test cases satisfied
       </div>
     </div>
     <div class="test-case-list">
   `;
 
-  result.results.forEach((tc, idx) => {
+  result.results.forEach((tc) => {
     const icon = tc.passed ? '✓' : '✗';
     const iconClass = tc.passed ? 'pass' : 'fail';
 
@@ -392,8 +377,8 @@ function renderResults(result) {
         <div class="test-case-header" onclick="this.nextElementSibling.classList.toggle('open')">
           <div class="tc-left">
             <span class="tc-icon ${iconClass}">${icon}</span>
-            <span class="tc-name">Test Case ${tc.testCaseId}${tc.description ? ' — ' + tc.description : ''}</span>
-            ${tc.isSample ? '<span class="tag">Sample</span>' : ''}
+            <span class="tc-name">Case ${tc.testCaseId}${tc.description ? ' — ' + tc.description : ''}</span>
+            ${tc.isSample ? '<span class="category-tag">Specimen</span>' : ''}
           </div>
           <span class="tc-badge ${iconClass}">${tc.passed ? 'Passed' : 'Failed'}</span>
         </div>
@@ -403,14 +388,14 @@ function renderResults(result) {
     if (tc.compilationError) {
       html += `
         <div class="detail-row">
-          <div class="detail-label">Compilation Error</div>
+          <div class="detail-label">Judgement Diagnostic / Error</div>
           <div class="detail-value">${escapeHtml(tc.compilationError)}</div>
         </div>
       `;
     } else if (tc.error) {
       html += `
         <div class="detail-row">
-          <div class="detail-label">Error</div>
+          <div class="detail-label">Diagnostic Output</div>
           <div class="detail-value">${escapeHtml(tc.error)}</div>
         </div>
       `;
@@ -419,7 +404,7 @@ function renderResults(result) {
     if (tc.input !== null && tc.input !== undefined) {
       html += `
         <div class="detail-row">
-          <div class="detail-label">Input</div>
+          <div class="detail-label">Input Parameters</div>
           <div class="detail-value">${escapeHtml(tc.input)}</div>
         </div>
       `;
@@ -437,7 +422,7 @@ function renderResults(result) {
     if (tc.actualOutput !== null && tc.actualOutput !== undefined) {
       html += `
         <div class="detail-row">
-          <div class="detail-label">Your Output</div>
+          <div class="detail-label">Actual Solution Output</div>
           <div class="detail-value" style="${tc.passed ? '' : 'color: var(--red);'}">${escapeHtml(tc.actualOutput)}</div>
         </div>
       `;
@@ -458,4 +443,3 @@ function escapeHtml(str) {
   div.textContent = str;
   return div.innerHTML;
 }
-

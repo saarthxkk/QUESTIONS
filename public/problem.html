@@ -3,33 +3,42 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CodeArena — Problem</title>
+  <title>CodeArena — Workspace</title>
+  
+  <!-- CodeMirror Stylesheets -->
+  <link rel="stylesheet" href="/vendor/codemirror/codemirror.min.css">
+  <link rel="stylesheet" href="/vendor/codemirror/show-hint.min.css">
   <link rel="stylesheet" href="/css/style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Co-Star Typography: Playfair Display + Inter + JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
   <!-- Marked.js for Markdown rendering -->
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body class="problem-page">
-  <!-- Navbar -->
+  <!-- Minimalist Navbar -->
   <nav class="navbar">
     <div class="nav-left">
-      <a href="/" class="logo">⚡ CodeArena</a>
+      <a href="/" class="logo">⚡ CodeArena<span class="logo-dot">.</span></a>
       <span class="nav-divider">|</span>
-      <span class="problem-nav-title" id="navTitle">Loading...</span>
+      <span class="problem-nav-title" id="navTitle">Loading specimen...</span>
     </div>
     <div class="nav-right">
       <div class="difficulty-badge" id="navDifficulty">—</div>
-      <span class="points-badge" id="navPoints">0 pts</span>
+      <span class="points-badge" id="navPoints">0 PTS</span>
     </div>
   </nav>
 
-  <!-- Main Layout: Split Pane -->
+  <!-- Main Layout: Split Workspace -->
   <div class="split-layout">
-    <!-- Left Panel: Problem Description -->
+    <!-- Left Panel: Problem Specimen & Instructions -->
     <div class="panel left-panel" id="leftPanel">
       <div class="panel-tabs">
-        <button class="panel-tab active" data-tab="description">Description</button>
-        <button class="panel-tab" data-tab="submissions">Results</button>
+        <button class="panel-tab active" data-tab="description">Problem Specimen</button>
+        <button class="panel-tab" data-tab="submissions">Judgement Results</button>
       </div>
 
       <!-- Description Tab -->
@@ -42,13 +51,15 @@
             <div class="tags" id="problemTags"></div>
           </div>
         </div>
-        <div class="problem-description" id="problemDescription">
-          <!-- Rendered markdown -->
-        </div>
+        
+        <!-- Rendered markdown instructions -->
+        <div class="problem-description" id="problemDescription"></div>
+        
+        <!-- Sample I/O -->
         <div class="sample-section">
-          <h3>Sample Input</h3>
+          <h3 id="sampleInputHeader">Sample Input</h3>
           <pre class="sample-box" id="sampleInput"></pre>
-          <h3>Sample Output</h3>
+          <h3 id="sampleOutputHeader">Expected Output</h3>
           <pre class="sample-box" id="sampleOutput"></pre>
         </div>
       </div>
@@ -57,54 +68,62 @@
       <div class="tab-content" id="submissionsTab">
         <div id="resultsContainer" class="results-container">
           <div class="empty-state">
-            <p>🚀 Submit your code to see results</p>
+            <p>Execute code to review verification test cases</p>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Resizer -->
+    <!-- Resizer Divider -->
     <div class="resizer" id="resizer"></div>
 
-    <!-- Right Panel: Code Editor -->
+    <!-- Right Panel: Code Editor & Execution Engine -->
     <div class="panel right-panel" id="rightPanel">
       <div class="editor-header">
-        <span class="lang-badge">C++17</span>
-        <button class="btn-reset" id="resetBtn" title="Reset to boilerplate">↺ Reset</button>
+        <span class="lang-badge" id="editorLangBadge">C++17</span>
+        <button class="btn-reset" id="resetBtn" title="Reset code to original specimen boilerplate">↺ Reset Specimen</button>
       </div>
 
+      <!-- CodeMirror Mount Canvas -->
       <div class="editor-wrapper">
-        <div class="line-numbers" id="lineNumbers"></div>
         <textarea id="codeEditor" class="code-editor" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off"></textarea>
       </div>
 
-      <!-- Custom Input -->
+      <!-- Custom Input / Query Area -->
       <div class="custom-input-section">
         <div class="input-header" id="toggleCustomInput">
           <span>▶ Custom Input</span>
         </div>
-        <textarea id="customInput" class="custom-input" placeholder="Enter your custom test input here..."></textarea>
+        <textarea id="customInput" class="custom-input" placeholder="Enter custom test input here..."></textarea>
       </div>
 
-      <!-- Action Buttons -->
+      <!-- Action Buttons (Run & Submit) -->
       <div class="editor-actions">
         <button class="btn btn-run" id="runBtn">▶ Run</button>
-        <button class="btn btn-submit" id="submitBtn">Submit</button>
+        <button class="btn btn-submit" id="submitBtn">Submit Solution</button>
       </div>
 
-      <!-- Console Output -->
+      <!-- Output Console -->
       <div class="console-section" id="consoleSection">
         <div class="console-header">
-          <span>Console</span>
+          <span>Output Console</span>
           <button class="btn-clear" id="clearConsole">Clear</button>
         </div>
-        <pre class="console-output" id="consoleOutput"></pre>
+        <pre class="console-output" id="consoleOutput">Ready to execute.</pre>
       </div>
     </div>
   </div>
 
+  <!-- Local CodeMirror Engine Scripts (No external CDN required) -->
+  <script src="/vendor/codemirror/codemirror.min.js"></script>
+  <script src="/vendor/codemirror/clike.min.js"></script>
+  <script src="/vendor/codemirror/sql.min.js"></script>
+  <script src="/vendor/codemirror/closebrackets.min.js"></script>
+  <script src="/vendor/codemirror/matchbrackets.min.js"></script>
+  <script src="/vendor/codemirror/show-hint.min.js"></script>
+
+  <!-- Autocomplete Dictionary & Workspace Logic -->
   <script src="/js/autocomplete.js"></script>
   <script src="/js/problem.js"></script>
 </body>
 </html>
-

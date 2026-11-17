@@ -28,6 +28,12 @@ function updateStats() {
   document.getElementById('easyQ').textContent = allQuestions.filter(q => q.difficulty === 'Easy').length;
   document.getElementById('medQ').textContent = allQuestions.filter(q => q.difficulty === 'Medium').length;
   document.getElementById('hardQ').textContent = allQuestions.filter(q => q.difficulty === 'Hard').length;
+  
+  const totalPoints = allQuestions.reduce((sum, q) => sum + (q.points || 0), 0);
+  const scoreBadge = document.getElementById('totalScore');
+  if (scoreBadge) {
+    scoreBadge.textContent = `${totalPoints} PTS`;
+  }
 }
 
 function populateCategories() {
@@ -83,7 +89,7 @@ function renderQuestions() {
       <span class="col-title">${q.title}</span>
       <span class="col-category"><span class="category-tag ${q.category === 'SQL' ? 'cat-sql' : ''}">${q.category}</span></span>
       <span class="col-difficulty diff-${q.difficulty.toLowerCase()}">${q.difficulty}</span>
-      <span class="col-points">${q.points} pts</span>
+      <span class="col-points">${q.points} PTS</span>
     </a>
   `).join('');
 }

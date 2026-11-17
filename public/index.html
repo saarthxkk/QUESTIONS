@@ -3,28 +3,32 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CodeArena — DSA Question Bank</title>
+  <title>CodeArena — Algorithmic & SQL Intelligence</title>
   <link rel="stylesheet" href="/css/style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <!-- Co-Star Typography: Playfair Display + Inter + JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
-  <!-- Navbar -->
+  <!-- Minimalist Navbar -->
   <nav class="navbar">
     <div class="nav-left">
-      <a href="/" class="logo">⚡ CodeArena</a>
+      <a href="/" class="logo">⚡ CodeArena<span class="logo-dot">.</span></a>
     </div>
     <div class="nav-right">
-      <span class="score-badge" id="totalScore">Score: 0</span>
+      <span class="score-badge" id="totalScore">0 PTS</span>
     </div>
   </nav>
 
-  <!-- Hero Section -->
+  <!-- Editorial Hero Section -->
   <section class="hero">
-    <h1>Master DSA, One Problem at a Time</h1>
-    <p>Practice data structures & algorithms with instant C++ compilation and automated test cases.</p>
+    <div class="hero-eyebrow">A Minimalist Problem Solving Environment</div>
+    <h1>Master DSA & SQL, One Concept at a Time</h1>
+    <p>Practice data structures, balancing trees, and advanced MySQL analytics with automated testing.</p>
   </section>
 
-  <!-- Filters -->
+  <!-- Filters & Table -->
   <div class="container">
     <div class="filters">
       <div class="filter-group">
@@ -35,7 +39,7 @@
       </div>
       <div class="filter-group">
         <select id="categoryFilter" class="filter-select">
-          <option value="all">All Categories</option>
+          <option value="all">All Collections</option>
         </select>
       </div>
       <div class="stats-bar">
@@ -50,22 +54,21 @@
     <div class="question-table">
       <div class="table-header">
         <span class="col-status">#</span>
-        <span class="col-title">Title</span>
+        <span class="col-title">Problem Specimen</span>
         <span class="col-category">Category</span>
         <span class="col-difficulty">Difficulty</span>
         <span class="col-points">Points</span>
       </div>
       <div id="questionList" class="table-body">
-        <!-- Questions will be rendered here -->
+        <!-- Questions rendered dynamically -->
       </div>
     </div>
   </div>
 
   <footer class="footer">
-    <p>CodeArena — Built for DSA Practice 🔥</p>
+    <p>CodeArena — Precision Algorithmic Practice</p>
   </footer>
 
   <script src="/js/main.js"></script>
 </body>
 </html>
-
