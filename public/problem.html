@@ -18,40 +18,89 @@
   <!-- LeetCode Official Style Navbar -->
   <nav class="navbar">
     <div class="nav-left">
-      <a href="/" class="logo">
+      <!-- LeetCode Glyph Logo -->
+      <a href="/" class="logo" title="CodeArena Home">
         <svg class="logo-icon" viewBox="0 0 24 24"><path d="M16.102 17.93l-2.697 2.607c-.466.467-1.111.662-1.823.662s-1.357-.195-1.824-.662l-4.332-4.363c-.467-.467-.702-1.15-.702-1.863s.235-1.357.702-1.824l4.319-4.38c.467-.467 1.125-.649 1.837-.649s1.357.195 1.824.662l2.697 2.607c.514.515 1.365.497 1.9-.038.535-.536.553-1.387.039-1.901l-2.609-2.636a5.074 5.074 0 0 0-3.693-1.503c-1.389 0-2.739.544-3.719 1.503L3.71 10.9c-.96.98-1.5 2.33-1.5 3.72s.54 2.74 1.5 3.72l4.332 4.363a5.21 5.21 0 0 0 3.719 1.503c1.389 0 2.739-.544 3.719-1.503l2.609-2.636c.514-.514.496-1.365-.039-1.901-.535-.535-1.386-.553-1.9-.038z"/></svg>
       </a>
 
-      <!-- Problem List Back Button -->
+      <!-- Problem List Dropdown Button -->
       <a href="/" id="backToProblemList" class="btn-problem-list">
-        <span>≡ Problem List</span>
+        <svg class="icon-svg" viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/></svg>
+        <span>Problem List</span>
+        <span style="font-size: 10px; opacity: 0.7;">▾</span>
       </a>
 
-      <!-- Next & Previous Problem Navigation -->
+      <!-- Navigation Arrows & Shuffle -->
       <div class="nav-navigators">
         <button class="nav-btn" id="prevProblemBtn" title="Previous Question">❮</button>
         <button class="nav-btn" id="nextProblemBtn" title="Next Question">❯</button>
+        <button class="nav-btn" id="randomProblemBtn" title="Pick Random Problem">
+          <svg class="icon-svg" viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path fill-rule="evenodd" d="M0 3.5A.5.5 0 0 1 .5 3H1c2.202 0 3.827 1.24 4.874 2.418.49.552.865 1.102 1.126 1.532.26-.43.636-.98 1.126-1.532C9.173 4.24 10.798 3 13 3v1c-1.798 0-3.173 1.01-4.126 2.082A9.624 9.624 0 0 0 7.556 8a9.624 9.624 0 0 0 1.318 1.918C9.827 10.99 11.202 12 13 12v1c-2.202 0-3.827-1.24-4.874-2.418A10.595 10.595 0 0 1 7 9.05c-.26.43-.636.98-1.126 1.532C4.827 11.76 3.202 13 1 13H.5a.5.5 0 0 1 0-1H1c1.798 0 3.173-1.01 4.126-2.082A9.624 9.624 0 0 0 6.444 8a9.624 9.624 0 0 0-1.318-1.918C4.173 5.01 2.798 4 1 4H.5a.5.5 0 0 1-.5-.5z"/><path d="M13 5.466V1.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384l-2.36 1.966a.25.25 0 0 1-.41-.192zm0 9v-3.932a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384l-2.36 1.966a.25.25 0 0 1-.41-.192z"/></svg>
+        </button>
       </div>
-
-      <span class="nav-divider">|</span>
-      <span class="problem-nav-title" id="navTitle">Loading problem...</span>
     </div>
 
-    <!-- Centered Run & Submit Buttons (LeetCode Screenshot Style) -->
+    <!-- Centered Action Buttons (Run & Submit) -->
     <div class="nav-center">
+      <button class="nav-icon-tool" id="layoutBtn" title="Layout Settings">
+        <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm7 1v10h7a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H7zm-1 0H2a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h4V3z"/></svg>
+      </button>
+
       <button class="btn-nav-run" id="runBtn" title="Run code against testcase">
         <span class="icon-run">▶</span>
         <span>Run</span>
       </button>
 
       <button class="btn-nav-submit" id="submitBtn" title="Submit solution for judging">
-        <span>☁ Submit</span>
+        <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V10.4a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V10.4a.5.5 0 0 1 .5-.5z"/><path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V10.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z"/></svg>
+        <span>Submit</span>
+      </button>
+
+      <button class="nav-icon-tool" id="debugBtn" title="Debugging Environment">
+        <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M4.355.522a.5.5 0 0 1 .623.333l.291.956A4.979 4.979 0 0 1 8 1c1.007 0 1.946.298 2.731.811l.29-.956a.5.5 0 1 1 .957.29l-.41 1.352A4.985 4.985 0 0 1 13 6h.5a.5.5 0 0 1 0 1H13v1.5H14.5a.5.5 0 0 1 0 1H13V11h.5a.5.5 0 0 1 0 1H13a5 5 0 0 1-10 0H2.5a.5.5 0 0 1 0-1H3V9.5H1.5a.5.5 0 0 1 0-1H3V7H1.5a.5.5 0 0 1 0-1H3a4.985 4.985 0 0 1 1.432-3.503l-.41-1.352a.5.5 0 0 1 .333-.623zM4 7v4a4 4 0 0 0 8 0V7H4z"/></svg>
+      </button>
+
+      <button class="nav-icon-tool" id="aiSparkBtn" title="AI Code Assistant" style="color: #c084fc;">
+        <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M8 0a.5.5 0 0 1 .5.5v1.07A5.992 5.992 0 0 1 14.43 7.5h1.07a.5.5 0 0 1 0 1h-1.07A5.992 5.992 0 0 1 8.5 14.43v1.07a.5.5 0 0 1-1 0v-1.07A5.992 5.992 0 0 1 1.57 8.5H.5a.5.5 0 0 1 0-1h1.07A5.992 5.992 0 0 1 7.5 1.57V.5A.5.5 0 0 1 8 0zm0 3a5 5 0 1 0 0 10A5 5 0 0 0 8 3z"/></svg>
       </button>
     </div>
 
+    <!-- Right Utility Icons & Profile -->
     <div class="nav-right">
-      <span class="points-pill" id="navPoints">0 PTS</span>
-      <button class="btn-icon" id="resetBtn" title="Reset code to original template">↺ Reset</button>
+      <button class="nav-icon-tool" title="Apps Directory">
+        <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M1 2.5A1.5 1.5 0 0 1 2.5 1h1A1.5 1.5 0 0 1 5 2.5v1A1.5 1.5 0 0 1 3.5 5h-1A1.5 1.5 0 0 1 1 3.5v-1zM2.5 2a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1zm4.5.5A1.5 1.5 0 0 1 8.5 1h1A1.5 1.5 0 0 1 11 2.5v1A1.5 1.5 0 0 1 9.5 5h-1A1.5 1.5 0 0 1 7 3.5v-1zM8.5 2a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1zm4.5.5A1.5 1.5 0 0 1 14.5 1h1a1.5 1.5 0 0 1 1.5 1.5v1a1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5v-1zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1zM1 8.5A1.5 1.5 0 0 1 2.5 7h1A1.5 1.5 0 0 1 5 8.5v1A1.5 1.5 0 0 1 3.5 11h-1A1.5 1.5 0 0 1 1 9.5v-1zM2.5 8a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1zm4.5.5A1.5 1.5 0 0 1 8.5 7h1A1.5 1.5 0 0 1 11 8.5v1A1.5 1.5 0 0 1 9.5 11h-1A1.5 1.5 0 0 1 7 9.5v-1zM8.5 8a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1zm4.5.5A1.5 1.5 0 0 1 14.5 7h1a1.5 1.5 0 0 1 1.5 1.5v1a1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5v-1zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1zM1 14.5A1.5 1.5 0 0 1 2.5 13h1a1.5 1.5 0 0 1 1.5 1.5v1A1.5 1.5 0 0 1 3.5 17h-1A1.5 1.5 0 0 1 1 15.5v-1zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1zm4.5.5a1.5 1.5 0 0 1 1.5-1.5h1a1.5 1.5 0 0 1 1.5 1.5v1a1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5v-1zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1zm4.5.5a1.5 1.5 0 0 1 1.5-1.5h1a1.5 1.5 0 0 1 1.5 1.5v1a1.5 1.5 0 0 1-1.5 1.5h-1a1.5 1.5 0 0 1-1.5-1.5v-1zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1z"/></svg>
+      </button>
+
+      <button class="nav-icon-tool" title="Settings">
+        <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"/><path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319z"/></svg>
+      </button>
+
+      <!-- Bell with red dot -->
+      <div class="nav-bell-wrapper" title="Notifications">
+        <button class="nav-icon-tool">
+          <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zm.995-14.901a1 1 0 1 0-1.99 0A5.002 5.002 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901z"/></svg>
+        </button>
+        <span class="nav-badge-dot"></span>
+      </div>
+
+      <!-- Streak -->
+      <span class="nav-streak" title="Daily Streak">
+        <span>🔥</span>
+        <span>0</span>
+      </span>
+
+      <!-- Stopwatch / Timer -->
+      <span class="nav-timer" id="navTimer" title="Timer">
+        <span>⏱️</span>
+      </span>
+
+      <!-- User Profile Avatar -->
+      <div class="user-avatar" title="Sarthak Pandey">
+        <span>SP</span>
+      </div>
+
+      <!-- Premium Gold Pill Button -->
+      <button class="btn-premium" title="LeetCode Premium">Premium</button>
     </div>
   </nav>
 
@@ -60,86 +109,199 @@
     <!-- Left Panel: Problem Statement & Judgement -->
     <div class="panel left-panel" id="leftPanel">
       <div class="panel-tabs">
-        <button class="panel-tab active" data-tab="description">
-          <span>📄 Description</span>
-        </button>
-        <button class="panel-tab" data-tab="submissions">
-          <span>📊 Judgement</span>
-        </button>
-      </div>
-
-      <!-- Description Tab -->
-      <div class="tab-content active" id="descriptionTab">
-        <div class="problem-title-header">
-          <h1 id="problemTitle">Loading...</h1>
-          <div class="problem-meta-pills">
-            <span class="difficulty-pill" id="problemDifficulty">—</span>
-            <span class="meta-pill" id="problemTopic">🏷️ Topics</span>
-            <span class="meta-pill" id="problemCategory">Track</span>
-            <span class="meta-pill" style="color: var(--lc-orange); font-weight: 600;" id="problemPointsBadge">⭐ 25 pts</span>
-          </div>
+        <div class="panel-tabs-left">
+          <button class="panel-tab active" data-tab="description">
+            <svg class="tab-svg" viewBox="0 0 16 16" width="13" height="13" fill="currentColor"><path d="M4 0h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2zm0 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H4z"/><path d="M4.5 10.5A.5.5 0 0 1 5 10h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5zm0-3A.5.5 0 0 1 5 7h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5zm0-3A.5.5 0 0 1 5 4h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5z"/></svg>
+            <span>Description</span>
+          </button>
+          <button class="panel-tab" data-tab="editorial">
+            <svg class="tab-svg" viewBox="0 0 16 16" width="13" height="13" fill="currentColor"><path d="M1 2.828c.885-.37 2.154-.769 3.388-.893 1.33-.134 2.458.063 3.112.752v9.746c-.935-.53-2.12-.603-3.213-.493-1.18.12-2.37.461-3.287.811V2.828zm7.5-.141c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492V2.687zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783z"/></svg>
+            <span>Editorial</span>
+          </button>
+          <button class="panel-tab" data-tab="solutions">
+            <svg class="tab-svg" viewBox="0 0 16 16" width="13" height="13" fill="currentColor"><path d="M2 1a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1v7.5a2.5 2.5 0 0 1-2.5 2.5h-5A2.5 2.5 0 0 1 3 12.5V4a1 1 0 0 1-1-1V1zm2 3v8.5A1.5 1.5 0 0 0 5.5 14h5a1.5 1.5 0 0 0 1.5-1.5V4H4z"/></svg>
+            <span>Solutions</span>
+          </button>
+          <button class="panel-tab" data-tab="submissions">
+            <svg class="tab-svg" viewBox="0 0 16 16" width="13" height="13" fill="currentColor"><path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"/><path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z"/></svg>
+            <span>Submissions</span>
+          </button>
         </div>
-        
-        <!-- Markdown Body -->
-        <div class="problem-description" id="problemDescription"></div>
-
-        <!-- Examples (Styled like the LeetCode image) -->
-        <div id="exampleSection">
-          <div class="example-card">
-            <div class="example-title">Example 1:</div>
-            <div><span class="field-name">Input:</span> <pre id="sampleInput"></pre></div>
-            <div style="margin-top: 8px;"><span class="field-name">Output:</span> <pre id="sampleOutput"></pre></div>
-          </div>
+        <div class="panel-tabs-right">
+          <button class="btn-panel-icon" id="leftExpandBtn" title="Expand panel">
+            <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor"><path fill-rule="evenodd" d="M5.828 10.172a.5.5 0 0 0-.707 0l-4.096 4.096V11.5a.5.5 0 0 0-1 0v3.975a.5.5 0 0 0 .5.5H4.5a.5.5 0 0 0 0-1H1.732l4.096-4.096a.5.5 0 0 0 0-.707zm4.344 0a.5.5 0 0 1 .707 0l4.096 4.096V11.5a.5.5 0 1 1 1 0v3.975a.5.5 0 0 1-.5.5H11.5a.5.5 0 0 1 0-1h2.768l-4.096-4.096a.5.5 0 0 1 0-.707zm0-4.344a.5.5 0 0 0 .707 0l4.096-4.096V4.5a.5.5 0 1 0 1 0V.525a.5.5 0 0 0-.5-.5H11.5a.5.5 0 0 0 0 1h2.768l-4.096 4.096a.5.5 0 0 0 0 .707zm-4.344 0a.5.5 0 0 1-.707 0L1.025 1.732V4.5a.5.5 0 0 1-1 0V.525a.5.5 0 0 1 .5-.5H4.5a.5.5 0 0 1 0 1H1.732l4.096 4.096a.5.5 0 0 1 0 .707z"/></svg>
+          </button>
+          <button class="btn-panel-icon" id="leftCollapseBtn" title="Collapse panel">
+            <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor"><path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/></svg>
+          </button>
         </div>
       </div>
 
-      <!-- Submissions / Judgement Tab -->
-      <div class="tab-content" id="submissionsTab">
-        <div id="resultsContainer">
-          <div class="empty-run-state">
-            <p>Click "Submit" in the navbar to judge against all test cases.</p>
+      <!-- Left Panel Body Container -->
+      <div class="left-panel-body">
+        <!-- Description Tab Content -->
+        <div class="tab-content active" id="descriptionTab">
+          <div class="problem-title-header">
+            <div class="problem-title-row">
+              <h1 id="problemTitle">Loading...</h1>
+              <div class="solved-pill" id="solvedBadge" style="display: none;">
+                <svg class="check-icon" viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/></svg>
+                <span>Solved</span>
+              </div>
+            </div>
+
+            <div class="problem-meta-pills">
+              <span class="difficulty-pill" id="problemDifficulty">—</span>
+              <span class="meta-pill" id="problemTopic">
+                <svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor"><path d="M2 2a1 1 0 0 1 1-1h4.586a1 1 0 0 1 .707.293l7 7a1 1 0 0 1 0 1.414l-4.586 4.586a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 2 6.586V2zm3.5 4a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/></svg>
+                <span>Topics</span>
+              </span>
+              <span class="meta-pill" id="problemCategory">
+                <svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor"><path d="M8 1a2 2 0 0 1 2 2v2H6V3a2 2 0 0 1 2-2zm3 4V3a3 3 0 1 0-6 0v2H3.5A1.5 1.5 0 0 0 2 6.5v7A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5v-7A1.5 1.5 0 0 0 12.5 5H11z"/></svg>
+                <span>Companies</span>
+              </span>
+              <span class="meta-pill" id="problemHint">
+                <svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor"><path d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13a.5.5 0 0 1 0 1 .5.5 0 0 1 0 1l-.224.447a1 1 0 0 1-.894.553H6.618a1 1 0 0 1-.894-.553L5.5 15a.5.5 0 0 1 0-1 .5.5 0 0 1 0-1 .5.5 0 0 1-.46-.302l-.761-1.77a1.964 1.964 0 0 0-.453-.618A5.984 5.984 0 0 1 2 6zm6-5a5 5 0 0 0-3.479 8.592c.263.254.514.564.676.941L5.83 12h4.342l.632-1.467c.162-.377.413-.687.676-.941A5 5 0 0 0 8 1z"/></svg>
+                <span>Hint</span>
+              </span>
+              <span class="meta-pill points-badge" id="problemPointsBadge">⭐ 25 pts</span>
+            </div>
           </div>
+          
+          <!-- Markdown Body -->
+          <div class="problem-description" id="problemDescription"></div>
+
+          <!-- Examples Section (Exact LeetCode Styling) -->
+          <div id="exampleSection" class="examples-container"></div>
+        </div>
+
+        <!-- Editorial Tab Content -->
+        <div class="tab-content" id="editorialTab">
+          <div class="editorial-content" id="editorialBody">
+            <h3 style="margin-bottom: 12px; color: #ffffff;">Editorial & Solution Approach</h3>
+            <p style="color: var(--text-secondary); margin-bottom: 16px;">Step-by-step breakdown and optimal algorithmic intuition.</p>
+            <div id="editorialText"></div>
+          </div>
+        </div>
+
+        <!-- Solutions Tab Content -->
+        <div class="tab-content" id="solutionsTab">
+          <div class="solutions-content">
+            <h3 style="margin-bottom: 12px; color: #ffffff;">Community & Reference Solutions</h3>
+            <div id="solutionsText"></div>
+          </div>
+        </div>
+
+        <!-- Submissions / Judgement Tab Content -->
+        <div class="tab-content" id="submissionsTab">
+          <div id="resultsContainer">
+            <div class="empty-run-state">
+              <p>Click "Submit" in the top bar to judge your solution against all test cases.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Left Panel Bottom Toolbar (Exact Screenshot) -->
+      <div class="left-panel-footer">
+        <div class="footer-left">
+          <button class="footer-btn" id="likeBtn" title="Upvote">
+            <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor"><path d="M6.956 1.745C7.021.81 7.908.087 8.864.325l.261.066c.463.116.874.456 1.012.965.22.816.533 2.511.062 4.51a9.84 9.84 0 0 1 .443-.051c.713-.065 1.669-.072 2.516.21.518.173.994.681 1.2 1.273.184.532.16 1.162-.234 1.733.058.119.112.245.162.378.369.978.248 1.832-.08 2.37-.17.28-.403.5-.688.65.04.148.064.305.068.468.017.653-.298 1.29-.86 1.643-.243.153-.526.243-.82.266-.017.151-.06.304-.131.455-.308.653-1.002.99-1.744.99H7.556c-1.39 0-2.435-.494-3.13-1.196-.696-.703-.997-1.614-1.127-2.584a29.07 29.07 0 0 1-.299-4.832V7.12c0-.528.257-1.02.686-1.32.428-.3.978-.38 1.488-.216.58.187 1.135.409 1.67.665.229-.915.423-2.148.423-3.082l.09-.422zM2.873 4h1.26a.5.5 0 0 0 .49-.408 10.74 10.74 0 0 1 .458-1.554.5.5 0 0 0-.417-.638l-.634-.08a.5.5 0 0 0-.54.348l-.617 2.332zm-1.85 2a.5.5 0 0 0-.49.408A28.48 28.48 0 0 0 .25 11.24c.005.176.012.352.02.528a.5.5 0 0 0 .498.472h1.64a.5.5 0 0 0 .5-.5V6.5a.5.5 0 0 0-.5-.5H1.023z"/></svg>
+            <span id="likeCount">71.2K</span>
+          </button>
+          <button class="footer-btn" id="dislikeBtn" title="Downvote">
+            <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor"><path d="M6.956 14.534c.021.158.06.316.12.469.308.77.962 1.097 1.788 1.097h2.72c1.39 0 2.435-.494 3.13-1.196.696-.703.997-1.614 1.127-2.584.22-.98.3-2.03.3-3.084V7.5a.5.5 0 0 0-.5-.5h-1.64a.5.5 0 0 0-.498.472 28.48 28.48 0 0 1-.02.528c-.04.498-.12.996-.24 1.492a.5.5 0 0 0 .49.608h1.26a.5.5 0 0 1 .49.408l.617 2.332a.5.5 0 0 1-.54.62l-.634-.08a.5.5 0 0 1-.417-.366 10.74 10.74 0 0 0-.458-1.554.5.5 0 0 0-.49-.408H6.956z"/></svg>
+          </button>
+          <button class="footer-btn" title="Comments">
+            <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor"><path d="M2.678 11.894a1 1 0 0 1 .287.801 10.97 10.97 0 0 1-.398 2c1.395-.323 2.247-.697 2.634-.893a1 1 0 0 1 .71-.074A8.06 8.06 0 0 0 8 14c3.996 0 7-2.807 7-6 0-3.192-3.004-6-7-6S1 4.808 1 8c0 1.468.617 2.83 1.678 3.894zm-.493 3.905a21.682 21.682 0 0 1-.713.129c-.2 0-.303-.1-.303-.255 0-.256.095-.658.267-1.12a8.91 8.91 0 0 0-.317-.432C.466 12.87 0 10.575 0 8c0-4.418 4.03-8 9-8s9 3.582 9 8-4.03 8-9 8a9.863 9.863 0 0 1-4.802-1.226c-.385.18-.946.398-1.513.525z"/></svg>
+            <span>2.2K</span>
+          </button>
+          <button class="footer-btn" id="starBtn" title="Favorite">
+            <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+          </button>
+          <button class="footer-btn" title="Share Problem">
+            <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor"><path d="M11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5z"/></svg>
+          </button>
+        </div>
+        <div class="footer-right">
+          <span class="online-indicator">
+            <span class="online-dot"></span>
+            <span id="onlineCount">804 Online</span>
+          </span>
         </div>
       </div>
     </div>
 
-    <!-- Resizer Divider -->
+    <!-- Vertical Resizer Divider -->
     <div class="resizer" id="resizer"></div>
 
     <!-- Right Panel: Code Editor & Bottom Test Drawer -->
     <div class="panel right-panel" id="rightPanel">
-      <!-- Editor Header -->
+      <!-- Editor Header Bar -->
       <div class="editor-header-bar">
         <div class="editor-header-left">
-          <span>&lt;/&gt; Code</span>
-          <span class="lang-selector" id="editorLangBadge">C++17</span>
+          <span class="editor-title-code">&lt;/&gt; Code</span>
+          <span class="lang-selector" id="editorLangBadge">Python ▾</span>
+          <span class="auto-pill">🔒 Auto</span>
         </div>
         <div class="editor-header-right">
-          <button class="btn-icon" id="formatBtn" title="Clear Code">Format</button>
+          <button class="btn-icon" id="bookmarkBtn" title="Bookmark Solution">
+            <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor"><path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z"/></svg>
+          </button>
+          <button class="btn-icon" id="formatBtn" title="Format Code">
+            <span>{}</span>
+          </button>
+          <button class="btn-icon" id="resetBtn" title="Reset Code to Template">
+            <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor"><path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/><path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/></svg>
+          </button>
+          <button class="btn-icon" id="editorFullscreenBtn" title="Fullscreen">
+            <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor"><path fill-rule="evenodd" d="M5.828 10.172a.5.5 0 0 0-.707 0l-4.096 4.096V11.5a.5.5 0 0 0-1 0v3.975a.5.5 0 0 0 .5.5H4.5a.5.5 0 0 0 0-1H1.732l4.096-4.096a.5.5 0 0 0 0-.707zm4.344 0a.5.5 0 0 1 .707 0l4.096 4.096V11.5a.5.5 0 1 1 1 0v3.975a.5.5 0 0 1-.5.5H11.5a.5.5 0 0 1 0-1h2.768l-4.096-4.096a.5.5 0 0 1 0-.707zm0-4.344a.5.5 0 0 0 .707 0l4.096-4.096V4.5a.5.5 0 1 0 1 0V.525a.5.5 0 0 0-.5-.5H11.5a.5.5 0 0 0 0 1h2.768l-4.096 4.096a.5.5 0 0 0 0 .707zm-4.344 0a.5.5 0 0 1-.707 0L1.025 1.732V4.5a.5.5 0 0 1-1 0V.525a.5.5 0 0 1 .5-.5H4.5a.5.5 0 0 1 0 1H1.732l4.096 4.096a.5.5 0 0 1 0 .707z"/></svg>
+          </button>
         </div>
       </div>
 
-      <!-- CodeMirror Mount Container -->
+      <!-- CodeMirror Mount Canvas -->
       <div class="editor-container">
         <textarea id="codeEditor" class="code-editor"></textarea>
+      </div>
+
+      <!-- Editor Footer Status Bar (Saved, Ln 1, Col 1) -->
+      <div class="editor-footer-bar">
+        <span class="editor-saved-status" id="savedStatus">Saved</span>
+        <span class="editor-cursor-pos" id="cursorPos">Ln 1, Col 1</span>
+      </div>
+
+      <!-- Horizontal Divider between Editor and Test Drawer -->
+      <div class="resizer-h" id="resizerH">
+        <div class="resizer-h-handle"></div>
       </div>
 
       <!-- Bottom Drawer: Testcase & Test Result (Exact LeetCode Screenshot) -->
       <div class="test-drawer" id="testDrawer">
         <div class="test-drawer-tabs">
-          <button class="test-drawer-tab tab-testcase active" data-drawer="testcase">
-            <span class="tab-icon">☑</span>
-            <span>Testcase</span>
-          </button>
-          <button class="test-drawer-tab tab-result" data-drawer="result">
-            <span class="tab-icon">&gt;_</span>
-            <span>Test Result</span>
-          </button>
+          <div class="drawer-tabs-left">
+            <button class="test-drawer-tab tab-testcase active" data-drawer="testcase">
+              <span class="tab-icon">☑</span>
+              <span>Testcase</span>
+            </button>
+            <button class="test-drawer-tab tab-result" data-drawer="result">
+              <span class="tab-icon">&gt;_</span>
+              <span>Test Result</span>
+            </button>
+          </div>
+          <div class="drawer-tabs-right">
+            <button class="btn-panel-icon" id="drawerCollapseBtn" title="Collapse / Expand Drawer">
+              <svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/></svg>
+            </button>
+          </div>
         </div>
 
         <div class="test-drawer-content">
-          <!-- Pane 1: Custom Testcase Input -->
+          <!-- Pane 1: Custom Testcase Input with Case Pills -->
           <div class="drawer-pane active" id="paneTestcase">
+            <div class="case-tabs-bar" id="caseTabsBar">
+              <!-- Dynamically populated Case 1, Case 2, Case 3 pills -->
+            </div>
             <textarea id="customInput" class="testcase-input" placeholder="Enter custom test input here..."></textarea>
           </div>
 
@@ -148,7 +310,14 @@
             <div class="empty-run-state" id="emptyResultMsg">
               <span>You must run your code first</span>
             </div>
-            <pre class="console-output" id="consoleOutput" style="display: none;"></pre>
+            <div class="test-result-wrapper" id="testResultWrapper" style="display: none;">
+              <div class="result-header-row">
+                <div class="result-status-pill" id="resultStatusPill">Accepted</div>
+                <div class="result-runtime" id="resultRuntime">Runtime: 0 ms</div>
+              </div>
+              <div class="result-case-tabs" id="resultCaseTabs"></div>
+              <div class="result-case-details" id="resultCaseDetails"></div>
+            </div>
           </div>
         </div>
       </div>
