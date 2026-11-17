@@ -640,6 +640,7 @@ def generate_questions():
             "track": qdef["track"],
             "category": qdef["category"],
             "subtopic": qdef["subtopic"],
+            "tags": [qdef["subtopic"], "SQL", "MySQL"],
             "description": qdef["description"],
             "type": "sql",
             "tableSchema": SCHEMA_SQL,

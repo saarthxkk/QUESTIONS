@@ -58,7 +58,7 @@ def get_questions():
             'track': q.get('track', q['category']),
             'subtopic': q.get('subtopic', ''),
             'type': q.get('type', 'cpp'),
-            'tags': q['tags']
+            'tags': q.get('tags', [q.get('subtopic', q.get('category', 'SQL'))])
         })
     return jsonify(summary)
 
