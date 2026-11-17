@@ -55,6 +55,8 @@ def get_questions():
             'difficulty': q['difficulty'],
             'points': q['points'],
             'category': q['category'],
+            'track': q.get('track', q['category']),
+            'subtopic': q.get('subtopic', ''),
             'type': q.get('type', 'cpp'),
             'tags': q['tags']
         })

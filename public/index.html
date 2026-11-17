@@ -3,61 +3,113 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CodeArena — Algorithmic & SQL Intelligence</title>
+  <title>CodeArena — LeetCode DSA & SQL Practice</title>
   <link rel="stylesheet" href="/css/style.css">
-  <!-- Co-Star Typography: Playfair Display + Inter + JetBrains Mono -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
-  <!-- Minimalist Navbar -->
+  <!-- Navbar -->
   <nav class="navbar">
     <div class="nav-left">
-      <a href="/" class="logo">⚡ CodeArena<span class="logo-dot">.</span></a>
+      <a href="/" class="logo">
+        <svg class="logo-icon" viewBox="0 0 24 24"><path d="M16.102 17.93l-2.697 2.607c-.466.467-1.111.662-1.823.662s-1.357-.195-1.824-.662l-4.332-4.363c-.467-.467-.702-1.15-.702-1.863s.235-1.357.702-1.824l4.319-4.38c.467-.467 1.125-.649 1.837-.649s1.357.195 1.824.662l2.697 2.607c.514.515 1.365.497 1.9-.038.535-.536.553-1.387.039-1.901l-2.609-2.636a5.074 5.074 0 0 0-3.693-1.503c-1.389 0-2.739.544-3.719 1.503L3.71 10.9c-.96.98-1.5 2.33-1.5 3.72s.54 2.74 1.5 3.72l4.332 4.363a5.21 5.21 0 0 0 3.719 1.503c1.389 0 2.739-.544 3.719-1.503l2.609-2.636c.514-.514.496-1.365-.039-1.901-.535-.535-1.386-.553-1.9-.038z"/></svg>
+        <span>CodeArena</span>
+      </a>
+      <span class="nav-divider">|</span>
+      <span style="font-size: 13px; color: var(--text-secondary); font-weight: 500;">Problem Explorer</span>
     </div>
     <div class="nav-right">
-      <span class="score-badge" id="totalScore">0 PTS</span>
+      <span class="points-pill" id="totalScore">0 PTS TOTAL</span>
     </div>
   </nav>
 
-  <!-- Editorial Hero Section -->
-  <section class="hero">
-    <div class="hero-eyebrow">A Minimalist Problem Solving Environment</div>
-    <h1>Master DSA & SQL, One Concept at a Time</h1>
-    <p>Practice data structures, balancing trees, and advanced MySQL analytics with automated testing.</p>
-  </section>
-
-  <!-- Filters & Table -->
+  <!-- Main Container -->
   <div class="container">
-    <div class="filters">
-      <div class="filter-group">
-        <button class="filter-btn active" data-filter="all">All</button>
-        <button class="filter-btn" data-filter="Easy">Easy</button>
-        <button class="filter-btn" data-filter="Medium">Medium</button>
-        <button class="filter-btn" data-filter="Hard">Hard</button>
+    <div class="home-header">
+      <h1>Practice Tracks</h1>
+      <p>Select your primary study topic (BST, AVL Trees, or SQL) to explore specific sub-topics and practice problems.</p>
+    </div>
+
+    <!-- Primary Topic Selection Cards (BST, AVL Trees, SQL, All) -->
+    <div class="tracks-grid">
+      <div class="track-card active" data-track="all">
+        <div class="track-card-header">
+          <div class="track-title-wrapper">
+            <span class="track-icon">⚡</span>
+            <span class="track-name">All Tracks</span>
+          </div>
+          <span class="track-count-badge" id="countAll">13 Qs</span>
+        </div>
+        <p class="track-desc">Complete DSA and SQL collection across all algorithms, balancing trees, and MySQL analytics.</p>
       </div>
-      <div class="filter-group">
-        <select id="categoryFilter" class="filter-select">
-          <option value="all">All Collections</option>
-        </select>
+
+      <div class="track-card" data-track="BST">
+        <div class="track-card-header">
+          <div class="track-title-wrapper">
+            <span class="track-icon">🌳</span>
+            <span class="track-name">BST Trees</span>
+          </div>
+          <span class="track-count-badge" id="countBST">3 Qs</span>
+        </div>
+        <p class="track-desc">Standard Binary Search Tree construction, recursive insertion, depth calculation & parent tracking.</p>
       </div>
-      <div class="stats-bar">
-        <div class="stat"><span class="stat-count" id="totalQ">0</span> Problems</div>
-        <div class="stat easy-stat"><span class="stat-count" id="easyQ">0</span> Easy</div>
-        <div class="stat medium-stat"><span class="stat-count" id="medQ">0</span> Medium</div>
-        <div class="stat hard-stat"><span class="stat-count" id="hardQ">0</span> Hard</div>
+
+      <div class="track-card" data-track="AVL Trees">
+        <div class="track-card-header">
+          <div class="track-title-wrapper">
+            <span class="track-icon">⚖️</span>
+            <span class="track-name">AVL Trees</span>
+          </div>
+          <span class="track-count-badge" id="countAVL">5 Qs</span>
+        </div>
+        <p class="track-desc">Self-balancing BSTs: Balance factors, LL, RR, LR, RL single/double rotations & node deletion.</p>
       </div>
+
+      <div class="track-card" data-track="SQL">
+        <div class="track-card-header">
+          <div class="track-title-wrapper">
+            <span class="track-icon">🗄️</span>
+            <span class="track-name">SQL Database</span>
+          </div>
+          <span class="track-count-badge" id="countSQL">5 Qs</span>
+        </div>
+        <p class="track-desc">MySQL practice on student schema: multi-condition filtering, GROUP BY, date functions & analytics.</p>
+      </div>
+    </div>
+
+    <!-- Sub-Topic Filter Bar (Dynamically populated based on active track) -->
+    <div class="subtopic-bar" id="subtopicBar">
+      <div class="subtopic-header">
+        <span class="subtopic-title">
+          <span>🏷️ Sub-Topics</span>
+          <span id="activeTrackName" style="color: var(--lc-orange); font-size: 11px;">(All Topics)</span>
+        </span>
+      </div>
+      <div class="subtopic-chips" id="subtopicChips">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+
+    <!-- Secondary Filter Bar (Difficulty & Search) -->
+    <div class="table-controls">
+      <div class="diff-filter-group">
+        <button class="diff-filter-btn active" data-filter="all">All Difficulties</button>
+        <button class="diff-filter-btn" data-filter="Easy">Easy</button>
+        <button class="diff-filter-btn" data-filter="Medium">Medium</button>
+        <button class="diff-filter-btn" data-filter="Hard">Hard</button>
+      </div>
+      <input type="text" id="searchInput" class="search-box" placeholder="Search problems or tags...">
     </div>
 
     <!-- Question Table -->
     <div class="question-table">
       <div class="table-header">
-        <span class="col-status">#</span>
-        <span class="col-title">Problem Specimen</span>
-        <span class="col-category">Category</span>
-        <span class="col-difficulty">Difficulty</span>
+        <span class="col-id">#</span>
+        <span class="col-title">Title</span>
+        <span class="col-subtopic">Sub-Topic</span>
+        <span class="col-diff">Difficulty</span>
         <span class="col-points">Points</span>
+        <span class="col-action">Action</span>
       </div>
       <div id="questionList" class="table-body">
         <!-- Questions rendered dynamically -->
@@ -65,8 +117,8 @@
     </div>
   </div>
 
-  <footer class="footer">
-    <p>CodeArena — Precision Algorithmic Practice</p>
+  <footer style="text-align: center; padding: 24px 0; color: var(--text-muted); font-size: 12px; border-top: 1px solid var(--border);">
+    CodeArena — LeetCode-style Practice Platform
   </footer>
 
   <script src="/js/main.js"></script>

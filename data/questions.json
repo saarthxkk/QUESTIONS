@@ -86,7 +86,9 @@
         "isSample": false,
         "description": "Perfect BST with 15 nodes"
       }
-    ]
+    ],
+    "track": "BST",
+    "subtopic": "Recursive Insertion"
   },
   {
     "id": 2,
@@ -175,7 +177,9 @@
         "isSample": false,
         "description": "Large tree with mixed insertions and existing keys"
       }
-    ]
+    ],
+    "track": "BST",
+    "subtopic": "Depth Tracking & Duplicates"
   },
   {
     "id": 3,
@@ -264,7 +268,9 @@
         "isSample": false,
         "description": "Perfect balanced BST with 15 nodes"
       }
-    ]
+    ],
+    "track": "BST",
+    "subtopic": "Parent & Direction Tracking"
   },
   {
     "id": 4,
@@ -353,7 +359,9 @@
         "isSample": false,
         "description": "Mixed positive and negative integers"
       }
-    ]
+    ],
+    "track": "AVL Trees",
+    "subtopic": "Basic AVL Rotations"
   },
   {
     "id": 5,
@@ -442,7 +450,9 @@
         "isSample": false,
         "description": "15 nodes inserted to form complete balanced tree"
       }
-    ]
+    ],
+    "track": "AVL Trees",
+    "subtopic": "Sequential Insertion (LL/RR/LR/RL)"
   },
   {
     "id": 6,
@@ -531,7 +541,9 @@
         "isSample": false,
         "description": "15 elements with zero nulls in first 3 levels"
       }
-    ]
+    ],
+    "track": "AVL Trees",
+    "subtopic": "Multiple Rebalancing & Height"
   },
   {
     "id": 7,
@@ -620,7 +632,9 @@
         "isSample": false,
         "description": "Complex deletion on 10 nodes with cascading rotations"
       }
-    ]
+    ],
+    "track": "AVL Trees",
+    "subtopic": "Node Deletion & Balancing"
   },
   {
     "id": 8,
@@ -709,7 +723,9 @@
         "isSample": false,
         "description": "12 nodes sequence from Q2 with 8 search queries"
       }
-    ]
+    ],
+    "track": "AVL Trees",
+    "subtopic": "Search Queries & Verification"
   },
   {
     "id": 9,
@@ -895,7 +911,9 @@
         ],
         "orderSensitive": true
       }
-    ]
+    ],
+    "track": "SQL",
+    "subtopic": "WHERE & Multi-Condition Filtering"
   },
   {
     "id": 10,
@@ -1029,7 +1047,9 @@
         ],
         "orderSensitive": true
       }
-    ]
+    ],
+    "track": "SQL",
+    "subtopic": "ORDER BY, Multi-Sort & LIMIT"
   },
   {
     "id": 11,
@@ -1134,7 +1154,9 @@
         "expectedRows": [],
         "orderSensitive": true
       }
-    ]
+    ],
+    "track": "SQL",
+    "subtopic": "GROUP BY, HAVING & Aggregates"
   },
   {
     "id": 12,
@@ -1287,7 +1309,9 @@
         ],
         "orderSensitive": true
       }
-    ]
+    ],
+    "track": "SQL",
+    "subtopic": "Date Functions (YEAR/MONTH)"
   },
   {
     "id": 13,
@@ -1445,6 +1469,8 @@
         ],
         "orderSensitive": true
       }
-    ]
+    ],
+    "track": "SQL",
+    "subtopic": "DISTINCT & Intelligence Analytics"
   }
 ]

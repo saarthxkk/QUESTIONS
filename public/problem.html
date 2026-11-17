@@ -9,66 +9,95 @@
   <link rel="stylesheet" href="/vendor/codemirror/codemirror.min.css">
   <link rel="stylesheet" href="/vendor/codemirror/show-hint.min.css">
   <link rel="stylesheet" href="/css/style.css">
-
-  <!-- Co-Star Typography: Playfair Display + Inter + JetBrains Mono -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
   <!-- Marked.js for Markdown rendering -->
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body class="problem-page">
-  <!-- Minimalist Navbar -->
+  <!-- LeetCode Official Style Navbar -->
   <nav class="navbar">
     <div class="nav-left">
-      <a href="/" class="logo">⚡ CodeArena<span class="logo-dot">.</span></a>
+      <a href="/" class="logo">
+        <svg class="logo-icon" viewBox="0 0 24 24"><path d="M16.102 17.93l-2.697 2.607c-.466.467-1.111.662-1.823.662s-1.357-.195-1.824-.662l-4.332-4.363c-.467-.467-.702-1.15-.702-1.863s.235-1.357.702-1.824l4.319-4.38c.467-.467 1.125-.649 1.837-.649s1.357.195 1.824.662l2.697 2.607c.514.515 1.365.497 1.9-.038.535-.536.553-1.387.039-1.901l-2.609-2.636a5.074 5.074 0 0 0-3.693-1.503c-1.389 0-2.739.544-3.719 1.503L3.71 10.9c-.96.98-1.5 2.33-1.5 3.72s.54 2.74 1.5 3.72l4.332 4.363a5.21 5.21 0 0 0 3.719 1.503c1.389 0 2.739-.544 3.719-1.503l2.609-2.636c.514-.514.496-1.365-.039-1.901-.535-.535-1.386-.553-1.9-.038z"/></svg>
+      </a>
+
+      <!-- Problem List Back Button -->
+      <a href="/" id="backToProblemList" class="btn-problem-list">
+        <span>≡ Problem List</span>
+      </a>
+
+      <!-- Next & Previous Problem Navigation -->
+      <div class="nav-navigators">
+        <button class="nav-btn" id="prevProblemBtn" title="Previous Question">❮</button>
+        <button class="nav-btn" id="nextProblemBtn" title="Next Question">❯</button>
+      </div>
+
       <span class="nav-divider">|</span>
-      <span class="problem-nav-title" id="navTitle">Loading specimen...</span>
+      <span class="problem-nav-title" id="navTitle">Loading problem...</span>
     </div>
+
+    <!-- Centered Run & Submit Buttons (LeetCode Screenshot Style) -->
+    <div class="nav-center">
+      <button class="btn-nav-run" id="runBtn" title="Run code against testcase">
+        <span class="icon-run">▶</span>
+        <span>Run</span>
+      </button>
+
+      <button class="btn-nav-submit" id="submitBtn" title="Submit solution for judging">
+        <span>☁ Submit</span>
+      </button>
+    </div>
+
     <div class="nav-right">
-      <div class="difficulty-badge" id="navDifficulty">—</div>
-      <span class="points-badge" id="navPoints">0 PTS</span>
+      <span class="points-pill" id="navPoints">0 PTS</span>
+      <button class="btn-icon" id="resetBtn" title="Reset code to original template">↺ Reset</button>
     </div>
   </nav>
 
-  <!-- Main Layout: Split Workspace -->
+  <!-- Main Split Layout -->
   <div class="split-layout">
-    <!-- Left Panel: Problem Specimen & Instructions -->
+    <!-- Left Panel: Problem Statement & Judgement -->
     <div class="panel left-panel" id="leftPanel">
       <div class="panel-tabs">
-        <button class="panel-tab active" data-tab="description">Problem Specimen</button>
-        <button class="panel-tab" data-tab="submissions">Judgement Results</button>
+        <button class="panel-tab active" data-tab="description">
+          <span>📄 Description</span>
+        </button>
+        <button class="panel-tab" data-tab="submissions">
+          <span>📊 Judgement</span>
+        </button>
       </div>
 
       <!-- Description Tab -->
       <div class="tab-content active" id="descriptionTab">
-        <div class="problem-header">
+        <div class="problem-title-header">
           <h1 id="problemTitle">Loading...</h1>
-          <div class="problem-meta">
+          <div class="problem-meta-pills">
             <span class="difficulty-pill" id="problemDifficulty">—</span>
-            <span class="category-pill" id="problemCategory">—</span>
-            <div class="tags" id="problemTags"></div>
+            <span class="meta-pill" id="problemTopic">🏷️ Topics</span>
+            <span class="meta-pill" id="problemCategory">Track</span>
+            <span class="meta-pill" style="color: var(--lc-orange); font-weight: 600;" id="problemPointsBadge">⭐ 25 pts</span>
           </div>
         </div>
         
-        <!-- Rendered markdown instructions -->
+        <!-- Markdown Body -->
         <div class="problem-description" id="problemDescription"></div>
-        
-        <!-- Sample I/O -->
-        <div class="sample-section">
-          <h3 id="sampleInputHeader">Sample Input</h3>
-          <pre class="sample-box" id="sampleInput"></pre>
-          <h3 id="sampleOutputHeader">Expected Output</h3>
-          <pre class="sample-box" id="sampleOutput"></pre>
+
+        <!-- Examples (Styled like the LeetCode image) -->
+        <div id="exampleSection">
+          <div class="example-card">
+            <div class="example-title">Example 1:</div>
+            <div><span class="field-name">Input:</span> <pre id="sampleInput"></pre></div>
+            <div style="margin-top: 8px;"><span class="field-name">Output:</span> <pre id="sampleOutput"></pre></div>
+          </div>
         </div>
       </div>
 
-      <!-- Results Tab -->
+      <!-- Submissions / Judgement Tab -->
       <div class="tab-content" id="submissionsTab">
-        <div id="resultsContainer" class="results-container">
-          <div class="empty-state">
-            <p>Execute code to review verification test cases</p>
+        <div id="resultsContainer">
+          <div class="empty-run-state">
+            <p>Click "Submit" in the navbar to judge against all test cases.</p>
           </div>
         </div>
       </div>
@@ -77,44 +106,56 @@
     <!-- Resizer Divider -->
     <div class="resizer" id="resizer"></div>
 
-    <!-- Right Panel: Code Editor & Execution Engine -->
+    <!-- Right Panel: Code Editor & Bottom Test Drawer -->
     <div class="panel right-panel" id="rightPanel">
-      <div class="editor-header">
-        <span class="lang-badge" id="editorLangBadge">C++17</span>
-        <button class="btn-reset" id="resetBtn" title="Reset code to original specimen boilerplate">↺ Reset Specimen</button>
-      </div>
-
-      <!-- CodeMirror Mount Canvas -->
-      <div class="editor-wrapper">
-        <textarea id="codeEditor" class="code-editor" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off"></textarea>
-      </div>
-
-      <!-- Custom Input / Query Area -->
-      <div class="custom-input-section">
-        <div class="input-header" id="toggleCustomInput">
-          <span>▶ Custom Input</span>
+      <!-- Editor Header -->
+      <div class="editor-header-bar">
+        <div class="editor-header-left">
+          <span>&lt;/&gt; Code</span>
+          <span class="lang-selector" id="editorLangBadge">C++17</span>
         </div>
-        <textarea id="customInput" class="custom-input" placeholder="Enter custom test input here..."></textarea>
-      </div>
-
-      <!-- Action Buttons (Run & Submit) -->
-      <div class="editor-actions">
-        <button class="btn btn-run" id="runBtn">▶ Run</button>
-        <button class="btn btn-submit" id="submitBtn">Submit Solution</button>
-      </div>
-
-      <!-- Output Console -->
-      <div class="console-section" id="consoleSection">
-        <div class="console-header">
-          <span>Output Console</span>
-          <button class="btn-clear" id="clearConsole">Clear</button>
+        <div class="editor-header-right">
+          <button class="btn-icon" id="formatBtn" title="Clear Code">Format</button>
         </div>
-        <pre class="console-output" id="consoleOutput">Ready to execute.</pre>
+      </div>
+
+      <!-- CodeMirror Mount Container -->
+      <div class="editor-container">
+        <textarea id="codeEditor" class="code-editor"></textarea>
+      </div>
+
+      <!-- Bottom Drawer: Testcase & Test Result (Exact LeetCode Screenshot) -->
+      <div class="test-drawer" id="testDrawer">
+        <div class="test-drawer-tabs">
+          <button class="test-drawer-tab tab-testcase active" data-drawer="testcase">
+            <span class="tab-icon">☑</span>
+            <span>Testcase</span>
+          </button>
+          <button class="test-drawer-tab tab-result" data-drawer="result">
+            <span class="tab-icon">&gt;_</span>
+            <span>Test Result</span>
+          </button>
+        </div>
+
+        <div class="test-drawer-content">
+          <!-- Pane 1: Custom Testcase Input -->
+          <div class="drawer-pane active" id="paneTestcase">
+            <textarea id="customInput" class="testcase-input" placeholder="Enter custom test input here..."></textarea>
+          </div>
+
+          <!-- Pane 2: Test Result Console (With "You must run your code first" empty state) -->
+          <div class="drawer-pane" id="paneResult">
+            <div class="empty-run-state" id="emptyResultMsg">
+              <span>You must run your code first</span>
+            </div>
+            <pre class="console-output" id="consoleOutput" style="display: none;"></pre>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- Local CodeMirror Engine Scripts (No external CDN required) -->
+  <!-- Local CodeMirror Engine Scripts -->
   <script src="/vendor/codemirror/codemirror.min.js"></script>
   <script src="/vendor/codemirror/clike.min.js"></script>
   <script src="/vendor/codemirror/sql.min.js"></script>
@@ -122,7 +163,7 @@
   <script src="/vendor/codemirror/matchbrackets.min.js"></script>
   <script src="/vendor/codemirror/show-hint.min.js"></script>
 
-  <!-- Autocomplete Dictionary & Workspace Logic -->
+  <!-- Autocomplete & Workspace Logic -->
   <script src="/js/autocomplete.js"></script>
   <script src="/js/problem.js"></script>
 </body>

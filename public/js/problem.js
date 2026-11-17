@@ -1,27 +1,89 @@
 // ═══════════════════════════════════════════════════════════════
-// CodeArena — Problem Workspace (CodeMirror + Compiler)
+// CodeArena — LeetCode-style Problem Workspace
 // ═══════════════════════════════════════════════════════════════
 
+let allQuestions = [];
 let currentQuestion = null;
 let boilerplate = '';
 let cmEditor = null;
+let currentTrack = 'all';
 
 document.addEventListener('DOMContentLoaded', async () => {
   const params = new URLSearchParams(window.location.search);
   const id = parseInt(params.get('id'));
+  currentTrack = params.get('track') || 'all';
 
   if (!id) {
     window.location.href = '/';
     return;
   }
 
+  // Load all questions list for next/prev navigation
+  await loadQuestionDirectory();
+
+  // Load active question
   await loadProblem(id);
+
   setupCodeMirror();
   setupResizer();
-  setupTabs();
-  setupCustomInput();
+  setupPanelTabs();
+  setupDrawerTabs();
+  setupNavigators();
   setupActions();
 });
+
+// ─── Question Directory & Navigation ────────────────────────────
+
+async function loadQuestionDirectory() {
+  try {
+    const res = await fetch('/api/questions');
+    allQuestions = await res.json();
+  } catch (e) {
+    console.error('Could not load directory:', e);
+  }
+}
+
+function setupNavigators() {
+  const prevBtn = document.getElementById('prevProblemBtn');
+  const nextBtn = document.getElementById('nextProblemBtn');
+  const backLink = document.getElementById('backToProblemList');
+
+  // Set back link
+  if (currentTrack && currentTrack !== 'all') {
+    backLink.href = `/?track=${encodeURIComponent(currentTrack)}`;
+  } else {
+    backLink.href = '/';
+  }
+
+  // Filter pool for next/prev:
+  let pool = allQuestions;
+  if (currentTrack && currentTrack !== 'all') {
+    pool = allQuestions.filter(q => q.track === currentTrack || q.category === currentTrack);
+  }
+  if (!pool || pool.length === 0) pool = allQuestions;
+
+  const currentIdx = pool.findIndex(q => q.id === (currentQuestion ? currentQuestion.id : -1));
+
+  if (prevBtn) {
+    prevBtn.disabled = currentIdx <= 0;
+    prevBtn.onclick = () => {
+      if (currentIdx > 0) {
+        const prevQ = pool[currentIdx - 1];
+        window.location.href = `/problem?id=${prevQ.id}&track=${encodeURIComponent(currentTrack)}`;
+      }
+    };
+  }
+
+  if (nextBtn) {
+    nextBtn.disabled = currentIdx >= pool.length - 1;
+    nextBtn.onclick = () => {
+      if (currentIdx < pool.length - 1) {
+        const nextQ = pool[currentIdx + 1];
+        window.location.href = `/problem?id=${nextQ.id}&track=${encodeURIComponent(currentTrack)}`;
+      }
+    };
+  }
+}
 
 // ─── Load Problem ───────────────────────────────────────────────
 
@@ -32,6 +94,7 @@ async function loadProblem(id) {
     currentQuestion = await res.json();
     window.currentQuestion = currentQuestion;
     renderProblem();
+    setupNavigators();
   } catch (err) {
     document.getElementById('problemTitle').textContent = 'Problem not found';
   }
@@ -42,36 +105,31 @@ function renderProblem() {
   const isSql = q.type === 'sql';
   const diffClass = q.difficulty.toLowerCase();
 
-  // Navbar
+  // Top Navbar Title
   document.getElementById('navTitle').textContent = `${q.id}. ${q.title}`;
-  const navDiff = document.getElementById('navDifficulty');
-  navDiff.textContent = q.difficulty;
-  navDiff.className = `difficulty-badge ${diffClass}`;
   document.getElementById('navPoints').textContent = `${q.points} PTS`;
   document.title = `${q.title} — CodeArena`;
 
-  // Problem header
+  // Left Pane Header
   document.getElementById('problemTitle').textContent = `${q.id}. ${q.title}`;
   
-  const pill = document.getElementById('problemDifficulty');
-  pill.textContent = q.difficulty;
-  pill.className = `difficulty-pill ${diffClass}`;
+  const diffPill = document.getElementById('problemDifficulty');
+  diffPill.textContent = q.difficulty;
+  diffPill.className = `difficulty-pill ${diffClass}`;
+
+  const topicPill = document.getElementById('problemTopic');
+  topicPill.textContent = `🏷️ ${q.subtopic || q.category}`;
 
   const catPill = document.getElementById('problemCategory');
-  catPill.textContent = q.category;
-  if (isSql) {
-    catPill.classList.add('cat-sql');
-  }
+  catPill.textContent = q.track || q.category;
+
+  document.getElementById('problemPointsBadge').textContent = `⭐ ${q.points} pts`;
 
   // Language badge in editor header
   const langBadge = document.getElementById('editorLangBadge');
   if (langBadge) {
     langBadge.textContent = isSql ? 'MySQL 8.0' : 'C++17';
   }
-
-  // Tags
-  const tagsContainer = document.getElementById('problemTags');
-  tagsContainer.innerHTML = q.tags.map(t => `<span class="tag">${t}</span>`).join('');
 
   // Description (Markdown)
   if (typeof marked !== 'undefined') {
@@ -80,37 +138,26 @@ function renderProblem() {
     document.getElementById('problemDescription').textContent = q.description;
   }
 
-  // Update sample headers
-  const inHeader = document.getElementById('sampleInputHeader');
-  const outHeader = document.getElementById('sampleOutputHeader');
-  if (inHeader) inHeader.textContent = isSql ? 'Sample Database Specimen (student table)' : 'Sample Input';
-  if (outHeader) outHeader.textContent = isSql ? 'Expected Query Result Table' : 'Expected Output';
-
   // Sample I/O
   document.getElementById('sampleInput').textContent = q.sampleInput;
   document.getElementById('sampleOutput').textContent = q.sampleOutput;
 
   // Boilerplate
   boilerplate = q.boilerplate || '';
-  
-  // Custom input placeholder & label
-  const customHeader = document.querySelector('#toggleCustomInput span');
+
+  // Custom Input
   const customInputEl = document.getElementById('customInput');
-  if (customHeader) {
-    customHeader.textContent = isSql ? '▶ Custom Query / Test' : '▶ Custom Input';
-  }
   if (customInputEl) {
     customInputEl.placeholder = isSql 
       ? 'Enter custom SQL query (e.g. SELECT * FROM student;) or leave empty to test editor solution...'
-      : 'Enter your custom test input here...';
+      : 'Enter your custom testcase stdin input here...';
     customInputEl.value = isSql ? '' : q.sampleInput;
   }
 
-  // If CodeMirror is already mounted, set content and mode
+  // If CodeMirror is already mounted, update value & mode
   if (cmEditor) {
     const savedCode = localStorage.getItem(`code_${q.id}`);
-    const initialCode = savedCode || boilerplate;
-    cmEditor.setValue(initialCode);
+    cmEditor.setValue(savedCode || boilerplate);
     cmEditor.setOption('mode', isSql ? 'text/x-mysql' : 'text/x-c++src');
     cmEditor.clearHistory();
   }
@@ -122,8 +169,7 @@ function setupCodeMirror() {
   const textarea = document.getElementById('codeEditor');
   const isSql = currentQuestion && currentQuestion.type === 'sql';
   const savedCode = currentQuestion ? localStorage.getItem(`code_${currentQuestion.id}`) : null;
-  const initialCode = savedCode || boilerplate;
-  textarea.value = initialCode;
+  textarea.value = savedCode || boilerplate;
 
   if (typeof CodeMirror !== 'undefined') {
     cmEditor = CodeMirror.fromTextArea(textarea, {
@@ -155,7 +201,6 @@ function setupCodeMirror() {
       }
     });
 
-    // Synchronize textarea & save to localStorage
     cmEditor.on('change', () => {
       textarea.value = cmEditor.getValue();
       if (currentQuestion) {
@@ -163,12 +208,10 @@ function setupCodeMirror() {
       }
     });
 
-    // Auto-trigger hints while typing (VS Code Style)
+    // Auto-hints on input
     cmEditor.on('inputRead', (cm, change) => {
       if (change.origin === '+input' && change.text && change.text[0]) {
-        const curChar = change.text[0];
-        // Trigger on letter or underscore
-        if (/[a-zA-Z_]/.test(curChar)) {
+        if (/[a-zA-Z_]/.test(change.text[0])) {
           if (CodeMirror.hint && CodeMirror.hint.codearena) {
             cm.showHint({ hint: CodeMirror.hint.codearena, completeSingle: false });
           }
@@ -176,13 +219,12 @@ function setupCodeMirror() {
       }
     });
 
-    // Refresh layout after render
     setTimeout(() => cmEditor.refresh(), 100);
   }
 
-  // Reset button logic
+  // Reset button
   document.getElementById('resetBtn').addEventListener('click', () => {
-    if (confirm('Reset code to the original specimen boilerplate?')) {
+    if (confirm('Reset code to original starter template?')) {
       if (cmEditor) {
         cmEditor.setValue(boilerplate);
         cmEditor.focus();
@@ -197,9 +239,7 @@ function setupCodeMirror() {
 }
 
 function getEditorCode() {
-  if (cmEditor) {
-    return cmEditor.getValue();
-  }
+  if (cmEditor) return cmEditor.getValue();
   return document.getElementById('codeEditor').value;
 }
 
@@ -236,33 +276,42 @@ function setupResizer() {
   });
 }
 
-// ─── Tabs ───────────────────────────────────────────────────────
+// ─── Left Panel Tabs ───────────────────────────────────────────
 
-function setupTabs() {
+function setupPanelTabs() {
   document.querySelectorAll('.panel-tab').forEach(tab => {
     tab.addEventListener('click', () => {
       document.querySelectorAll('.panel-tab').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      document.querySelectorAll('#leftPanel .tab-content').forEach(c => c.classList.remove('active'));
       tab.classList.add('active');
       document.getElementById(tab.dataset.tab + 'Tab').classList.add('active');
     });
   });
 }
 
-// ─── Custom Input Toggle ────────────────────────────────────────
+// ─── Bottom Drawer Tabs (Testcase & Test Result) ────────────────
 
-function setupCustomInput() {
-  document.getElementById('toggleCustomInput').addEventListener('click', () => {
-    const input = document.getElementById('customInput');
-    input.classList.toggle('open');
-    const header = document.getElementById('toggleCustomInput').querySelector('span');
-    const isSql = currentQuestion && currentQuestion.type === 'sql';
-    const label = isSql ? 'Custom Query / Test' : 'Custom Input';
-    header.textContent = input.classList.contains('open') ? `▼ ${label}` : `▶ ${label}`;
-    if (input.classList.contains('open')) {
-      input.focus();
-    }
+function setupDrawerTabs() {
+  document.querySelectorAll('.test-drawer-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.test-drawer-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.drawer-pane').forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+
+      if (tab.dataset.drawer === 'testcase') {
+        document.getElementById('paneTestcase').classList.add('active');
+      } else {
+        document.getElementById('paneResult').classList.add('active');
+      }
+    });
   });
+}
+
+function switchToResultDrawer() {
+  document.querySelectorAll('.test-drawer-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.drawer-pane').forEach(p => p.classList.remove('active'));
+  document.querySelector('.tab-result').classList.add('active');
+  document.getElementById('paneResult').classList.add('active');
 }
 
 // ─── Run & Submit Actions ───────────────────────────────────────
@@ -270,9 +319,6 @@ function setupCustomInput() {
 function setupActions() {
   document.getElementById('runBtn').addEventListener('click', runCode);
   document.getElementById('submitBtn').addEventListener('click', submitCode);
-  document.getElementById('clearConsole').addEventListener('click', () => {
-    document.getElementById('consoleOutput').textContent = 'Console cleared.';
-  });
 }
 
 async function runCode() {
@@ -283,9 +329,14 @@ async function runCode() {
   const input = document.getElementById('customInput').value;
   const btn = document.getElementById('runBtn');
 
+  // Switch to result tab and show running state
+  switchToResultDrawer();
+  document.getElementById('emptyResultMsg').style.display = 'none';
+  const consoleEl = document.getElementById('consoleOutput');
+  consoleEl.style.display = 'block';
+  consoleEl.textContent = 'Running testcase...';
+
   btn.disabled = true;
-  btn.innerHTML = '<span class="spinner"></span> Running...';
-  document.getElementById('consoleOutput').textContent = isSql ? 'Executing query against in-memory database...\n' : 'Compiling and running against specimen input...\n';
 
   try {
     const res = await fetch('/api/run', {
@@ -305,19 +356,18 @@ async function runCode() {
     } else if (result.timeout) {
       output = `⏱ Time Limit Exceeded`;
     } else if (result.error && !result.success) {
-      output = `❌ Execution Error:\n${result.error}`;
+      output = `❌ Error:\n${result.error}`;
     } else {
-      output = `✅ Result:\n${result.output}`;
+      output = `Output:\n${result.output}`;
       if (result.error) {
-        output += `\n⚠ Stderr:\n${result.error}`;
+        output += `\nStderr:\n${result.error}`;
       }
     }
-    document.getElementById('consoleOutput').textContent = output;
+    consoleEl.textContent = output;
   } catch (err) {
-    document.getElementById('consoleOutput').textContent = `Execution fault: ${err.message}`;
+    consoleEl.textContent = `Execution fault: ${err.message}`;
   } finally {
     btn.disabled = false;
-    btn.innerHTML = '▶ Run';
   }
 }
 
@@ -326,7 +376,7 @@ async function submitCode() {
   const btn = document.getElementById('submitBtn');
 
   btn.disabled = true;
-  btn.innerHTML = '<span class="spinner"></span> Judging...';
+  btn.textContent = 'Judging...';
 
   try {
     const res = await fetch('/api/submit', {
@@ -335,106 +385,87 @@ async function submitCode() {
       body: JSON.stringify({ code, questionId: currentQuestion.id })
     });
     const result = await res.json();
-    renderResults(result);
+    renderJudgementResults(result);
 
-    // Switch to submissions tab
+    // Switch to Judgement tab on the left panel
     document.querySelectorAll('.panel-tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    document.querySelectorAll('#leftPanel .tab-content').forEach(c => c.classList.remove('active'));
     document.querySelector('[data-tab="submissions"]').classList.add('active');
     document.getElementById('submissionsTab').classList.add('active');
+
+    if (result.status === 'Accepted') {
+      localStorage.setItem(`solved_${currentQuestion.id}`, 'true');
+    }
   } catch (err) {
-    document.getElementById('consoleOutput').textContent = `Submission fault: ${err.message}`;
+    alert(`Submission error: ${err.message}`);
   } finally {
     btn.disabled = false;
-    btn.innerHTML = 'Submit Solution';
+    btn.innerHTML = '<span>☁ Submit</span>';
   }
 }
 
-function renderResults(result) {
+function renderJudgementResults(result) {
   const container = document.getElementById('resultsContainer');
   const isAccepted = result.status === 'Accepted';
 
   let html = `
-    <div class="result-header">
-      <span class="result-status ${isAccepted ? 'accepted' : 'failed'}">
-        ${isAccepted ? '✓ Accepted' : '✗ ' + result.status}
-      </span>
-      <div class="result-score">
-        <strong>${result.points}</strong> / ${currentQuestion.points} PTS
+    <div class="judgement-status">
+      <div class="status-badge ${isAccepted ? 'accepted' : 'failed'}">
+        <span>${isAccepted ? '✓' : '✗'}</span>
+        <span>${result.status}</span>
+      </div>
+      <div style="font-size: 13px; color: var(--text-secondary);">
+        <strong style="color: var(--lc-orange);">${result.points}</strong> / ${currentQuestion.points} PTS
         &nbsp;•&nbsp;
-        ${result.passed}/${result.total} test cases satisfied
+        ${result.passed}/${result.total} test cases passed
       </div>
     </div>
-    <div class="test-case-list">
+    <div style="display: flex; flex-direction: column; gap: 8px;">
   `;
 
   result.results.forEach((tc) => {
     const icon = tc.passed ? '✓' : '✗';
-    const iconClass = tc.passed ? 'pass' : 'fail';
+    const iconClass = tc.passed ? 'diff-easy' : 'diff-hard';
 
     html += `
-      <div class="test-case-item">
-        <div class="test-case-header" onclick="this.nextElementSibling.classList.toggle('open')">
-          <div class="tc-left">
-            <span class="tc-icon ${iconClass}">${icon}</span>
-            <span class="tc-name">Case ${tc.testCaseId}${tc.description ? ' — ' + tc.description : ''}</span>
-            ${tc.isSample ? '<span class="category-tag">Specimen</span>' : ''}
-          </div>
-          <span class="tc-badge ${iconClass}">${tc.passed ? 'Passed' : 'Failed'}</span>
+      <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; font-size: 13px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+          <span style="font-weight: 600;">
+            <span class="${iconClass}" style="margin-right: 6px;">${icon}</span>
+            Case ${tc.testCaseId}${tc.description ? ' — ' + tc.description : ''}
+          </span>
+          <span class="difficulty-pill ${tc.passed ? 'easy' : 'hard'}">${tc.passed ? 'Passed' : 'Failed'}</span>
         </div>
-        <div class="test-case-detail">
     `;
 
     if (tc.compilationError) {
       html += `
-        <div class="detail-row">
-          <div class="detail-label">Judgement Diagnostic / Error</div>
-          <div class="detail-value">${escapeHtml(tc.compilationError)}</div>
-        </div>
-      `;
-    } else if (tc.error) {
-      html += `
-        <div class="detail-row">
-          <div class="detail-label">Diagnostic Output</div>
-          <div class="detail-value">${escapeHtml(tc.error)}</div>
+        <div style="margin-top: 6px; color: var(--red); font-family: 'JetBrains Mono', monospace; font-size: 12px; white-space: pre-wrap;">
+          ${escapeHtml(tc.compilationError)}
         </div>
       `;
     }
 
-    if (tc.input !== null && tc.input !== undefined) {
+    if (tc.expectedOutput) {
       html += `
-        <div class="detail-row">
-          <div class="detail-label">Input Parameters</div>
-          <div class="detail-value">${escapeHtml(tc.input)}</div>
+        <div style="margin-top: 6px; font-size: 12px; color: var(--text-secondary);">
+          Expected: <pre style="background: #1a1a1a; padding: 6px; border-radius: 4px; margin-top: 2px;">${escapeHtml(tc.expectedOutput)}</pre>
         </div>
       `;
     }
 
-    if (tc.expectedOutput !== null && tc.expectedOutput !== undefined) {
+    if (tc.actualOutput) {
       html += `
-        <div class="detail-row">
-          <div class="detail-label">Expected Output</div>
-          <div class="detail-value">${escapeHtml(tc.expectedOutput)}</div>
+        <div style="margin-top: 6px; font-size: 12px; color: ${tc.passed ? 'var(--text-secondary)' : 'var(--red)'};">
+          Your Output: <pre style="background: #1a1a1a; padding: 6px; border-radius: 4px; margin-top: 2px;">${escapeHtml(tc.actualOutput)}</pre>
         </div>
       `;
     }
 
-    if (tc.actualOutput !== null && tc.actualOutput !== undefined) {
-      html += `
-        <div class="detail-row">
-          <div class="detail-label">Actual Solution Output</div>
-          <div class="detail-value" style="${tc.passed ? '' : 'color: var(--red);'}">${escapeHtml(tc.actualOutput)}</div>
-        </div>
-      `;
-    }
-
-    html += `
-        </div>
-      </div>
-    `;
+    html += `</div>`;
   });
 
-  html += '</div>';
+  html += `</div>`;
   container.innerHTML = html;
 }
 
