@@ -308,4 +308,4 @@ def compile_and_run(code, stdin_input, timeout=5):
 
 if __name__ == '__main__':
     print("\n🚀 CodeArena is running at http://localhost:8080\n")
-    app.run(debug=True, port=8080)
+    app.run(debug=False, port=8080)
