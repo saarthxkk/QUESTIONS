@@ -9,10 +9,149 @@ class CppAutocomplete {
     this.selectedIndex = -1;
     this.visible = false;
     this.suggestions = [];
+    this.language = 'cpp';
     
     this.initDropdown();
     this.bindEvents();
     this.buildDictionary();
+  }
+
+  setLanguage(lang) {
+    this.language = lang;
+    if (lang === 'sql') {
+      this.buildSqlDictionary();
+    } else {
+      this.buildDictionary();
+    }
+  }
+
+  buildSqlDictionary() {
+    this.dictionary = [
+      // ── SQL Core Keywords ──
+      { text: 'SELECT', kind: 'keyword', icon: '🔑', detail: 'SELECT col1, col2' },
+      { text: 'FROM', kind: 'keyword', icon: '🔑', detail: 'FROM table_name' },
+      { text: 'WHERE', kind: 'keyword', icon: '🔑', detail: 'WHERE condition' },
+      { text: 'GROUP BY', kind: 'keyword', icon: '🔑', detail: 'GROUP BY col1, col2' },
+      { text: 'HAVING', kind: 'keyword', icon: '🔑', detail: 'HAVING aggregate_condition' },
+      { text: 'ORDER BY', kind: 'keyword', icon: '🔑', detail: 'ORDER BY col ASC|DESC' },
+      { text: 'LIMIT', kind: 'keyword', icon: '🔑', detail: 'LIMIT n [OFFSET m]' },
+      { text: 'AND', kind: 'keyword', icon: '🔑', detail: 'Logical AND' },
+      { text: 'OR', kind: 'keyword', icon: '🔑', detail: 'Logical OR' },
+      { text: 'NOT', kind: 'keyword', icon: '🔑', detail: 'Logical NOT' },
+      { text: 'BETWEEN', kind: 'keyword', icon: '🔑', detail: 'val BETWEEN low AND high' },
+      { text: 'IN', kind: 'keyword', icon: '🔑', detail: 'col IN (val1, val2)' },
+      { text: 'NOT IN', kind: 'keyword', icon: '🔑', detail: 'col NOT IN (val1, val2)' },
+      { text: 'LIKE', kind: 'keyword', icon: '🔑', detail: "col LIKE 'pattern%'" },
+      { text: 'NOT LIKE', kind: 'keyword', icon: '🔑', detail: "col NOT LIKE 'pattern%'" },
+      { text: 'DISTINCT', kind: 'keyword', icon: '🔑', detail: 'COUNT(DISTINCT col)' },
+      { text: 'AS', kind: 'keyword', icon: '🔑', detail: 'expression AS alias_name' },
+      { text: 'ASC', kind: 'keyword', icon: '🔑', detail: 'Ascending sort order' },
+      { text: 'DESC', kind: 'keyword', icon: '🔑', detail: 'Descending sort order' },
+      { text: 'IS NULL', kind: 'keyword', icon: '🔑', detail: 'Check for NULL value' },
+      { text: 'IS NOT NULL', kind: 'keyword', icon: '🔑', detail: 'Check for non-NULL value' },
+      { text: 'JOIN', kind: 'keyword', icon: '🔑', detail: 'JOIN table ON condition' },
+      { text: 'INNER JOIN', kind: 'keyword', icon: '🔑', detail: 'INNER JOIN table ON condition' },
+      { text: 'LEFT JOIN', kind: 'keyword', icon: '🔑', detail: 'LEFT JOIN table ON condition' },
+      { text: 'RIGHT JOIN', kind: 'keyword', icon: '🔑', detail: 'RIGHT JOIN table ON condition' },
+      { text: 'UNION', kind: 'keyword', icon: '🔑', detail: 'Combine result sets' },
+      { text: 'UNION ALL', kind: 'keyword', icon: '🔑', detail: 'Combine result sets with duplicates' },
+      { text: 'CASE', kind: 'keyword', icon: '🔑', detail: 'CASE WHEN cond THEN val ELSE val END' },
+      { text: 'WHEN', kind: 'keyword', icon: '🔑', detail: 'WHEN condition THEN result' },
+      { text: 'THEN', kind: 'keyword', icon: '🔑', detail: 'THEN result' },
+      { text: 'ELSE', kind: 'keyword', icon: '🔑', detail: 'ELSE fallback_result' },
+      { text: 'END', kind: 'keyword', icon: '🔑', detail: 'END case statement' },
+
+      // ── Aggregate & Math Functions ──
+      { text: 'COUNT(*)', kind: 'function', icon: '⚡', detail: 'COUNT(*) — count all rows' },
+      { text: 'COUNT', kind: 'function', icon: '⚡', detail: 'COUNT(col) or COUNT(DISTINCT col)' },
+      { text: 'SUM', kind: 'function', icon: '⚡', detail: 'SUM(numeric_col)' },
+      { text: 'AVG', kind: 'function', icon: '⚡', detail: 'AVG(numeric_col)' },
+      { text: 'MAX', kind: 'function', icon: '⚡', detail: 'MAX(column)' },
+      { text: 'MIN', kind: 'function', icon: '⚡', detail: 'MIN(column)' },
+      { text: 'ROUND', kind: 'function', icon: '⚡', detail: 'ROUND(number, decimals)' },
+
+      // ── Date Functions ──
+      { text: 'YEAR', kind: 'function', icon: '⚡', detail: 'YEAR(date_col)' },
+      { text: 'MONTH', kind: 'function', icon: '⚡', detail: 'MONTH(date_col) — 1 to 12' },
+      { text: 'MONTHNAME', kind: 'function', icon: '⚡', detail: 'MONTHNAME(date_col) — January..December' },
+      { text: 'DATE', kind: 'function', icon: '⚡', detail: 'DATE(datetime_val)' },
+      { text: 'DATEDIFF', kind: 'function', icon: '⚡', detail: 'DATEDIFF(date1, date2)' },
+
+      // ── Database Table & Columns ──
+      { text: 'student', kind: 'class', icon: '🗄️', detail: 'Table: student' },
+      { text: 'student_id', kind: 'field', icon: '🏷️', detail: 'Column: student.student_id (INT PK)' },
+      { text: 'name', kind: 'field', icon: '🏷️', detail: 'Column: student.name (VARCHAR)' },
+      { text: 'age', kind: 'field', icon: '🏷️', detail: 'Column: student.age (INT)' },
+      { text: 'gender', kind: 'field', icon: '🏷️', detail: "Column: student.gender ('M' or 'F')" },
+      { text: 'city', kind: 'field', icon: '🏷️', detail: 'Column: student.city (VARCHAR)' },
+      { text: 'email', kind: 'field', icon: '🏷️', detail: 'Column: student.email (VARCHAR UNIQUE)' },
+      { text: 'marks', kind: 'field', icon: '🏷️', detail: 'Column: student.marks (INT 0-100)' },
+      { text: 'dob', kind: 'field', icon: '🏷️', detail: 'Column: student.dob (DATE YYYY-MM-DD)' },
+
+      // ── Common Problem Aliases ──
+      { text: 'student_name', kind: 'field', icon: '🏷️', detail: 'Alias: name AS student_name' },
+      { text: 'student_marks', kind: 'field', icon: '🏷️', detail: 'Alias: marks AS student_marks' },
+      { text: 'total_students', kind: 'field', icon: '🏷️', detail: 'Alias: COUNT(*) AS total_students' },
+      { text: 'total_marks', kind: 'field', icon: '🏷️', detail: 'Alias: SUM(marks) AS total_marks' },
+      { text: 'average_marks', kind: 'field', icon: '🏷️', detail: 'Alias: ROUND(AVG(marks), 2) AS average_marks' },
+      { text: 'highest_marks', kind: 'field', icon: '🏷️', detail: 'Alias: MAX(marks) AS highest_marks' },
+      { text: 'lowest_marks', kind: 'field', icon: '🏷️', detail: 'Alias: MIN(marks) AS lowest_marks' },
+      { text: 'birth_year', kind: 'field', icon: '🏷️', detail: 'Alias: YEAR(dob) AS birth_year' },
+      { text: 'birth_month_number', kind: 'field', icon: '🏷️', detail: 'Alias: MONTH(dob) AS birth_month_number' },
+      { text: 'birth_month_name', kind: 'field', icon: '🏷️', detail: 'Alias: MONTHNAME(dob) AS birth_month_name' },
+      { text: 'average_age', kind: 'field', icon: '🏷️', detail: 'Alias: ROUND(AVG(age), 2) AS average_age' },
+      { text: 'unique_cities', kind: 'field', icon: '🏷️', detail: 'Alias: COUNT(DISTINCT city) AS unique_cities' },
+      { text: 'unique_ages', kind: 'field', icon: '🏷️', detail: 'Alias: COUNT(DISTINCT age) AS unique_ages' },
+      { text: 'unique_marks', kind: 'field', icon: '🏷️', detail: 'Alias: COUNT(DISTINCT marks) AS unique_marks' },
+
+      // ── Common Cities ──
+      { text: "'Delhi'", kind: 'object', icon: '📍', detail: "City literal 'Delhi'" },
+      { text: "'Meerut'", kind: 'object', icon: '📍', detail: "City literal 'Meerut'" },
+      { text: "'Noida'", kind: 'object', icon: '📍', detail: "City literal 'Noida'" },
+      { text: "'Panipat'", kind: 'object', icon: '📍', detail: "City literal 'Panipat'" },
+
+      // ── SQL Snippets ──
+      {
+        text: 'sel',
+        kind: 'snippet',
+        icon: '✂️',
+        detail: 'SELECT * FROM student;',
+        isSnippet: true,
+        body: 'SELECT * FROM student;'
+      },
+      {
+        text: 'selwhere',
+        kind: 'snippet',
+        icon: '✂️',
+        detail: 'SELECT ... FROM student WHERE ...',
+        isSnippet: true,
+        body: 'SELECT student_id, name, city, marks\nFROM student\nWHERE marks >= 75\nORDER BY marks DESC;'
+      },
+      {
+        text: 'grpby',
+        kind: 'snippet',
+        icon: '✂️',
+        detail: 'GROUP BY ... HAVING ...',
+        isSnippet: true,
+        body: 'GROUP BY city\nHAVING COUNT(*) >= 2'
+      },
+      {
+        text: 'cntdist',
+        kind: 'snippet',
+        icon: '✂️',
+        detail: 'COUNT(DISTINCT column)',
+        isSnippet: true,
+        body: 'COUNT(DISTINCT '
+      },
+      {
+        text: 'roundavg',
+        kind: 'snippet',
+        icon: '✂️',
+        detail: 'ROUND(AVG(col), 2)',
+        isSnippet: true,
+        body: 'ROUND(AVG(marks), 2) AS '
+      }
+    ];
   }
 
   // ─── Dictionary ─────────────────────────────────────────────
@@ -731,6 +870,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const editor = document.getElementById('codeEditor');
     if (editor) {
       window.autocomplete = new CppAutocomplete(editor);
+      if (window.currentQuestion && window.currentQuestion.type === 'sql') {
+        window.autocomplete.setLanguage('sql');
+      }
     }
   }, 500);
 });

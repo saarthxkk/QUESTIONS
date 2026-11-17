@@ -74,14 +74,46 @@ function renderProblem() {
   // Boilerplate
   boilerplate = q.boilerplate || '';
   const editor = document.getElementById('codeEditor');
+
+  // Language badge & Editor configuration
+  const langBadge = document.querySelector('.lang-badge');
+  const isSql = q.type === 'sql';
+  if (langBadge) {
+    langBadge.textContent = isSql ? 'MySQL 8.0' : 'C++17';
+  }
+
+  // Update sample headers if SQL
+  const sampleHeaders = document.querySelectorAll('.sample-section h3');
+  if (sampleHeaders.length >= 2) {
+    sampleHeaders[0].textContent = isSql ? 'Sample Database Records (student table)' : 'Sample Input';
+    sampleHeaders[1].textContent = isSql ? 'Expected Output Table' : 'Sample Output';
+  }
+
+  // Custom input placeholder & label
+  const customHeader = document.querySelector('#toggleCustomInput span');
+  const customInputEl = document.getElementById('customInput');
+  if (customHeader) {
+    customHeader.textContent = isSql ? '▶ Custom Query / Test' : '▶ Custom Input';
+  }
+  if (customInputEl) {
+    customInputEl.placeholder = isSql 
+      ? 'Enter custom SQL query (e.g. SELECT * FROM student;) or leave empty to run editor code...'
+      : 'Enter your custom test input here...';
+  }
+
+  // Autocomplete language switch
+  window.currentQuestion = q;
+  if (window.autocomplete) {
+    window.autocomplete.setLanguage(isSql ? 'sql' : 'cpp');
+  }
   
   // Load saved code or use boilerplate
   const savedCode = localStorage.getItem(`code_${q.id}`);
   editor.value = savedCode || boilerplate;
   updateLineNumbers();
 
-  // Set custom input to sample
-  document.getElementById('customInput').value = q.sampleInput;
+  // Set custom input default
+  document.getElementById('customInput').value = isSql ? '' : q.sampleInput;
 }
 
 // ─── Editor Setup ───────────────────────────────────────────────
@@ -258,13 +290,17 @@ function setupActions() {
 }
 
 async function runCode() {
-  const code = document.getElementById('codeEditor').value;
+  const isSql = currentQuestion && currentQuestion.type === 'sql';
+  const customQuery = document.getElementById('customInput').value.trim();
+  const editorCode = document.getElementById('codeEditor').value;
+  // If custom query provided for SQL, run that; otherwise run editor code
+  const code = (isSql && customQuery) ? customQuery : editorCode;
   const input = document.getElementById('customInput').value;
   const btn = document.getElementById('runBtn');
 
   btn.disabled = true;
   btn.innerHTML = '<span class="spinner"></span> Running...';
-  document.getElementById('consoleOutput').textContent = 'Compiling and running...\n';
+  document.getElementById('consoleOutput').textContent = isSql ? 'Executing query against database...\n' : 'Compiling and running...\n';
 
   try {
     const res = await fetch('/api/run', {
@@ -272,7 +308,7 @@ async function runCode() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         code,
-        input,
+        input: isSql ? '' : input,
         questionId: currentQuestion ? currentQuestion.id : null
       })
     });
@@ -280,15 +316,15 @@ async function runCode() {
     
     let output = '';
     if (result.compilationError) {
-      output = `❌ Compilation Error:\n${result.compilationError}`;
+      output = `❌ ${isSql ? 'SQL Error' : 'Compilation Error'}:\n${result.compilationError}`;
     } else if (result.timeout) {
       output = `⏱ Time Limit Exceeded`;
     } else if (result.error && !result.success) {
-      output = `❌ Runtime Error:\n${result.error}`;
+      output = `❌ Error:\n${result.error}`;
     } else {
-      output = `✅ Output:\n${result.output}`;
+      output = `✅ Result:\n${result.output}`;
       if (result.error) {
-        output += `\n⚠ Stderr:\n${result.error}`;
+        output += `\n⚠ Warning/Stderr:\n${result.error}`;
       }
     }
     document.getElementById('consoleOutput').textContent = output;

@@ -81,7 +81,7 @@ function renderQuestions() {
     <a class="question-row" href="/problem?id=${q.id}">
       <span class="col-status">${q.id}</span>
       <span class="col-title">${q.title}</span>
-      <span class="col-category"><span class="category-tag">${q.category}</span></span>
+      <span class="col-category"><span class="category-tag ${q.category === 'SQL' ? 'cat-sql' : ''}">${q.category}</span></span>
       <span class="col-difficulty diff-${q.difficulty.toLowerCase()}">${q.difficulty}</span>
       <span class="col-points">${q.points} pts</span>
     </a>

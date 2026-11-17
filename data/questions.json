@@ -710,5 +710,741 @@
         "description": "12 nodes sequence from Q2 with 8 search queries"
       }
     ]
+  },
+  {
+    "id": 9,
+    "title": "Student Performance Search Engine",
+    "difficulty": "Easy",
+    "points": 25,
+    "category": "SQL",
+    "type": "sql",
+    "tags": [
+      "SQL",
+      "SELECT",
+      "WHERE",
+      "ORDER BY",
+      "LIKE",
+      "Filtering"
+    ],
+    "description": "## Student Performance Search Engine\n\nThe college administration wants to develop a student search system to identify students who meet specific academic and demographic requirements.\n\nWrite an SQL query to retrieve the `student_id`, `name`, `city`, `age`, `gender`, `marks`, and `dob` of students who satisfy the following conditions:\n\n1. Students must have marks **between 60 and 95** (inclusive).\n2. Students must belong to **Delhi, Meerut, or Noida**.\n3. Students must **not** belong to **Panipat**.\n4. Their names must either **start with 'A' or 'R'**, **end with 'a'**, or **contain the substring 'it'**.\n5. **Exclude female students from Meerut**.\n6. Display the results in **descending order of marks**.\n7. If two students have equal marks, sort them **alphabetically by name**.\n\n### Table Schema: `student`\n| Column | Type | Description |\n|---|---|---|\n| `student_id` | INT | Primary key |\n| `name` | VARCHAR(50) | Student's name |\n| `age` | INT | Age in years |\n| `gender` | CHAR(1) | 'M' or 'F' |\n| `city` | VARCHAR(50) | City of residence |\n| `email` | VARCHAR(100) | Unique email address |\n| `marks` | INT | Marks scored (0-100) |\n| `dob` | DATE | Date of birth (YYYY-MM-DD) |\n\n### Validation Highlights\n- Students from Panipat must never appear.\n- Female students from Meerut must never appear.\n- Students with marks below 60 must never appear.\n- All 7 columns must be present in the output.",
+    "sampleInput": "+------------+--------+-----+--------+---------+--------------------+-------+------------+\n| student_id | name   | age | gender | city    | email              | marks | dob        |\n+------------+--------+-----+--------+---------+--------------------+-------+------------+\n| 101        | Aditya | 29  | M      | Meerut  | aditya@gmail.com   | 85    | 1996-10-25 |\n| 102        | Rahul  | 21  | M      | Delhi   | rahul@gmail.com    | 72    | 2005-03-12 |\n| 103        | Priya  | 22  | F      | Noida   | priya@gmail.com    | 91    | 2004-07-18 |\n| 104        | Amit   | 20  | M      | Meerut  | amit@gmail.com     | 65    | 2006-01-25 |\n| 105        | Neha   | 23  | F      | Delhi   | neha@gmail.com     | 78    | 2003-11-09 |\n| 106        | Riya   | 21  | F      | Panipat | riya@gmail.com     | 88    | 2005-05-22 |\n| 107        | Rohit  | 24  | M      | Noida   | rohit@gmail.com    | 55    | 2002-09-14 |\n| 108        | Anjali | 22  | F      | Meerut  | anjali@gmail.com   | 95    | 2004-12-03 |\n| 109        | Karan  | 25  | M      | Delhi   | karan@gmail.com    | 67    | 2001-06-28 |\n| 110        | Ankit  | 20  | M      | Panipat | ankit@gmail.com    | 81    | 2006-02-17 |\n+------------+--------+-----+--------+---------+--------------------+-------+------------+",
+    "sampleOutput": "student_id | name   | city   | age | gender | marks | dob       \n-----------+--------+--------+-----+--------+-------+-----------\n103        | Priya  | Noida  | 22  | F      | 91    | 2004-07-18\n101        | Aditya | Meerut | 29  | M      | 85    | 1996-10-25\n105        | Neha   | Delhi  | 23  | F      | 78    | 2003-11-09\n102        | Rahul  | Delhi  | 21  | M      | 72    | 2005-03-12\n104        | Amit   | Meerut | 20  | M      | 65    | 2006-01-25\n\n(5 rows)",
+    "tableSchema": "CREATE TABLE student (\n    student_id INT PRIMARY KEY,\n    name VARCHAR(50) NOT NULL,\n    age INT,\n    gender CHAR(1),\n    city VARCHAR(50) DEFAULT 'Delhi',\n    email VARCHAR(100) UNIQUE,\n    marks INT,\n    dob DATE\n);",
+    "testData": "INSERT INTO student (student_id, name, age, gender, city, email, marks, dob) VALUES\n(101, 'Aditya', 29, 'M', 'Meerut', 'aditya@gmail.com', 85, '1996-10-25'),\n(102, 'Rahul', 21, 'M', 'Delhi', 'rahul@gmail.com', 72, '2005-03-12'),\n(103, 'Priya', 22, 'F', 'Noida', 'priya@gmail.com', 91, '2004-07-18'),\n(104, 'Amit', 20, 'M', 'Meerut', 'amit@gmail.com', 65, '2006-01-25'),\n(105, 'Neha', 23, 'F', 'Delhi', 'neha@gmail.com', 78, '2003-11-09'),\n(106, 'Riya', 21, 'F', 'Panipat', 'riya@gmail.com', 88, '2005-05-22'),\n(107, 'Rohit', 24, 'M', 'Noida', 'rohit@gmail.com', 55, '2002-09-14'),\n(108, 'Anjali', 22, 'F', 'Meerut', 'anjali@gmail.com', 95, '2004-12-03'),\n(109, 'Karan', 25, 'M', 'Delhi', 'karan@gmail.com', 67, '2001-06-28'),\n(110, 'Ankit', 20, 'M', 'Panipat', 'ankit@gmail.com', 81, '2006-02-17');",
+    "boilerplate": "-- Write your SQL query below\nSELECT student_id, name, city, age, gender, marks, dob\nFROM student\nWHERE \nORDER BY ;",
+    "testCases": [
+      {
+        "id": 1,
+        "description": "Standard college student dataset (10 records)",
+        "isSample": true,
+        "testData": "INSERT INTO student (student_id, name, age, gender, city, email, marks, dob) VALUES\n(101, 'Aditya', 29, 'M', 'Meerut', 'aditya@gmail.com', 85, '1996-10-25'),\n(102, 'Rahul', 21, 'M', 'Delhi', 'rahul@gmail.com', 72, '2005-03-12'),\n(103, 'Priya', 22, 'F', 'Noida', 'priya@gmail.com', 91, '2004-07-18'),\n(104, 'Amit', 20, 'M', 'Meerut', 'amit@gmail.com', 65, '2006-01-25'),\n(105, 'Neha', 23, 'F', 'Delhi', 'neha@gmail.com', 78, '2003-11-09'),\n(106, 'Riya', 21, 'F', 'Panipat', 'riya@gmail.com', 88, '2005-05-22'),\n(107, 'Rohit', 24, 'M', 'Noida', 'rohit@gmail.com', 55, '2002-09-14'),\n(108, 'Anjali', 22, 'F', 'Meerut', 'anjali@gmail.com', 95, '2004-12-03'),\n(109, 'Karan', 25, 'M', 'Delhi', 'karan@gmail.com', 67, '2001-06-28'),\n(110, 'Ankit', 20, 'M', 'Panipat', 'ankit@gmail.com', 81, '2006-02-17');",
+        "expectedColumns": [
+          "student_id",
+          "name",
+          "city",
+          "age",
+          "gender",
+          "marks",
+          "dob"
+        ],
+        "expectedRows": [
+          [
+            103,
+            "Priya",
+            "Noida",
+            22,
+            "F",
+            91,
+            "2004-07-18"
+          ],
+          [
+            101,
+            "Aditya",
+            "Meerut",
+            29,
+            "M",
+            85,
+            "1996-10-25"
+          ],
+          [
+            105,
+            "Neha",
+            "Delhi",
+            23,
+            "F",
+            78,
+            "2003-11-09"
+          ],
+          [
+            102,
+            "Rahul",
+            "Delhi",
+            21,
+            "M",
+            72,
+            "2005-03-12"
+          ],
+          [
+            104,
+            "Amit",
+            "Meerut",
+            20,
+            "M",
+            65,
+            "2006-01-25"
+          ]
+        ],
+        "orderSensitive": true
+      },
+      {
+        "id": 2,
+        "description": "Diverse demographics & city distribution dataset",
+        "isSample": false,
+        "testData": "INSERT INTO student (student_id, name, age, gender, city, email, marks, dob) VALUES\n(201, 'Aakash', 22, 'M', 'Delhi', 'aakash@gmail.com', 94, '2004-10-10'),\n(202, 'Ritika', 21, 'F', 'Noida', 'ritika@gmail.com', 82, '2005-04-15'),\n(203, 'Rohan', 20, 'M', 'Meerut', 'rohan@gmail.com', 62, '2006-08-20'),\n(204, 'Simran', 23, 'F', 'Meerut', 'simran@gmail.com', 89, '2003-01-05'),\n(205, 'Mohit', 25, 'M', 'Delhi', 'mohit@gmail.com', 76, '2001-10-30'),\n(206, 'Deepak', 24, 'M', 'Panipat', 'deepak@gmail.com', 90, '2002-12-12'),\n(207, 'Anita', 22, 'F', 'Delhi', 'anita@gmail.com', 88, '2004-03-25');",
+        "expectedColumns": [
+          "student_id",
+          "name",
+          "city",
+          "age",
+          "gender",
+          "marks",
+          "dob"
+        ],
+        "expectedRows": [
+          [
+            201,
+            "Aakash",
+            "Delhi",
+            22,
+            "M",
+            94,
+            "2004-10-10"
+          ],
+          [
+            207,
+            "Anita",
+            "Delhi",
+            22,
+            "F",
+            88,
+            "2004-03-25"
+          ],
+          [
+            202,
+            "Ritika",
+            "Noida",
+            21,
+            "F",
+            82,
+            "2005-04-15"
+          ],
+          [
+            205,
+            "Mohit",
+            "Delhi",
+            25,
+            "M",
+            76,
+            "2001-10-30"
+          ],
+          [
+            203,
+            "Rohan",
+            "Meerut",
+            20,
+            "M",
+            62,
+            "2006-08-20"
+          ]
+        ],
+        "orderSensitive": true
+      },
+      {
+        "id": 3,
+        "description": "Boundary marks (60, 95) & edge cases dataset",
+        "isSample": false,
+        "testData": "INSERT INTO student (student_id, name, age, gender, city, email, marks, dob) VALUES\n(301, 'Ramesh', 20, 'M', 'Delhi', 'ramesh@gmail.com', 60, '2006-05-10'),\n(302, 'Radha', 21, 'F', 'Noida', 'radha@gmail.com', 95, '2005-10-01'),\n(303, 'Asha', 22, 'F', 'Meerut', 'asha@gmail.com', 92, '2004-09-18'),\n(304, 'Kavita', 24, 'F', 'Panipat', 'kavita@gmail.com', 79, '2002-10-15');",
+        "expectedColumns": [
+          "student_id",
+          "name",
+          "city",
+          "age",
+          "gender",
+          "marks",
+          "dob"
+        ],
+        "expectedRows": [
+          [
+            302,
+            "Radha",
+            "Noida",
+            21,
+            "F",
+            95,
+            "2005-10-01"
+          ],
+          [
+            301,
+            "Ramesh",
+            "Delhi",
+            20,
+            "M",
+            60,
+            "2006-05-10"
+          ]
+        ],
+        "orderSensitive": true
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "title": "Top Performing Students Leaderboard",
+    "difficulty": "Easy",
+    "points": 25,
+    "category": "SQL",
+    "type": "sql",
+    "tags": [
+      "SQL",
+      "ORDER BY",
+      "LIMIT",
+      "Aliases",
+      "Filtering"
+    ],
+    "description": "## Top Performing Students Leaderboard\n\nA college is preparing a merit list based on students' academic performance.\n\nWrite an SQL query to generate a leaderboard containing the top-performing students.\n\nYour query must:\n1. Retrieve `student_id`, `name`, `city`, `marks`, and `age`.\n2. Consider only students whose marks are between 70 and 100.\n3. Consider students belonging to **Delhi, Meerut, Noida, or Panipat**.\n4. Exclude students whose marks are below 75.\n5. Sort students by **marks in descending order**.\n6. If marks are equal, prioritize **younger students** (ascending order of age).\n7. Display **only the top 3 students**.\n8. Give the output columns meaningful aliases:\n   - `name` as **`student_name`**\n   - `marks` as **`student_marks`**\n\n### Output Columns\n`student_id`, `student_name`, `city`, `student_marks`, `age`",
+    "sampleInput": "+------------+--------+-----+--------+---------+--------------------+-------+------------+\n| student_id | name   | age | gender | city    | email              | marks | dob        |\n+------------+--------+-----+--------+---------+--------------------+-------+------------+\n| 101        | Aditya | 29  | M      | Meerut  | aditya@gmail.com   | 85    | 1996-10-25 |\n| 102        | Rahul  | 21  | M      | Delhi   | rahul@gmail.com    | 72    | 2005-03-12 |\n| 103        | Priya  | 22  | F      | Noida   | priya@gmail.com    | 91    | 2004-07-18 |\n| 104        | Amit   | 20  | M      | Meerut  | amit@gmail.com     | 65    | 2006-01-25 |\n| 105        | Neha   | 23  | F      | Delhi   | neha@gmail.com     | 78    | 2003-11-09 |\n| 106        | Riya   | 21  | F      | Panipat | riya@gmail.com     | 88    | 2005-05-22 |\n| 107        | Rohit  | 24  | M      | Noida   | rohit@gmail.com    | 55    | 2002-09-14 |\n| 108        | Anjali | 22  | F      | Meerut  | anjali@gmail.com   | 95    | 2004-12-03 |\n| 109        | Karan  | 25  | M      | Delhi   | karan@gmail.com    | 67    | 2001-06-28 |\n| 110        | Ankit  | 20  | M      | Panipat | ankit@gmail.com    | 81    | 2006-02-17 |\n+------------+--------+-----+--------+---------+--------------------+-------+------------+",
+    "sampleOutput": "student_id | student_name | city    | student_marks | age\n-----------+--------------+---------+---------------+----\n108        | Anjali       | Meerut  | 95            | 22 \n103        | Priya        | Noida   | 91            | 22 \n106        | Riya         | Panipat | 88            | 21 \n\n(3 rows)",
+    "tableSchema": "CREATE TABLE student (\n    student_id INT PRIMARY KEY,\n    name VARCHAR(50) NOT NULL,\n    age INT,\n    gender CHAR(1),\n    city VARCHAR(50) DEFAULT 'Delhi',\n    email VARCHAR(100) UNIQUE,\n    marks INT,\n    dob DATE\n);",
+    "testData": "INSERT INTO student (student_id, name, age, gender, city, email, marks, dob) VALUES\n(101, 'Aditya', 29, 'M', 'Meerut', 'aditya@gmail.com', 85, '1996-10-25'),\n(102, 'Rahul', 21, 'M', 'Delhi', 'rahul@gmail.com', 72, '2005-03-12'),\n(103, 'Priya', 22, 'F', 'Noida', 'priya@gmail.com', 91, '2004-07-18'),\n(104, 'Amit', 20, 'M', 'Meerut', 'amit@gmail.com', 65, '2006-01-25'),\n(105, 'Neha', 23, 'F', 'Delhi', 'neha@gmail.com', 78, '2003-11-09'),\n(106, 'Riya', 21, 'F', 'Panipat', 'riya@gmail.com', 88, '2005-05-22'),\n(107, 'Rohit', 24, 'M', 'Noida', 'rohit@gmail.com', 55, '2002-09-14'),\n(108, 'Anjali', 22, 'F', 'Meerut', 'anjali@gmail.com', 95, '2004-12-03'),\n(109, 'Karan', 25, 'M', 'Delhi', 'karan@gmail.com', 67, '2001-06-28'),\n(110, 'Ankit', 20, 'M', 'Panipat', 'ankit@gmail.com', 81, '2006-02-17');",
+    "boilerplate": "-- Write your SQL query below\nSELECT student_id, name AS student_name, city, marks AS student_marks, age\nFROM student\nWHERE \nORDER BY \nLIMIT 3;",
+    "testCases": [
+      {
+        "id": 1,
+        "description": "Standard college student dataset (10 records)",
+        "isSample": true,
+        "testData": "INSERT INTO student (student_id, name, age, gender, city, email, marks, dob) VALUES\n(101, 'Aditya', 29, 'M', 'Meerut', 'aditya@gmail.com', 85, '1996-10-25'),\n(102, 'Rahul', 21, 'M', 'Delhi', 'rahul@gmail.com', 72, '2005-03-12'),\n(103, 'Priya', 22, 'F', 'Noida', 'priya@gmail.com', 91, '2004-07-18'),\n(104, 'Amit', 20, 'M', 'Meerut', 'amit@gmail.com', 65, '2006-01-25'),\n(105, 'Neha', 23, 'F', 'Delhi', 'neha@gmail.com', 78, '2003-11-09'),\n(106, 'Riya', 21, 'F', 'Panipat', 'riya@gmail.com', 88, '2005-05-22'),\n(107, 'Rohit', 24, 'M', 'Noida', 'rohit@gmail.com', 55, '2002-09-14'),\n(108, 'Anjali', 22, 'F', 'Meerut', 'anjali@gmail.com', 95, '2004-12-03'),\n(109, 'Karan', 25, 'M', 'Delhi', 'karan@gmail.com', 67, '2001-06-28'),\n(110, 'Ankit', 20, 'M', 'Panipat', 'ankit@gmail.com', 81, '2006-02-17');",
+        "expectedColumns": [
+          "student_id",
+          "student_name",
+          "city",
+          "student_marks",
+          "age"
+        ],
+        "expectedRows": [
+          [
+            108,
+            "Anjali",
+            "Meerut",
+            95,
+            22
+          ],
+          [
+            103,
+            "Priya",
+            "Noida",
+            91,
+            22
+          ],
+          [
+            106,
+            "Riya",
+            "Panipat",
+            88,
+            21
+          ]
+        ],
+        "orderSensitive": true
+      },
+      {
+        "id": 2,
+        "description": "Diverse demographics & city distribution dataset",
+        "isSample": false,
+        "testData": "INSERT INTO student (student_id, name, age, gender, city, email, marks, dob) VALUES\n(201, 'Aakash', 22, 'M', 'Delhi', 'aakash@gmail.com', 94, '2004-10-10'),\n(202, 'Ritika', 21, 'F', 'Noida', 'ritika@gmail.com', 82, '2005-04-15'),\n(203, 'Rohan', 20, 'M', 'Meerut', 'rohan@gmail.com', 62, '2006-08-20'),\n(204, 'Simran', 23, 'F', 'Meerut', 'simran@gmail.com', 89, '2003-01-05'),\n(205, 'Mohit', 25, 'M', 'Delhi', 'mohit@gmail.com', 76, '2001-10-30'),\n(206, 'Deepak', 24, 'M', 'Panipat', 'deepak@gmail.com', 90, '2002-12-12'),\n(207, 'Anita', 22, 'F', 'Delhi', 'anita@gmail.com', 88, '2004-03-25');",
+        "expectedColumns": [
+          "student_id",
+          "student_name",
+          "city",
+          "student_marks",
+          "age"
+        ],
+        "expectedRows": [
+          [
+            201,
+            "Aakash",
+            "Delhi",
+            94,
+            22
+          ],
+          [
+            206,
+            "Deepak",
+            "Panipat",
+            90,
+            24
+          ],
+          [
+            204,
+            "Simran",
+            "Meerut",
+            89,
+            23
+          ]
+        ],
+        "orderSensitive": true
+      },
+      {
+        "id": 3,
+        "description": "Boundary marks (60, 95) & edge cases dataset",
+        "isSample": false,
+        "testData": "INSERT INTO student (student_id, name, age, gender, city, email, marks, dob) VALUES\n(301, 'Ramesh', 20, 'M', 'Delhi', 'ramesh@gmail.com', 60, '2006-05-10'),\n(302, 'Radha', 21, 'F', 'Noida', 'radha@gmail.com', 95, '2005-10-01'),\n(303, 'Asha', 22, 'F', 'Meerut', 'asha@gmail.com', 92, '2004-09-18'),\n(304, 'Kavita', 24, 'F', 'Panipat', 'kavita@gmail.com', 79, '2002-10-15');",
+        "expectedColumns": [
+          "student_id",
+          "student_name",
+          "city",
+          "student_marks",
+          "age"
+        ],
+        "expectedRows": [
+          [
+            302,
+            "Radha",
+            "Noida",
+            95,
+            21
+          ],
+          [
+            303,
+            "Asha",
+            "Meerut",
+            92,
+            22
+          ],
+          [
+            304,
+            "Kavita",
+            "Panipat",
+            79,
+            24
+          ]
+        ],
+        "orderSensitive": true
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "title": "City-Wise Academic Performance Report",
+    "difficulty": "Medium",
+    "points": 50,
+    "category": "SQL",
+    "type": "sql",
+    "tags": [
+      "SQL",
+      "GROUP BY",
+      "HAVING",
+      "Aggregate Functions",
+      "ROUND"
+    ],
+    "description": "## City-Wise Academic Performance Report\n\nThe college management wants to compare academic performance across different cities.\n\nWrite an SQL query that displays:\n1. The name of each `city`.\n2. Total students belonging to that city (alias: **`total_students`**).\n3. Total marks obtained by students in that city (alias: **`total_marks`**).\n4. Average marks of students rounded to 2 decimal places (alias: **`average_marks`**).\n5. Highest marks obtained in that city (alias: **`highest_marks`**).\n6. Lowest marks obtained in that city (alias: **`lowest_marks`**).\n\n### Apply the following conditions:\n- Consider only students whose marks are between 50 and 100.\n- Include **only cities having at least 2 students**.\n- Display **only cities where the average marks are strictly greater than 75**.\n- Sort cities by **`average_marks` in descending order**.\n\n### Output Columns\n`city`, `total_students`, `total_marks`, `average_marks`, `highest_marks`, `lowest_marks`",
+    "sampleInput": "+------------+--------+-----+--------+---------+--------------------+-------+------------+\n| student_id | name   | age | gender | city    | email              | marks | dob        |\n+------------+--------+-----+--------+---------+--------------------+-------+------------+\n| 101        | Aditya | 29  | M      | Meerut  | aditya@gmail.com   | 85    | 1996-10-25 |\n| 102        | Rahul  | 21  | M      | Delhi   | rahul@gmail.com    | 72    | 2005-03-12 |\n| 103        | Priya  | 22  | F      | Noida   | priya@gmail.com    | 91    | 2004-07-18 |\n| 104        | Amit   | 20  | M      | Meerut  | amit@gmail.com     | 65    | 2006-01-25 |\n| 105        | Neha   | 23  | F      | Delhi   | neha@gmail.com     | 78    | 2003-11-09 |\n| 106        | Riya   | 21  | F      | Panipat | riya@gmail.com     | 88    | 2005-05-22 |\n| 107        | Rohit  | 24  | M      | Noida   | rohit@gmail.com    | 55    | 2002-09-14 |\n| 108        | Anjali | 22  | F      | Meerut  | anjali@gmail.com   | 95    | 2004-12-03 |\n| 109        | Karan  | 25  | M      | Delhi   | karan@gmail.com    | 67    | 2001-06-28 |\n| 110        | Ankit  | 20  | M      | Panipat | ankit@gmail.com    | 81    | 2006-02-17 |\n+------------+--------+-----+--------+---------+--------------------+-------+------------+",
+    "sampleOutput": "city    | total_students | total_marks | average_marks | highest_marks | lowest_marks\n--------+----------------+-------------+---------------+---------------+-------------\nPanipat | 2              | 169         | 84.5          | 88            | 81          \nMeerut  | 3              | 245         | 81.67         | 95            | 65          \n\n(2 rows)",
+    "tableSchema": "CREATE TABLE student (\n    student_id INT PRIMARY KEY,\n    name VARCHAR(50) NOT NULL,\n    age INT,\n    gender CHAR(1),\n    city VARCHAR(50) DEFAULT 'Delhi',\n    email VARCHAR(100) UNIQUE,\n    marks INT,\n    dob DATE\n);",
+    "testData": "INSERT INTO student (student_id, name, age, gender, city, email, marks, dob) VALUES\n(101, 'Aditya', 29, 'M', 'Meerut', 'aditya@gmail.com', 85, '1996-10-25'),\n(102, 'Rahul', 21, 'M', 'Delhi', 'rahul@gmail.com', 72, '2005-03-12'),\n(103, 'Priya', 22, 'F', 'Noida', 'priya@gmail.com', 91, '2004-07-18'),\n(104, 'Amit', 20, 'M', 'Meerut', 'amit@gmail.com', 65, '2006-01-25'),\n(105, 'Neha', 23, 'F', 'Delhi', 'neha@gmail.com', 78, '2003-11-09'),\n(106, 'Riya', 21, 'F', 'Panipat', 'riya@gmail.com', 88, '2005-05-22'),\n(107, 'Rohit', 24, 'M', 'Noida', 'rohit@gmail.com', 55, '2002-09-14'),\n(108, 'Anjali', 22, 'F', 'Meerut', 'anjali@gmail.com', 95, '2004-12-03'),\n(109, 'Karan', 25, 'M', 'Delhi', 'karan@gmail.com', 67, '2001-06-28'),\n(110, 'Ankit', 20, 'M', 'Panipat', 'ankit@gmail.com', 81, '2006-02-17');",
+    "boilerplate": "-- Write your SQL query below\nSELECT city,\n       COUNT(*) AS total_students,\n       SUM(marks) AS total_marks,\n       ROUND(AVG(marks), 2) AS average_marks,\n       MAX(marks) AS highest_marks,\n       MIN(marks) AS lowest_marks\nFROM student\nWHERE \nGROUP BY city\nHAVING \nORDER BY ;",
+    "testCases": [
+      {
+        "id": 1,
+        "description": "Standard college student dataset (10 records)",
+        "isSample": true,
+        "testData": "INSERT INTO student (student_id, name, age, gender, city, email, marks, dob) VALUES\n(101, 'Aditya', 29, 'M', 'Meerut', 'aditya@gmail.com', 85, '1996-10-25'),\n(102, 'Rahul', 21, 'M', 'Delhi', 'rahul@gmail.com', 72, '2005-03-12'),\n(103, 'Priya', 22, 'F', 'Noida', 'priya@gmail.com', 91, '2004-07-18'),\n(104, 'Amit', 20, 'M', 'Meerut', 'amit@gmail.com', 65, '2006-01-25'),\n(105, 'Neha', 23, 'F', 'Delhi', 'neha@gmail.com', 78, '2003-11-09'),\n(106, 'Riya', 21, 'F', 'Panipat', 'riya@gmail.com', 88, '2005-05-22'),\n(107, 'Rohit', 24, 'M', 'Noida', 'rohit@gmail.com', 55, '2002-09-14'),\n(108, 'Anjali', 22, 'F', 'Meerut', 'anjali@gmail.com', 95, '2004-12-03'),\n(109, 'Karan', 25, 'M', 'Delhi', 'karan@gmail.com', 67, '2001-06-28'),\n(110, 'Ankit', 20, 'M', 'Panipat', 'ankit@gmail.com', 81, '2006-02-17');",
+        "expectedColumns": [
+          "city",
+          "total_students",
+          "total_marks",
+          "average_marks",
+          "highest_marks",
+          "lowest_marks"
+        ],
+        "expectedRows": [
+          [
+            "Panipat",
+            2,
+            169,
+            84.5,
+            88,
+            81
+          ],
+          [
+            "Meerut",
+            3,
+            245,
+            81.67,
+            95,
+            65
+          ]
+        ],
+        "orderSensitive": true
+      },
+      {
+        "id": 2,
+        "description": "Diverse demographics & city distribution dataset",
+        "isSample": false,
+        "testData": "INSERT INTO student (student_id, name, age, gender, city, email, marks, dob) VALUES\n(201, 'Aakash', 22, 'M', 'Delhi', 'aakash@gmail.com', 94, '2004-10-10'),\n(202, 'Ritika', 21, 'F', 'Noida', 'ritika@gmail.com', 82, '2005-04-15'),\n(203, 'Rohan', 20, 'M', 'Meerut', 'rohan@gmail.com', 62, '2006-08-20'),\n(204, 'Simran', 23, 'F', 'Meerut', 'simran@gmail.com', 89, '2003-01-05'),\n(205, 'Mohit', 25, 'M', 'Delhi', 'mohit@gmail.com', 76, '2001-10-30'),\n(206, 'Deepak', 24, 'M', 'Panipat', 'deepak@gmail.com', 90, '2002-12-12'),\n(207, 'Anita', 22, 'F', 'Delhi', 'anita@gmail.com', 88, '2004-03-25');",
+        "expectedColumns": [
+          "city",
+          "total_students",
+          "total_marks",
+          "average_marks",
+          "highest_marks",
+          "lowest_marks"
+        ],
+        "expectedRows": [
+          [
+            "Delhi",
+            3,
+            258,
+            86.0,
+            94,
+            76
+          ],
+          [
+            "Meerut",
+            2,
+            151,
+            75.5,
+            89,
+            62
+          ]
+        ],
+        "orderSensitive": true
+      },
+      {
+        "id": 3,
+        "description": "Boundary marks (60, 95) & edge cases dataset",
+        "isSample": false,
+        "testData": "INSERT INTO student (student_id, name, age, gender, city, email, marks, dob) VALUES\n(301, 'Ramesh', 20, 'M', 'Delhi', 'ramesh@gmail.com', 60, '2006-05-10'),\n(302, 'Radha', 21, 'F', 'Noida', 'radha@gmail.com', 95, '2005-10-01'),\n(303, 'Asha', 22, 'F', 'Meerut', 'asha@gmail.com', 92, '2004-09-18'),\n(304, 'Kavita', 24, 'F', 'Panipat', 'kavita@gmail.com', 79, '2002-10-15');",
+        "expectedColumns": [
+          "city",
+          "total_students",
+          "total_marks",
+          "average_marks",
+          "highest_marks",
+          "lowest_marks"
+        ],
+        "expectedRows": [],
+        "orderSensitive": true
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "title": "Student Birthdate Analytics System",
+    "difficulty": "Medium",
+    "points": 50,
+    "category": "SQL",
+    "type": "sql",
+    "tags": [
+      "SQL",
+      "Date Functions",
+      "YEAR",
+      "MONTH",
+      "MONTHNAME",
+      "GROUP BY"
+    ],
+    "description": "## Student Birthdate Analytics System\n\nThe college administration wants to analyze student birth records to organize birthday events and generate demographic reports.\n\nWrite an SQL query to generate a birthdate report.\n\nYour query must:\n1. Retrieve the birth year using the `YEAR()` function (alias: **`birth_year`**).\n2. Retrieve the birth month number using `MONTH()` (alias: **`birth_month_number`**).\n3. Retrieve the birth month name using `MONTHNAME()` (alias: **`birth_month_name`**).\n4. Count the number of students born in each year and month combination (alias: **`total_students`**).\n5. Consider students whose DOB falls **between '2003-01-01' and '2005-12-31'**, along with students **born in October** regardless of their birth year.\n6. Group the results by birth year and birth month.\n7. Display only groups containing at least one student.\n8. Sort the output by **`birth_year` in ascending order**, then **`birth_month_number` in ascending order**.\n\n### Output Columns\n`birth_year`, `birth_month_number`, `birth_month_name`, `total_students`",
+    "sampleInput": "+------------+--------+-----+--------+---------+--------------------+-------+------------+\n| student_id | name   | age | gender | city    | email              | marks | dob        |\n+------------+--------+-----+--------+---------+--------------------+-------+------------+\n| 101        | Aditya | 29  | M      | Meerut  | aditya@gmail.com   | 85    | 1996-10-25 |\n| 102        | Rahul  | 21  | M      | Delhi   | rahul@gmail.com    | 72    | 2005-03-12 |\n| 103        | Priya  | 22  | F      | Noida   | priya@gmail.com    | 91    | 2004-07-18 |\n| 104        | Amit   | 20  | M      | Meerut  | amit@gmail.com     | 65    | 2006-01-25 |\n| 105        | Neha   | 23  | F      | Delhi   | neha@gmail.com     | 78    | 2003-11-09 |\n| 106        | Riya   | 21  | F      | Panipat | riya@gmail.com     | 88    | 2005-05-22 |\n| 107        | Rohit  | 24  | M      | Noida   | rohit@gmail.com    | 55    | 2002-09-14 |\n| 108        | Anjali | 22  | F      | Meerut  | anjali@gmail.com   | 95    | 2004-12-03 |\n| 109        | Karan  | 25  | M      | Delhi   | karan@gmail.com    | 67    | 2001-06-28 |\n| 110        | Ankit  | 20  | M      | Panipat | ankit@gmail.com    | 81    | 2006-02-17 |\n+------------+--------+-----+--------+---------+--------------------+-------+------------+",
+    "sampleOutput": "birth_year | birth_month_number | birth_month_name | total_students\n-----------+--------------------+------------------+---------------\n1996       | 10                 | October          | 1             \n2003       | 11                 | November         | 1             \n2004       | 7                  | July             | 1             \n2004       | 12                 | December         | 1             \n2005       | 3                  | March            | 1             \n2005       | 5                  | May              | 1             \n\n(6 rows)",
+    "tableSchema": "CREATE TABLE student (\n    student_id INT PRIMARY KEY,\n    name VARCHAR(50) NOT NULL,\n    age INT,\n    gender CHAR(1),\n    city VARCHAR(50) DEFAULT 'Delhi',\n    email VARCHAR(100) UNIQUE,\n    marks INT,\n    dob DATE\n);",
+    "testData": "INSERT INTO student (student_id, name, age, gender, city, email, marks, dob) VALUES\n(101, 'Aditya', 29, 'M', 'Meerut', 'aditya@gmail.com', 85, '1996-10-25'),\n(102, 'Rahul', 21, 'M', 'Delhi', 'rahul@gmail.com', 72, '2005-03-12'),\n(103, 'Priya', 22, 'F', 'Noida', 'priya@gmail.com', 91, '2004-07-18'),\n(104, 'Amit', 20, 'M', 'Meerut', 'amit@gmail.com', 65, '2006-01-25'),\n(105, 'Neha', 23, 'F', 'Delhi', 'neha@gmail.com', 78, '2003-11-09'),\n(106, 'Riya', 21, 'F', 'Panipat', 'riya@gmail.com', 88, '2005-05-22'),\n(107, 'Rohit', 24, 'M', 'Noida', 'rohit@gmail.com', 55, '2002-09-14'),\n(108, 'Anjali', 22, 'F', 'Meerut', 'anjali@gmail.com', 95, '2004-12-03'),\n(109, 'Karan', 25, 'M', 'Delhi', 'karan@gmail.com', 67, '2001-06-28'),\n(110, 'Ankit', 20, 'M', 'Panipat', 'ankit@gmail.com', 81, '2006-02-17');",
+    "boilerplate": "-- Write your SQL query below\nSELECT YEAR(dob) AS birth_year,\n       MONTH(dob) AS birth_month_number,\n       MONTHNAME(dob) AS birth_month_name,\n       COUNT(*) AS total_students\nFROM student\nWHERE \nGROUP BY birth_year, birth_month_number, birth_month_name\nHAVING total_students >= 1\nORDER BY birth_year ASC, birth_month_number ASC;",
+    "testCases": [
+      {
+        "id": 1,
+        "description": "Standard college student dataset (10 records)",
+        "isSample": true,
+        "testData": "INSERT INTO student (student_id, name, age, gender, city, email, marks, dob) VALUES\n(101, 'Aditya', 29, 'M', 'Meerut', 'aditya@gmail.com', 85, '1996-10-25'),\n(102, 'Rahul', 21, 'M', 'Delhi', 'rahul@gmail.com', 72, '2005-03-12'),\n(103, 'Priya', 22, 'F', 'Noida', 'priya@gmail.com', 91, '2004-07-18'),\n(104, 'Amit', 20, 'M', 'Meerut', 'amit@gmail.com', 65, '2006-01-25'),\n(105, 'Neha', 23, 'F', 'Delhi', 'neha@gmail.com', 78, '2003-11-09'),\n(106, 'Riya', 21, 'F', 'Panipat', 'riya@gmail.com', 88, '2005-05-22'),\n(107, 'Rohit', 24, 'M', 'Noida', 'rohit@gmail.com', 55, '2002-09-14'),\n(108, 'Anjali', 22, 'F', 'Meerut', 'anjali@gmail.com', 95, '2004-12-03'),\n(109, 'Karan', 25, 'M', 'Delhi', 'karan@gmail.com', 67, '2001-06-28'),\n(110, 'Ankit', 20, 'M', 'Panipat', 'ankit@gmail.com', 81, '2006-02-17');",
+        "expectedColumns": [
+          "birth_year",
+          "birth_month_number",
+          "birth_month_name",
+          "total_students"
+        ],
+        "expectedRows": [
+          [
+            1996,
+            10,
+            "October",
+            1
+          ],
+          [
+            2003,
+            11,
+            "November",
+            1
+          ],
+          [
+            2004,
+            7,
+            "July",
+            1
+          ],
+          [
+            2004,
+            12,
+            "December",
+            1
+          ],
+          [
+            2005,
+            3,
+            "March",
+            1
+          ],
+          [
+            2005,
+            5,
+            "May",
+            1
+          ]
+        ],
+        "orderSensitive": true
+      },
+      {
+        "id": 2,
+        "description": "Diverse demographics & city distribution dataset",
+        "isSample": false,
+        "testData": "INSERT INTO student (student_id, name, age, gender, city, email, marks, dob) VALUES\n(201, 'Aakash', 22, 'M', 'Delhi', 'aakash@gmail.com', 94, '2004-10-10'),\n(202, 'Ritika', 21, 'F', 'Noida', 'ritika@gmail.com', 82, '2005-04-15'),\n(203, 'Rohan', 20, 'M', 'Meerut', 'rohan@gmail.com', 62, '2006-08-20'),\n(204, 'Simran', 23, 'F', 'Meerut', 'simran@gmail.com', 89, '2003-01-05'),\n(205, 'Mohit', 25, 'M', 'Delhi', 'mohit@gmail.com', 76, '2001-10-30'),\n(206, 'Deepak', 24, 'M', 'Panipat', 'deepak@gmail.com', 90, '2002-12-12'),\n(207, 'Anita', 22, 'F', 'Delhi', 'anita@gmail.com', 88, '2004-03-25');",
+        "expectedColumns": [
+          "birth_year",
+          "birth_month_number",
+          "birth_month_name",
+          "total_students"
+        ],
+        "expectedRows": [
+          [
+            2001,
+            10,
+            "October",
+            1
+          ],
+          [
+            2003,
+            1,
+            "January",
+            1
+          ],
+          [
+            2004,
+            3,
+            "March",
+            1
+          ],
+          [
+            2004,
+            10,
+            "October",
+            1
+          ],
+          [
+            2005,
+            4,
+            "April",
+            1
+          ]
+        ],
+        "orderSensitive": true
+      },
+      {
+        "id": 3,
+        "description": "Boundary marks (60, 95) & edge cases dataset",
+        "isSample": false,
+        "testData": "INSERT INTO student (student_id, name, age, gender, city, email, marks, dob) VALUES\n(301, 'Ramesh', 20, 'M', 'Delhi', 'ramesh@gmail.com', 60, '2006-05-10'),\n(302, 'Radha', 21, 'F', 'Noida', 'radha@gmail.com', 95, '2005-10-01'),\n(303, 'Asha', 22, 'F', 'Meerut', 'asha@gmail.com', 92, '2004-09-18'),\n(304, 'Kavita', 24, 'F', 'Panipat', 'kavita@gmail.com', 79, '2002-10-15');",
+        "expectedColumns": [
+          "birth_year",
+          "birth_month_number",
+          "birth_month_name",
+          "total_students"
+        ],
+        "expectedRows": [
+          [
+            2002,
+            10,
+            "October",
+            1
+          ],
+          [
+            2004,
+            9,
+            "September",
+            1
+          ],
+          [
+            2005,
+            10,
+            "October",
+            1
+          ]
+        ],
+        "orderSensitive": true
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "title": "Complete Student Database Intelligence Report",
+    "difficulty": "Hard",
+    "points": 100,
+    "category": "SQL",
+    "type": "sql",
+    "tags": [
+      "SQL",
+      "DISTINCT",
+      "Aggregate Functions",
+      "GROUP BY",
+      "Intelligence"
+    ],
+    "description": "## Complete Student Database Intelligence Report\n\nThe college wants to build a comprehensive student analytics dashboard to understand academic performance and demographic distribution.\n\nWrite an SQL query to generate a **gender-wise academic performance report**.\n\nFor each gender, calculate:\n1. Gender (`gender`).\n2. Total number of students: `COUNT(*)` as **`total_students`**.\n3. Sum of marks obtained: `SUM(marks)` as **`total_marks`**.\n4. Average marks rounded to 2 decimal places: `ROUND(AVG(marks), 2)` as **`average_marks`**.\n5. Highest marks: `MAX(marks)` as **`highest_marks`**.\n6. Lowest marks: `MIN(marks)` as **`lowest_marks`**.\n7. Average age rounded to 2 decimal places: `ROUND(AVG(age), 2)` as **`average_age`**.\n8. Number of unique cities represented: `COUNT(DISTINCT city)` as **`unique_cities`**.\n9. Number of unique ages: `COUNT(DISTINCT age)` as **`unique_ages`**.\n10. Number of unique marks: `COUNT(DISTINCT marks)` as **`unique_marks`**.\n\n### Additional Requirements:\n- Group the results by `gender`.\n- Sort the results by **`average_marks` in descending order**.\n\n### Output Columns\n`gender`, `total_students`, `total_marks`, `average_marks`, `highest_marks`, `lowest_marks`, `average_age`, `unique_cities`, `unique_ages`, `unique_marks`",
+    "sampleInput": "+------------+--------+-----+--------+---------+--------------------+-------+------------+\n| student_id | name   | age | gender | city    | email              | marks | dob        |\n+------------+--------+-----+--------+---------+--------------------+-------+------------+\n| 101        | Aditya | 29  | M      | Meerut  | aditya@gmail.com   | 85    | 1996-10-25 |\n| 102        | Rahul  | 21  | M      | Delhi   | rahul@gmail.com    | 72    | 2005-03-12 |\n| 103        | Priya  | 22  | F      | Noida   | priya@gmail.com    | 91    | 2004-07-18 |\n| 104        | Amit   | 20  | M      | Meerut  | amit@gmail.com     | 65    | 2006-01-25 |\n| 105        | Neha   | 23  | F      | Delhi   | neha@gmail.com     | 78    | 2003-11-09 |\n| 106        | Riya   | 21  | F      | Panipat | riya@gmail.com     | 88    | 2005-05-22 |\n| 107        | Rohit  | 24  | M      | Noida   | rohit@gmail.com    | 55    | 2002-09-14 |\n| 108        | Anjali | 22  | F      | Meerut  | anjali@gmail.com   | 95    | 2004-12-03 |\n| 109        | Karan  | 25  | M      | Delhi   | karan@gmail.com    | 67    | 2001-06-28 |\n| 110        | Ankit  | 20  | M      | Panipat | ankit@gmail.com    | 81    | 2006-02-17 |\n+------------+--------+-----+--------+---------+--------------------+-------+------------+",
+    "sampleOutput": "gender | total_students | total_marks | average_marks | highest_marks | lowest_marks | average_age | unique_cities | unique_ages | unique_marks\n-------+----------------+-------------+---------------+---------------+--------------+-------------+---------------+-------------+-------------\nF      | 4              | 352         | 88.0          | 95            | 78           | 22.0        | 4             | 3           | 4           \nM      | 6              | 425         | 70.83         | 85            | 55           | 23.17       | 4             | 5           | 6           \n\n(2 rows)",
+    "tableSchema": "CREATE TABLE student (\n    student_id INT PRIMARY KEY,\n    name VARCHAR(50) NOT NULL,\n    age INT,\n    gender CHAR(1),\n    city VARCHAR(50) DEFAULT 'Delhi',\n    email VARCHAR(100) UNIQUE,\n    marks INT,\n    dob DATE\n);",
+    "testData": "INSERT INTO student (student_id, name, age, gender, city, email, marks, dob) VALUES\n(101, 'Aditya', 29, 'M', 'Meerut', 'aditya@gmail.com', 85, '1996-10-25'),\n(102, 'Rahul', 21, 'M', 'Delhi', 'rahul@gmail.com', 72, '2005-03-12'),\n(103, 'Priya', 22, 'F', 'Noida', 'priya@gmail.com', 91, '2004-07-18'),\n(104, 'Amit', 20, 'M', 'Meerut', 'amit@gmail.com', 65, '2006-01-25'),\n(105, 'Neha', 23, 'F', 'Delhi', 'neha@gmail.com', 78, '2003-11-09'),\n(106, 'Riya', 21, 'F', 'Panipat', 'riya@gmail.com', 88, '2005-05-22'),\n(107, 'Rohit', 24, 'M', 'Noida', 'rohit@gmail.com', 55, '2002-09-14'),\n(108, 'Anjali', 22, 'F', 'Meerut', 'anjali@gmail.com', 95, '2004-12-03'),\n(109, 'Karan', 25, 'M', 'Delhi', 'karan@gmail.com', 67, '2001-06-28'),\n(110, 'Ankit', 20, 'M', 'Panipat', 'ankit@gmail.com', 81, '2006-02-17');",
+    "boilerplate": "-- Write your SQL query below\nSELECT gender,\n       COUNT(*) AS total_students,\n       SUM(marks) AS total_marks,\n       ROUND(AVG(marks), 2) AS average_marks,\n       MAX(marks) AS highest_marks,\n       MIN(marks) AS lowest_marks,\n       ROUND(AVG(age), 2) AS average_age,\n       COUNT(DISTINCT city) AS unique_cities,\n       COUNT(DISTINCT age) AS unique_ages,\n       COUNT(DISTINCT marks) AS unique_marks\nFROM student\nGROUP BY gender\nORDER BY average_marks DESC;",
+    "testCases": [
+      {
+        "id": 1,
+        "description": "Standard college student dataset (10 records)",
+        "isSample": true,
+        "testData": "INSERT INTO student (student_id, name, age, gender, city, email, marks, dob) VALUES\n(101, 'Aditya', 29, 'M', 'Meerut', 'aditya@gmail.com', 85, '1996-10-25'),\n(102, 'Rahul', 21, 'M', 'Delhi', 'rahul@gmail.com', 72, '2005-03-12'),\n(103, 'Priya', 22, 'F', 'Noida', 'priya@gmail.com', 91, '2004-07-18'),\n(104, 'Amit', 20, 'M', 'Meerut', 'amit@gmail.com', 65, '2006-01-25'),\n(105, 'Neha', 23, 'F', 'Delhi', 'neha@gmail.com', 78, '2003-11-09'),\n(106, 'Riya', 21, 'F', 'Panipat', 'riya@gmail.com', 88, '2005-05-22'),\n(107, 'Rohit', 24, 'M', 'Noida', 'rohit@gmail.com', 55, '2002-09-14'),\n(108, 'Anjali', 22, 'F', 'Meerut', 'anjali@gmail.com', 95, '2004-12-03'),\n(109, 'Karan', 25, 'M', 'Delhi', 'karan@gmail.com', 67, '2001-06-28'),\n(110, 'Ankit', 20, 'M', 'Panipat', 'ankit@gmail.com', 81, '2006-02-17');",
+        "expectedColumns": [
+          "gender",
+          "total_students",
+          "total_marks",
+          "average_marks",
+          "highest_marks",
+          "lowest_marks",
+          "average_age",
+          "unique_cities",
+          "unique_ages",
+          "unique_marks"
+        ],
+        "expectedRows": [
+          [
+            "F",
+            4,
+            352,
+            88.0,
+            95,
+            78,
+            22.0,
+            4,
+            3,
+            4
+          ],
+          [
+            "M",
+            6,
+            425,
+            70.83,
+            85,
+            55,
+            23.17,
+            4,
+            5,
+            6
+          ]
+        ],
+        "orderSensitive": true
+      },
+      {
+        "id": 2,
+        "description": "Diverse demographics & city distribution dataset",
+        "isSample": false,
+        "testData": "INSERT INTO student (student_id, name, age, gender, city, email, marks, dob) VALUES\n(201, 'Aakash', 22, 'M', 'Delhi', 'aakash@gmail.com', 94, '2004-10-10'),\n(202, 'Ritika', 21, 'F', 'Noida', 'ritika@gmail.com', 82, '2005-04-15'),\n(203, 'Rohan', 20, 'M', 'Meerut', 'rohan@gmail.com', 62, '2006-08-20'),\n(204, 'Simran', 23, 'F', 'Meerut', 'simran@gmail.com', 89, '2003-01-05'),\n(205, 'Mohit', 25, 'M', 'Delhi', 'mohit@gmail.com', 76, '2001-10-30'),\n(206, 'Deepak', 24, 'M', 'Panipat', 'deepak@gmail.com', 90, '2002-12-12'),\n(207, 'Anita', 22, 'F', 'Delhi', 'anita@gmail.com', 88, '2004-03-25');",
+        "expectedColumns": [
+          "gender",
+          "total_students",
+          "total_marks",
+          "average_marks",
+          "highest_marks",
+          "lowest_marks",
+          "average_age",
+          "unique_cities",
+          "unique_ages",
+          "unique_marks"
+        ],
+        "expectedRows": [
+          [
+            "F",
+            3,
+            259,
+            86.33,
+            89,
+            82,
+            22.0,
+            3,
+            3,
+            3
+          ],
+          [
+            "M",
+            4,
+            322,
+            80.5,
+            94,
+            62,
+            22.75,
+            3,
+            4,
+            4
+          ]
+        ],
+        "orderSensitive": true
+      },
+      {
+        "id": 3,
+        "description": "Boundary marks (60, 95) & edge cases dataset",
+        "isSample": false,
+        "testData": "INSERT INTO student (student_id, name, age, gender, city, email, marks, dob) VALUES\n(301, 'Ramesh', 20, 'M', 'Delhi', 'ramesh@gmail.com', 60, '2006-05-10'),\n(302, 'Radha', 21, 'F', 'Noida', 'radha@gmail.com', 95, '2005-10-01'),\n(303, 'Asha', 22, 'F', 'Meerut', 'asha@gmail.com', 92, '2004-09-18'),\n(304, 'Kavita', 24, 'F', 'Panipat', 'kavita@gmail.com', 79, '2002-10-15');",
+        "expectedColumns": [
+          "gender",
+          "total_students",
+          "total_marks",
+          "average_marks",
+          "highest_marks",
+          "lowest_marks",
+          "average_age",
+          "unique_cities",
+          "unique_ages",
+          "unique_marks"
+        ],
+        "expectedRows": [
+          [
+            "F",
+            3,
+            266,
+            88.67,
+            95,
+            79,
+            22.33,
+            3,
+            3,
+            3
+          ],
+          [
+            "M",
+            1,
+            60,
+            60.0,
+            60,
+            60,
+            20.0,
+            1,
+            1,
+            1
+          ]
+        ],
+        "orderSensitive": true
+      }
+    ]
   }
 ]

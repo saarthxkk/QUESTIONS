@@ -7,6 +7,7 @@ import tempfile
 import shutil
 import urllib.request
 from compiler_util import prepare_submission_code
+from sql_engine import create_connection, execute_query, format_table, compare_sql_results
 
 app = Flask(__name__, static_folder='public', static_url_path='')
 
@@ -54,6 +55,7 @@ def get_questions():
             'difficulty': q['difficulty'],
             'points': q['points'],
             'category': q['category'],
+            'type': q.get('type', 'cpp'),
             'tags': q['tags']
         })
     return jsonify(summary)
@@ -89,19 +91,45 @@ def add_question():
 
 @app.route('/api/run', methods=['POST'])
 def run_code():
-    """Run code against a single custom input with automatic boilerplate merging."""
+    """Run code against a single custom input or database query."""
     data = request.json or {}
     code = data.get('code', '')
     stdin_input = data.get('input', '')
     qid = data.get('questionId')
 
-    boilerplate = ''
+    question = None
     if qid:
         questions = load_questions()
         for q in questions:
             if q['id'] == qid:
-                boilerplate = q.get('boilerplate', '')
+                question = q
                 break
+
+    is_sql = (question and question.get('type') == 'sql') or (
+        not question and any(code.strip().upper().startswith(kw) for kw in ['SELECT', 'WITH', '--', '/*'])
+    )
+
+    if is_sql:
+        schema = question.get('tableSchema', '') if question else ''
+        data_sql = question.get('testData', '') if question else ''
+        conn = create_connection(schema, data_sql)
+        res = execute_query(conn, code)
+        conn.close()
+        if not res['success']:
+            return jsonify({
+                'success': False,
+                'compilationError': f"SQL Error:\n{res['error']}",
+                'output': ''
+            })
+        return jsonify({
+            'success': True,
+            'output': format_table(res['columns'], res['rows']),
+            'columns': res['columns'],
+            'rows': res['rows'],
+            'rowCount': res['rowCount']
+        })
+
+    boilerplate = question.get('boilerplate', '') if question else ''
 
     # Validate and merge code with boilerplate if function-only
     ok, final_code, merge_err = prepare_submission_code(code, boilerplate)
@@ -117,7 +145,7 @@ def run_code():
 
 @app.route('/api/submit', methods=['POST'])
 def submit_code():
-    """Run code against all test cases for a question with automatic boilerplate merging."""
+    """Run code against all test cases for a question."""
     data = request.json or {}
     code = data.get('code', '')
     qid = data.get('questionId')
@@ -132,8 +160,69 @@ def submit_code():
     if not question:
         return jsonify({'error': 'Question not found'}), 404
 
+    # Handle SQL questions
+    if question.get('type') == 'sql':
+        schema = question.get('tableSchema', '')
+        default_data = question.get('testData', '')
+        test_cases = question.get('testCases', [])
+        results = []
+        passed = 0
+        total = len(test_cases)
+
+        for tc in test_cases:
+            tc_data = tc.get('testData', default_data)
+            conn = create_connection(schema, tc_data)
+            res = execute_query(conn, code)
+            conn.close()
+
+            if not res['success']:
+                results.append({
+                    'testCaseId': tc['id'],
+                    'description': tc.get('description', ''),
+                    'isSample': tc.get('isSample', False),
+                    'passed': False,
+                    'compilationError': f"SQL Error: {res['error']}"
+                })
+                break
+
+            exp_cols = tc.get('expectedColumns', [])
+            exp_rows = tc.get('expectedRows', [])
+            order_sensitive = tc.get('orderSensitive', True)
+
+            is_match, match_msg = compare_sql_results(
+                res['columns'], res['rows'],
+                exp_cols, exp_rows,
+                order_sensitive=order_sensitive
+            )
+
+            if is_match:
+                passed += 1
+
+            results.append({
+                'testCaseId': tc['id'],
+                'description': tc.get('description', ''),
+                'isSample': tc.get('isSample', False),
+                'passed': is_match,
+                'input': tc.get('description', '') if tc.get('isSample', False) else None,
+                'expectedOutput': format_table(exp_cols, exp_rows) if (tc.get('isSample', False) or not is_match) else None,
+                'actualOutput': format_table(res['columns'], res['rows']) if (tc.get('isSample', False) or not is_match) else None,
+                'error': "" if is_match else match_msg
+            })
+
+        status = 'Accepted' if passed == total else 'Wrong Answer'
+        if results and results[-1].get('compilationError'):
+            status = 'SQL Error'
+
+        return jsonify({
+            'status': status,
+            'passed': passed,
+            'total': total,
+            'points': question['points'] if passed == total else 0,
+            'results': results
+        })
+
+    # Handle C++ questions
     boilerplate = question.get('boilerplate', '')
-    # Validate and merge code with boilerplate if function-only
     ok, final_code, merge_err = prepare_submission_code(code, boilerplate)
     if not ok:
         return jsonify({
@@ -177,7 +266,6 @@ def submit_code():
             'timeout': result.get('timeout', False)
         })
 
-        # Stop on compilation error
         if result.get('compilationError'):
             break
 
